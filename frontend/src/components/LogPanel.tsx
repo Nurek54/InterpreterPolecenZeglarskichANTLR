@@ -1,17 +1,9 @@
 import { useRef, useEffect, useState, type ChangeEvent } from "react";
 import type { LogEntry } from "../types/ship";
 
-// ─────────────────────────────────────────────────────────────────
-// PROPS
-// ─────────────────────────────────────────────────────────────────
-
 interface LogPanelProps {
   log: LogEntry[];
 }
-
-// ─────────────────────────────────────────────────────────────────
-// STAŁE — ikony i kolory per kategoria
-// ─────────────────────────────────────────────────────────────────
 
 const CATEGORY_ICONS: Record<string, string> = {
   żagle: "⛵",

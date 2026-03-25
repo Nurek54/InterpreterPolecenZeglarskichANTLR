@@ -71,8 +71,7 @@ export default function App() {
       {/* ── HEADER ── */}
       <header className="app-header">
         <div className="header-left">
-          <h1>🏴‍☠️ Pirate Ship Commander</h1>
-          <span className="subtitle">Interpreter poleceń żeglarskich</span>
+          <h1>🏴‍☠️ Interpreter poleceń żeglarskich</h1>
         </div>
         <div className="header-right">
           <span

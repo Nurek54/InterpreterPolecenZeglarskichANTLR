@@ -1,10 +1,6 @@
 import { useState, type ReactNode } from "react";
 import type { ShipState } from "../types/ship";
 
-// ─────────────────────────────────────────────────────────────────
-// PROPS
-// ─────────────────────────────────────────────────────────────────
-
 interface StatePanelProps {
   shipState: ShipState | null;
 }
@@ -21,10 +17,6 @@ interface StateRowProps {
   value: string | number;
   color?: string;
 }
-
-// ─────────────────────────────────────────────────────────────────
-// SUB-COMPONENTS
-// ─────────────────────────────────────────────────────────────────
 
 function Section({ title, icon, children, defaultOpen = true }: SectionProps) {
   const [open, setOpen] = useState(defaultOpen);

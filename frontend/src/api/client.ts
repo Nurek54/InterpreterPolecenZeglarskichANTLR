@@ -1,7 +1,3 @@
-// ─────────────────────────────────────────────────────────────────
-// api/client.ts — Typowany klient API do backendu FastAPI
-// ─────────────────────────────────────────────────────────────────
-
 import type {
   ExecuteRequest,
   ExecuteResponse,

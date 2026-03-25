@@ -1,10 +1,6 @@
 import { useState, useRef, useEffect, type KeyboardEvent, type ChangeEvent } from "react";
 import type { ExampleCommand } from "../types/ship";
 
-// ─────────────────────────────────────────────────────────────────
-// PROPS
-// ─────────────────────────────────────────────────────────────────
-
 interface CommandTerminalProps {
   onExecute: (commands: string, reset: boolean) => Promise<void>;
   onReset: () => Promise<void>;
@@ -13,10 +9,6 @@ interface CommandTerminalProps {
   examples: ExampleCommand[];
   connected: boolean;
 }
-
-// ─────────────────────────────────────────────────────────────────
-// COMPONENT
-// ─────────────────────────────────────────────────────────────────
 
 export default function CommandTerminal({
   onExecute,
