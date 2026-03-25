@@ -1,0 +1,537 @@
+/* ═══════════════════════════════════════════════════════════════
+   🏴‍☠️ PIRATE SHIP COMMANDER — STYLES
+   ═══════════════════════════════════════════════════════════════ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #0a1628;
+  --bg-secondary: #111d33;
+  --bg-panel: #152238;
+  --bg-input: #0d1a2e;
+  --border: #1e3a5f;
+  --border-light: #2a4a6f;
+  --text: #e2e8f0;
+  --text-muted: #64748b;
+  --text-dim: #475569;
+  --accent-gold: #ffd700;
+  --accent-blue: #3b82f6;
+  --accent-green: #4ade80;
+  --accent-red: #ef4444;
+  --accent-orange: #f97316;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   APP LAYOUT
+   ═══════════════════════════════════════════════════════════════ */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── HEADER ── */
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.header-left h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  letter-spacing: 0.5px;
+}
+
+.header-left .subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-left: 12px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-dot.connected {
+  background: var(--accent-green);
+  box-shadow: 0 0 6px var(--accent-green);
+}
+
+.status-dot.disconnected {
+  background: var(--accent-red);
+  box-shadow: 0 0 6px var(--accent-red);
+}
+
+/* ── BODY (2 kolumny) ── */
+
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  width: 55%;
+  min-width: 400px;
+  border-right: 1px solid var(--border);
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  min-width: 350px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   3D SCENE
+   ═══════════════════════════════════════════════════════════════ */
+
+.scene-container {
+  flex: 1;
+  min-height: 300px;
+  position: relative;
+}
+
+.scene-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STATE PANEL
+   ═══════════════════════════════════════════════════════════════ */
+
+.state-panel {
+  height: 260px;
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.state-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 12px;
+}
+
+.state-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── Sekcje stanu ── */
+
+.state-section {
+  margin-bottom: 4px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  user-select: none;
+}
+
+.section-header:hover {
+  background: var(--border);
+}
+
+.toggle {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.section-body {
+  padding: 4px 0 4px 16px;
+}
+
+.state-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 8px;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+}
+
+.state-label {
+  color: var(--text-muted);
+}
+
+.state-value {
+  font-weight: 600;
+}
+
+.state-muted {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  padding: 2px 8px;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TERMINAL PANEL
+   ═══════════════════════════════════════════════════════════════ */
+
+.terminal-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Shared panel header ── */
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.panel-header h2 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  accent-color: var(--accent-gold);
+}
+
+/* ── Pasek przykładów ── */
+
+.examples-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--bg-input);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.examples-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.example-btn {
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-family: var(--font-sans);
+  background: var(--bg-panel);
+  color: var(--accent-gold);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.example-btn:hover {
+  background: var(--border);
+  border-color: var(--accent-gold);
+}
+
+/* ── Textarea ── */
+
+.textarea-wrapper {
+  flex: 1;
+  padding: 8px;
+  overflow: hidden;
+}
+
+.command-textarea {
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--accent-green);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  resize: none;
+  outline: none;
+  tab-size: 4;
+}
+
+.command-textarea::placeholder {
+  color: var(--text-dim);
+}
+
+.command-textarea:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.1);
+}
+
+/* ── Błędy ── */
+
+.error-box {
+  margin: 0 8px 4px;
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  color: var(--accent-red);
+  flex-shrink: 0;
+}
+
+.error-box strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.error-item {
+  padding-left: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+/* ── Przyciski terminala ── */
+
+.terminal-actions {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  flex-shrink: 0;
+}
+
+.btn {
+  padding: 7px 16px;
+  font-size: 0.82rem;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent-gold);
+  color: #000;
+  flex: 1;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #ffdf33;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+}
+
+.btn-secondary {
+  background: var(--bg-panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--border);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  color: var(--text);
+  background: var(--bg-panel);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LOG PANEL
+   ═══════════════════════════════════════════════════════════════ */
+
+.log-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 150px;
+}
+
+.log-filter {
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  background: var(--bg-input);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  outline: none;
+}
+
+.log-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0;
+}
+
+.log-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-dim);
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+.log-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 3px 14px;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  line-height: 1.5;
+}
+
+.log-entry:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.log-time {
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+.log-icon {
+  flex-shrink: 0;
+}
+
+.log-category {
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.log-message {
+  color: var(--text);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLLBAR CUSTOM
+   ═══════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-light);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+  .app-body {
+    flex-direction: column;
+  }
+  .left-column, .right-column {
+    width: 100%;
+    min-width: unset;
+    border-right: none;
+  }
+  .left-column {
+    border-bottom: 1px solid var(--border);
+    max-height: 50vh;
+  }
+  .scene-container {
+    min-height: 200px;
+  }
+  .state-panel {
+    height: 160px;
+  }
+}
