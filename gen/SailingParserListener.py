@@ -116,24 +116,6 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#TrimSailToAngle.
-    def enterTrimSailToAngle(self, ctx:SailingParser.TrimSailToAngleContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#TrimSailToAngle.
-    def exitTrimSailToAngle(self, ctx:SailingParser.TrimSailToAngleContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#EaseSailPercent.
-    def enterEaseSailPercent(self, ctx:SailingParser.EaseSailPercentContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#EaseSailPercent.
-    def exitEaseSailPercent(self, ctx:SailingParser.EaseSailPercentContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#sail.
     def enterSail(self, ctx:SailingParser.SailContext):
         pass
@@ -323,33 +305,6 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#PayOutChain.
-    def enterPayOutChain(self, ctx:SailingParser.PayOutChainContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#PayOutChain.
-    def exitPayOutChain(self, ctx:SailingParser.PayOutChainContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#HaulChain.
-    def enterHaulChain(self, ctx:SailingParser.HaulChainContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#HaulChain.
-    def exitHaulChain(self, ctx:SailingParser.HaulChainContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#PayOutLine.
-    def enterPayOutLine(self, ctx:SailingParser.PayOutLineContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#PayOutLine.
-    def exitPayOutLine(self, ctx:SailingParser.PayOutLineContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#Moor.
     def enterMoor(self, ctx:SailingParser.MoorContext):
         pass
@@ -365,33 +320,6 @@ class SailingParserListener(ParseTreeListener):
 
     # Exit a parse tree produced by SailingParser#CastOff.
     def exitCastOff(self, ctx:SailingParser.CastOffContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ThrowMooringLines.
-    def enterThrowMooringLines(self, ctx:SailingParser.ThrowMooringLinesContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ThrowMooringLines.
-    def exitThrowMooringLines(self, ctx:SailingParser.ThrowMooringLinesContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#HaulMooringLines.
-    def enterHaulMooringLines(self, ctx:SailingParser.HaulMooringLinesContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#HaulMooringLines.
-    def exitHaulMooringLines(self, ctx:SailingParser.HaulMooringLinesContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ThrowGrapplingHooks.
-    def enterThrowGrapplingHooks(self, ctx:SailingParser.ThrowGrapplingHooksContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ThrowGrapplingHooks.
-    def exitThrowGrapplingHooks(self, ctx:SailingParser.ThrowGrapplingHooksContext):
         pass
 
 
@@ -419,42 +347,6 @@ class SailingParserListener(ParseTreeListener):
 
     # Exit a parse tree produced by SailingParser#SetCourseWaypoint.
     def exitSetCourseWaypoint(self, ctx:SailingParser.SetCourseWaypointContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#SetCourseIsland.
-    def enterSetCourseIsland(self, ctx:SailingParser.SetCourseIslandContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#SetCourseIsland.
-    def exitSetCourseIsland(self, ctx:SailingParser.SetCourseIslandContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#SetCoursePort.
-    def enterSetCoursePort(self, ctx:SailingParser.SetCoursePortContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#SetCoursePort.
-    def exitSetCoursePort(self, ctx:SailingParser.SetCoursePortContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#SetCourseBay.
-    def enterSetCourseBay(self, ctx:SailingParser.SetCourseBayContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#SetCourseBay.
-    def exitSetCourseBay(self, ctx:SailingParser.SetCourseBayContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#SetCourseHideout.
-    def enterSetCourseHideout(self, ctx:SailingParser.SetCourseHideoutContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#SetCourseHideout.
-    def exitSetCourseHideout(self, ctx:SailingParser.SetCourseHideoutContext):
         pass
 
 
@@ -575,15 +467,6 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#FullSailSpeed.
-    def enterFullSailSpeed(self, ctx:SailingParser.FullSailSpeedContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#FullSailSpeed.
-    def exitFullSailSpeed(self, ctx:SailingParser.FullSailSpeedContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#FullAhead.
     def enterFullAhead(self, ctx:SailingParser.FullAheadContext):
         pass
@@ -638,24 +521,6 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#AimCannons.
-    def enterAimCannons(self, ctx:SailingParser.AimCannonsContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#AimCannons.
-    def exitAimCannons(self, ctx:SailingParser.AimCannonsContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#AimCannonsAngle.
-    def enterAimCannonsAngle(self, ctx:SailingParser.AimCannonsAngleContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#AimCannonsAngle.
-    def exitAimCannonsAngle(self, ctx:SailingParser.AimCannonsAngleContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#FireCannons.
     def enterFireCannons(self, ctx:SailingParser.FireCannonsContext):
         pass
@@ -701,24 +566,6 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#PrepareMuskets.
-    def enterPrepareMuskets(self, ctx:SailingParser.PrepareMusketsContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#PrepareMuskets.
-    def exitPrepareMuskets(self, ctx:SailingParser.PrepareMusketsContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#FireMuskets.
-    def enterFireMuskets(self, ctx:SailingParser.FireMusketsContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#FireMuskets.
-    def exitFireMuskets(self, ctx:SailingParser.FireMusketsContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#cannonGroup.
     def enterCannonGroup(self, ctx:SailingParser.CannonGroupContext):
         pass
@@ -734,78 +581,6 @@ class SailingParserListener(ParseTreeListener):
 
     # Exit a parse tree produced by SailingParser#ammoType.
     def exitAmmoType(self, ctx:SailingParser.AmmoTypeContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#target.
-    def enterTarget(self, ctx:SailingParser.TargetContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#target.
-    def exitTarget(self, ctx:SailingParser.TargetContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#PrepareBoarding.
-    def enterPrepareBoarding(self, ctx:SailingParser.PrepareBoardingContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#PrepareBoarding.
-    def exitPrepareBoarding(self, ctx:SailingParser.PrepareBoardingContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#Board.
-    def enterBoard(self, ctx:SailingParser.BoardContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#Board.
-    def exitBoard(self, ctx:SailingParser.BoardContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#Storm.
-    def enterStorm(self, ctx:SailingParser.StormContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#Storm.
-    def exitStorm(self, ctx:SailingParser.StormContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#Retreat.
-    def enterRetreat(self, ctx:SailingParser.RetreatContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#Retreat.
-    def exitRetreat(self, ctx:SailingParser.RetreatContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ThrowBoardingLines.
-    def enterThrowBoardingLines(self, ctx:SailingParser.ThrowBoardingLinesContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ThrowBoardingLines.
-    def exitThrowBoardingLines(self, ctx:SailingParser.ThrowBoardingLinesContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ThrowGrapplingHooksBoard.
-    def enterThrowGrapplingHooksBoard(self, ctx:SailingParser.ThrowGrapplingHooksBoardContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ThrowGrapplingHooksBoard.
-    def exitThrowGrapplingHooksBoard(self, ctx:SailingParser.ThrowGrapplingHooksBoardContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#GangwayToSide.
-    def enterGangwayToSide(self, ctx:SailingParser.GangwayToSideContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#GangwayToSide.
-    def exitGangwayToSide(self, ctx:SailingParser.GangwayToSideContext):
         pass
 
 
@@ -881,177 +656,6 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#ScanHorizon.
-    def enterScanHorizon(self, ctx:SailingParser.ScanHorizonContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ScanHorizon.
-    def exitScanHorizon(self, ctx:SailingParser.ScanHorizonContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ScanSide.
-    def enterScanSide(self, ctx:SailingParser.ScanSideContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ScanSide.
-    def exitScanSide(self, ctx:SailingParser.ScanSideContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ScanDirection.
-    def enterScanDirection(self, ctx:SailingParser.ScanDirectionContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ScanDirection.
-    def exitScanDirection(self, ctx:SailingParser.ScanDirectionContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#IdentifyShip.
-    def enterIdentifyShip(self, ctx:SailingParser.IdentifyShipContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#IdentifyShip.
-    def exitIdentifyShip(self, ctx:SailingParser.IdentifyShipContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#IdentifyTarget.
-    def enterIdentifyTarget(self, ctx:SailingParser.IdentifyTargetContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#IdentifyTarget.
-    def exitIdentifyTarget(self, ctx:SailingParser.IdentifyTargetContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LookoutToCrowsNest.
-    def enterLookoutToCrowsNest(self, ctx:SailingParser.LookoutToCrowsNestContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LookoutToCrowsNest.
-    def exitLookoutToCrowsNest(self, ctx:SailingParser.LookoutToCrowsNestContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LookoutReport.
-    def enterLookoutReport(self, ctx:SailingParser.LookoutReportContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LookoutReport.
-    def exitLookoutReport(self, ctx:SailingParser.LookoutReportContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ChaseTarget.
-    def enterChaseTarget(self, ctx:SailingParser.ChaseTargetContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ChaseTarget.
-    def exitChaseTarget(self, ctx:SailingParser.ChaseTargetContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ChaseNamed.
-    def enterChaseNamed(self, ctx:SailingParser.ChaseNamedContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ChaseNamed.
-    def exitChaseNamed(self, ctx:SailingParser.ChaseNamedContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#Flee.
-    def enterFlee(self, ctx:SailingParser.FleeContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#Flee.
-    def exitFlee(self, ctx:SailingParser.FleeContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#Intercept.
-    def enterIntercept(self, ctx:SailingParser.InterceptContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#Intercept.
-    def exitIntercept(self, ctx:SailingParser.InterceptContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#BlockTarget.
-    def enterBlockTarget(self, ctx:SailingParser.BlockTargetContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#BlockTarget.
-    def exitBlockTarget(self, ctx:SailingParser.BlockTargetContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#Ambush.
-    def enterAmbush(self, ctx:SailingParser.AmbushContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#Ambush.
-    def exitAmbush(self, ctx:SailingParser.AmbushContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#EvadeTarget.
-    def enterEvadeTarget(self, ctx:SailingParser.EvadeTargetContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#EvadeTarget.
-    def exitEvadeTarget(self, ctx:SailingParser.EvadeTargetContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#RamTarget.
-    def enterRamTarget(self, ctx:SailingParser.RamTargetContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#RamTarget.
-    def exitRamTarget(self, ctx:SailingParser.RamTargetContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#DemandSurrender.
-    def enterDemandSurrender(self, ctx:SailingParser.DemandSurrenderContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#DemandSurrender.
-    def exitDemandSurrender(self, ctx:SailingParser.DemandSurrenderContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#Surrender.
-    def enterSurrender(self, ctx:SailingParser.SurrenderContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#Surrender.
-    def exitSurrender(self, ctx:SailingParser.SurrenderContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ExchangeFire.
-    def enterExchangeFire(self, ctx:SailingParser.ExchangeFireContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ExchangeFire.
-    def exitExchangeFire(self, ctx:SailingParser.ExchangeFireContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#BattleStations.
-    def enterBattleStations(self, ctx:SailingParser.BattleStationsContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#BattleStations.
-    def exitBattleStations(self, ctx:SailingParser.BattleStationsContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#CrewToStations.
     def enterCrewToStations(self, ctx:SailingParser.CrewToStationsContext):
         pass
@@ -1076,51 +680,6 @@ class SailingParserListener(ParseTreeListener):
 
     # Exit a parse tree produced by SailingParser#AllOnDeck.
     def exitAllOnDeck(self, ctx:SailingParser.AllOnDeckContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#WatchChange.
-    def enterWatchChange(self, ctx:SailingParser.WatchChangeContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#WatchChange.
-    def exitWatchChange(self, ctx:SailingParser.WatchChangeContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#CrewReport.
-    def enterCrewReport(self, ctx:SailingParser.CrewReportContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#CrewReport.
-    def exitCrewReport(self, ctx:SailingParser.CrewReportContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#RoleToStation.
-    def enterRoleToStation(self, ctx:SailingParser.RoleToStationContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#RoleToStation.
-    def exitRoleToStation(self, ctx:SailingParser.RoleToStationContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#CrewStateReport.
-    def enterCrewStateReport(self, ctx:SailingParser.CrewStateReportContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#CrewStateReport.
-    def exitCrewStateReport(self, ctx:SailingParser.CrewStateReportContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#role.
-    def enterRole(self, ctx:SailingParser.RoleContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#role.
-    def exitRole(self, ctx:SailingParser.RoleContext):
         pass
 
 
@@ -1232,165 +791,12 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#NavLights.
-    def enterNavLights(self, ctx:SailingParser.NavLightsContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#NavLights.
-    def exitNavLights(self, ctx:SailingParser.NavLightsContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#AnchorLights.
-    def enterAnchorLights(self, ctx:SailingParser.AnchorLightsContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#AnchorLights.
-    def exitAnchorLights(self, ctx:SailingParser.AnchorLightsContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#EmergencyLights.
-    def enterEmergencyLights(self, ctx:SailingParser.EmergencyLightsContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#EmergencyLights.
-    def exitEmergencyLights(self, ctx:SailingParser.EmergencyLightsContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#MastHeadLights.
-    def enterMastHeadLights(self, ctx:SailingParser.MastHeadLightsContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#MastHeadLights.
-    def exitMastHeadLights(self, ctx:SailingParser.MastHeadLightsContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#SternLights.
-    def enterSternLights(self, ctx:SailingParser.SternLightsContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#SternLights.
-    def exitSternLights(self, ctx:SailingParser.SternLightsContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LightLantern.
-    def enterLightLantern(self, ctx:SailingParser.LightLanternContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LightLantern.
-    def exitLightLantern(self, ctx:SailingParser.LightLanternContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ExtinguishLantern.
-    def enterExtinguishLantern(self, ctx:SailingParser.ExtinguishLanternContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ExtinguishLantern.
-    def exitExtinguishLantern(self, ctx:SailingParser.ExtinguishLanternContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LightTorches.
-    def enterLightTorches(self, ctx:SailingParser.LightTorchesContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LightTorches.
-    def exitLightTorches(self, ctx:SailingParser.LightTorchesContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ExtinguishTorches.
-    def enterExtinguishTorches(self, ctx:SailingParser.ExtinguishTorchesContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ExtinguishTorches.
-    def exitExtinguishTorches(self, ctx:SailingParser.ExtinguishTorchesContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LightLamps.
-    def enterLightLamps(self, ctx:SailingParser.LightLampsContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LightLamps.
-    def exitLightLamps(self, ctx:SailingParser.LightLampsContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ExtinguishLamps.
-    def enterExtinguishLamps(self, ctx:SailingParser.ExtinguishLampsContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ExtinguishLamps.
-    def exitExtinguishLamps(self, ctx:SailingParser.ExtinguishLampsContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#DarkenShip.
-    def enterDarkenShip(self, ctx:SailingParser.DarkenShipContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#DarkenShip.
-    def exitDarkenShip(self, ctx:SailingParser.DarkenShipContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#Repair.
     def enterRepair(self, ctx:SailingParser.RepairContext):
         pass
 
     # Exit a parse tree produced by SailingParser#Repair.
     def exitRepair(self, ctx:SailingParser.RepairContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#Patch.
-    def enterPatch(self, ctx:SailingParser.PatchContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#Patch.
-    def exitPatch(self, ctx:SailingParser.PatchContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#SealHull.
-    def enterSealHull(self, ctx:SailingParser.SealHullContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#SealHull.
-    def exitSealHull(self, ctx:SailingParser.SealHullContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#RepairMast.
-    def enterRepairMast(self, ctx:SailingParser.RepairMastContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#RepairMast.
-    def exitRepairMast(self, ctx:SailingParser.RepairMastContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#RepairRigging.
-    def enterRepairRigging(self, ctx:SailingParser.RepairRiggingContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#RepairRigging.
-    def exitRepairRigging(self, ctx:SailingParser.RepairRiggingContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#CarpenterReport.
-    def enterCarpenterReport(self, ctx:SailingParser.CarpenterReportContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#CarpenterReport.
-    def exitCarpenterReport(self, ctx:SailingParser.CarpenterReportContext):
         pass
 
 
@@ -1439,39 +845,12 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#LogSailState.
-    def enterLogSailState(self, ctx:SailingParser.LogSailStateContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LogSailState.
-    def exitLogSailState(self, ctx:SailingParser.LogSailStateContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LogWeaponsState.
-    def enterLogWeaponsState(self, ctx:SailingParser.LogWeaponsStateContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LogWeaponsState.
-    def exitLogWeaponsState(self, ctx:SailingParser.LogWeaponsStateContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#LogCargoState.
     def enterLogCargoState(self, ctx:SailingParser.LogCargoStateContext):
         pass
 
     # Exit a parse tree produced by SailingParser#LogCargoState.
     def exitLogCargoState(self, ctx:SailingParser.LogCargoStateContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LogCrewState.
-    def enterLogCrewState(self, ctx:SailingParser.LogCrewStateContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LogCrewState.
-    def exitLogCrewState(self, ctx:SailingParser.LogCrewStateContext):
         pass
 
 
@@ -1484,24 +863,6 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#FireAlarm.
-    def enterFireAlarm(self, ctx:SailingParser.FireAlarmContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#FireAlarm.
-    def exitFireAlarm(self, ctx:SailingParser.FireAlarmContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#WaterAlarm.
-    def enterWaterAlarm(self, ctx:SailingParser.WaterAlarmContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#WaterAlarm.
-    def exitWaterAlarm(self, ctx:SailingParser.WaterAlarmContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#BattleAlarm.
     def enterBattleAlarm(self, ctx:SailingParser.BattleAlarmContext):
         pass
@@ -1511,93 +872,12 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#PumpBilge.
-    def enterPumpBilge(self, ctx:SailingParser.PumpBilgeContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#PumpBilge.
-    def exitPumpBilge(self, ctx:SailingParser.PumpBilgeContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LifeJackets.
-    def enterLifeJackets(self, ctx:SailingParser.LifeJacketsContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LifeJackets.
-    def exitLifeJackets(self, ctx:SailingParser.LifeJacketsContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#Evacuate.
-    def enterEvacuate(self, ctx:SailingParser.EvacuateContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#Evacuate.
-    def exitEvacuate(self, ctx:SailingParser.EvacuateContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#AbandonShip.
-    def enterAbandonShip(self, ctx:SailingParser.AbandonShipContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#AbandonShip.
-    def exitAbandonShip(self, ctx:SailingParser.AbandonShipContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#FireOnBoard.
-    def enterFireOnBoard(self, ctx:SailingParser.FireOnBoardContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#FireOnBoard.
-    def exitFireOnBoard(self, ctx:SailingParser.FireOnBoardContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LeakDetected.
-    def enterLeakDetected(self, ctx:SailingParser.LeakDetectedContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LeakDetected.
-    def exitLeakDetected(self, ctx:SailingParser.LeakDetectedContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#MastBroken.
-    def enterMastBroken(self, ctx:SailingParser.MastBrokenContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#MastBroken.
-    def exitMastBroken(self, ctx:SailingParser.MastBrokenContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#ReportWind.
     def enterReportWind(self, ctx:SailingParser.ReportWindContext):
         pass
 
     # Exit a parse tree produced by SailingParser#ReportWind.
     def exitReportWind(self, ctx:SailingParser.ReportWindContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ReportWave.
-    def enterReportWave(self, ctx:SailingParser.ReportWaveContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ReportWave.
-    def exitReportWave(self, ctx:SailingParser.ReportWaveContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ReportVisibility.
-    def enterReportVisibility(self, ctx:SailingParser.ReportVisibilityContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ReportVisibility.
-    def exitReportVisibility(self, ctx:SailingParser.ReportVisibilityContext):
         pass
 
 
@@ -1619,30 +899,12 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#ReportCurrent.
-    def enterReportCurrent(self, ctx:SailingParser.ReportCurrentContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ReportCurrent.
-    def exitReportCurrent(self, ctx:SailingParser.ReportCurrentContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#Repeat.
     def enterRepeat(self, ctx:SailingParser.RepeatContext):
         pass
 
     # Exit a parse tree produced by SailingParser#Repeat.
     def exitRepeat(self, ctx:SailingParser.RepeatContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#WhileLoop.
-    def enterWhileLoop(self, ctx:SailingParser.WhileLoopContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#WhileLoop.
-    def exitWhileLoop(self, ctx:SailingParser.WhileLoopContext):
         pass
 
 
@@ -1679,42 +941,6 @@ class SailingParserListener(ParseTreeListener):
 
     # Exit a parse tree produced by SailingParser#timeUnit.
     def exitTimeUnit(self, ctx:SailingParser.TimeUnitContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#DefineManeuver.
-    def enterDefineManeuver(self, ctx:SailingParser.DefineManeuverContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#DefineManeuver.
-    def exitDefineManeuver(self, ctx:SailingParser.DefineManeuverContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ExecuteManeuver.
-    def enterExecuteManeuver(self, ctx:SailingParser.ExecuteManeuverContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ExecuteManeuver.
-    def exitExecuteManeuver(self, ctx:SailingParser.ExecuteManeuverContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#DefineProcedure.
-    def enterDefineProcedure(self, ctx:SailingParser.DefineProcedureContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#DefineProcedure.
-    def exitDefineProcedure(self, ctx:SailingParser.DefineProcedureContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#ExecuteProcedure.
-    def enterExecuteProcedure(self, ctx:SailingParser.ExecuteProcedureContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ExecuteProcedure.
-    def exitExecuteProcedure(self, ctx:SailingParser.ExecuteProcedureContext):
         pass
 
 
@@ -1760,51 +986,6 @@ class SailingParserListener(ParseTreeListener):
 
     # Exit a parse tree produced by SailingParser#DepthCondition.
     def exitDepthCondition(self, ctx:SailingParser.DepthConditionContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#CourseCondition.
-    def enterCourseCondition(self, ctx:SailingParser.CourseConditionContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#CourseCondition.
-    def exitCourseCondition(self, ctx:SailingParser.CourseConditionContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#TemperatureCondition.
-    def enterTemperatureCondition(self, ctx:SailingParser.TemperatureConditionContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#TemperatureCondition.
-    def exitTemperatureCondition(self, ctx:SailingParser.TemperatureConditionContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#PressureCondition.
-    def enterPressureCondition(self, ctx:SailingParser.PressureConditionContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#PressureCondition.
-    def exitPressureCondition(self, ctx:SailingParser.PressureConditionContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#WaveCondition.
-    def enterWaveCondition(self, ctx:SailingParser.WaveConditionContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#WaveCondition.
-    def exitWaveCondition(self, ctx:SailingParser.WaveConditionContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#VisibilityCondition.
-    def enterVisibilityCondition(self, ctx:SailingParser.VisibilityConditionContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#VisibilityCondition.
-    def exitVisibilityCondition(self, ctx:SailingParser.VisibilityConditionContext):
         pass
 
 

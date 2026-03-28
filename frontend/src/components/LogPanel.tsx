@@ -13,20 +13,15 @@ const CATEGORY_ICONS: Record<string, string> = {
   cumowanie: "🔗",
   prędkość: "💨",
   uzbrojenie: "💣",
-  abordaż: "⚔️",
   ładunek: "📦",
-  obserwacja: "🔭",
-  taktyka: "🏴‍☠️",
   załoga: "👥",
   flagi: "🏴",
-  światła: "🔦",
   naprawy: "🔧",
   dziennik: "📜",
   awaria: "🚨",
   pogoda: "🌊",
   kontrola: "⚙️",
   takielunek: "🪢",
-  błąd: "❌",
   ogólny: "📝",
 };
 
@@ -38,32 +33,22 @@ const CATEGORY_COLORS: Record<string, string> = {
   cumowanie: "#f97316",
   prędkość: "#22d3ee",
   uzbrojenie: "#ef4444",
-  abordaż: "#f43f5e",
   ładunek: "#fb923c",
-  obserwacja: "#818cf8",
-  taktyka: "#e879f9",
   załoga: "#34d399",
   flagi: "#fcd34d",
-  światła: "#fde68a",
   naprawy: "#a3a3a3",
   dziennik: "#d4d4d8",
-  awaria: "#ff0000",
+  awaria: "#ff4444",
   pogoda: "#38bdf8",
   kontrola: "#94a3b8",
   takielunek: "#78716c",
-  błąd: "#ff4444",
-  ogólny: "#888",
+  ogólny: "#666",
 };
-
-// ─────────────────────────────────────────────────────────────────
-// COMPONENT
-// ─────────────────────────────────────────────────────────────────
 
 export default function LogPanel({ log }: LogPanelProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState("all");
 
-  // Auto-scroll
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -107,7 +92,7 @@ export default function LogPanel({ log }: LogPanelProps) {
         ) : (
           filtered.map((entry, i) => {
             const icon = CATEGORY_ICONS[entry.category] ?? "📝";
-            const color = CATEGORY_COLORS[entry.category] ?? "#888";
+            const color = CATEGORY_COLORS[entry.category] ?? "#666";
             return (
               <div key={i} className="log-entry">
                 <span className="log-time">{entry.timestamp}</span>

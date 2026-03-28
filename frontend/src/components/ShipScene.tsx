@@ -19,44 +19,53 @@ interface FallbackShipProps {
 
 interface CompassOverlayProps {
     heading: number;
+    speed: number;
+    anchor: string;
 }
 
-function CompassOverlay({ heading }: CompassOverlayProps) {
-    const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+// ─────────────────────────────────────────────────────────────────
+// KOMPAS + INFO OVERLAY
+// ─────────────────────────────────────────────────────────────────
 
-    // Wyznacz nazwę kierunku
+function CompassOverlay({ heading, speed, anchor }: CompassOverlayProps) {
+    const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
     const dirIndex = Math.round(((heading % 360) + 360) % 360 / 45) % 8;
     const dirName = directions[dirIndex];
+
+    const compassBg = "rgba(6, 13, 20, 0.82)";
+    const ringColor = "rgba(212, 168, 67, 0.45)";
+    const goldText = "#d4a843";
+    const font = "'IBM Plex Mono', 'Menlo', monospace";
 
     return (
         <div style={{
             position: "absolute",
-            top: 16,
-            right: 16,
+            top: 14,
+            right: 14,
             zIndex: 10,
             pointerEvents: "none",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: 4,
+            gap: 6,
         }}>
-            {/* Kompas kółko */}
+            {/* Kompas */}
             <div style={{
-                width: 90,
-                height: 90,
+                width: 86,
+                height: 86,
                 borderRadius: "50%",
-                background: "rgba(0,0,0,0.65)",
-                border: "2px solid rgba(240,192,64,0.5)",
+                background: compassBg,
+                border: `2px solid ${ringColor}`,
                 position: "relative",
-                backdropFilter: "blur(4px)",
+                backdropFilter: "blur(8px)",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)",
             }}>
-                {/* Literki N/E/S/W — nieruchome */}
                 {(["N", "E", "S", "W"] as const).map((dir, i) => {
                     const angle = i * 90;
                     const rad = (angle * Math.PI) / 180;
-                    const r = 34;
-                    const x = 45 + Math.sin(rad) * r;
-                    const y = 45 - Math.cos(rad) * r;
+                    const r = 32;
+                    const x = 43 + Math.sin(rad) * r;
+                    const y = 43 - Math.cos(rad) * r;
                     return (
                         <span
                             key={dir}
@@ -65,18 +74,19 @@ function CompassOverlay({ heading }: CompassOverlayProps) {
                                 left: x,
                                 top: y,
                                 transform: "translate(-50%, -50%)",
-                                fontSize: 10,
-                                fontWeight: dir === "N" ? 800 : 600,
-                                fontFamily: "JetBrains Mono, monospace",
-                                color: dir === "N" ? "#f05050" : "rgba(255,255,255,0.5)",
+                                fontSize: 9,
+                                fontWeight: dir === "N" ? 800 : 500,
+                                fontFamily: font,
+                                color: dir === "N" ? "#d45050" : "rgba(213, 221, 229, 0.4)",
+                                letterSpacing: 0.5,
                             }}
                         >
-              {dir}
-            </span>
+                            {dir}
+                        </span>
                     );
                 })}
 
-                {/* Strzałka — obraca się z headingiem */}
+                {/* Strzałka */}
                 <div style={{
                     position: "absolute",
                     top: "50%",
@@ -84,70 +94,117 @@ function CompassOverlay({ heading }: CompassOverlayProps) {
                     width: 0,
                     height: 0,
                     transform: `translate(-50%, -50%) rotate(${heading}deg)`,
-                    transition: "transform 0.4s ease-out",
+                    transition: "transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
                 }}>
-                    {/* Trójkąt N (czerwony) */}
                     <div style={{
                         position: "absolute",
-                        left: -5,
-                        top: -28,
+                        left: -4,
+                        top: -26,
                         width: 0,
                         height: 0,
-                        borderLeft: "5px solid transparent",
-                        borderRight: "5px solid transparent",
-                        borderBottom: "28px solid #f05050",
+                        borderLeft: "4px solid transparent",
+                        borderRight: "4px solid transparent",
+                        borderBottom: "26px solid #d45050",
+                        filter: "drop-shadow(0 0 3px rgba(212, 80, 80, 0.4))",
                     }} />
-                    {/* Trójkąt S (biały) */}
                     <div style={{
                         position: "absolute",
-                        left: -5,
+                        left: -4,
                         top: 0,
                         width: 0,
                         height: 0,
-                        borderLeft: "5px solid transparent",
-                        borderRight: "5px solid transparent",
-                        borderTop: "28px solid rgba(255,255,255,0.4)",
+                        borderLeft: "4px solid transparent",
+                        borderRight: "4px solid transparent",
+                        borderTop: "26px solid rgba(213, 221, 229, 0.25)",
                     }} />
-                    {/* Punkt środkowy */}
                     <div style={{
                         position: "absolute",
-                        left: -3,
-                        top: -3,
-                        width: 6,
-                        height: 6,
+                        left: -2.5,
+                        top: -2.5,
+                        width: 5,
+                        height: 5,
                         borderRadius: "50%",
-                        background: "#f0c040",
+                        background: goldText,
+                        boxShadow: `0 0 4px ${goldText}`,
                     }} />
                 </div>
+
+                {/* Ticki co 30° */}
+                {Array.from({ length: 12 }).map((_, i) => {
+                    const angle = i * 30;
+                    const rad = (angle * Math.PI) / 180;
+                    const r1 = 38;
+                    const r2 = 41;
+                    return (
+                        <div
+                            key={i}
+                            style={{
+                                position: "absolute",
+                                left: 43 + Math.sin(rad) * r1,
+                                top: 43 - Math.cos(rad) * r1,
+                                width: 1,
+                                height: i % 3 === 0 ? 5 : 3,
+                                background: i % 3 === 0
+                                    ? "rgba(212, 168, 67, 0.5)"
+                                    : "rgba(213, 221, 229, 0.15)",
+                                transform: `translate(-50%, -50%) rotate(${angle}deg)`,
+                                borderRadius: 1,
+                            }}
+                        />
+                    );
+                })}
             </div>
 
-            {/* Wartość liczbowa pod kompasem */}
+            {/* Kurs */}
             <div style={{
-                background: "rgba(0,0,0,0.65)",
-                color: "#f0c040",
+                background: compassBg,
+                color: goldText,
                 padding: "3px 12px",
-                borderRadius: 6,
-                fontFamily: "JetBrains Mono, monospace",
-                fontSize: 13,
-                fontWeight: 700,
-                border: "1px solid rgba(240,192,64,0.3)",
-                backdropFilter: "blur(4px)",
+                borderRadius: 5,
+                fontFamily: font,
+                fontSize: 12,
+                fontWeight: 600,
+                border: `1px solid ${ringColor}`,
+                backdropFilter: "blur(8px)",
                 letterSpacing: 0.5,
+                boxShadow: "0 2px 10px rgba(0,0,0,0.4)",
             }}>
                 {heading.toFixed(0)}° {dirName}
+            </div>
+
+            {/* Prędkość + kotwica */}
+            <div style={{
+                background: compassBg,
+                padding: "3px 10px",
+                borderRadius: 5,
+                fontFamily: font,
+                fontSize: 10,
+                fontWeight: 500,
+                border: `1px solid rgba(22, 38, 56, 0.6)`,
+                backdropFilter: "blur(8px)",
+                color: speed > 0 ? "#38c8a8" : "rgba(122, 146, 168, 0.6)",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
+                display: "flex",
+                gap: 8,
+                alignItems: "center",
+            }}>
+                <span>{speed.toFixed(1)} kn</span>
+                {anchor === "rzucona" && (
+                    <span style={{ color: "#d4a843", fontSize: 11 }}>⚓</span>
+                )}
             </div>
         </div>
     );
 }
 
 // ─────────────────────────────────────────────────────────────────
-// WODA — animowana płaszczyzna
+// WODA — animowana, głębokie morze
 // ─────────────────────────────────────────────────────────────────
 
 function Water() {
     const meshRef = useRef<THREE.Mesh>(null);
     const geometry = useMemo(
-        () => new THREE.PlaneGeometry(300, 300, 64, 64),
+        () => new THREE.PlaneGeometry(400, 400, 80, 80),
         []
     );
 
@@ -161,8 +218,9 @@ function Water() {
             const x = positions.getX(i);
             const y = positions.getY(i);
             const z =
-                Math.sin(x * 0.08 + time * 0.7) * 0.3 +
-                Math.sin(y * 0.12 + time * 0.5) * 0.2;
+                Math.sin(x * 0.06 + time * 0.6) * 0.35 +
+                Math.sin(y * 0.09 + time * 0.4) * 0.25 +
+                Math.sin((x + y) * 0.04 + time * 0.3) * 0.15;
             positions.setZ(i, z);
         }
         positions.needsUpdate = true;
@@ -172,14 +230,51 @@ function Water() {
         <mesh ref={meshRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
             <primitive object={geometry} />
             <meshStandardMaterial
-                color="#0a4a7a"
+                color="#082840"
                 transparent
-                opacity={0.85}
+                opacity={0.88}
                 side={THREE.DoubleSide}
-                roughness={0.3}
-                metalness={0.1}
+                roughness={0.25}
+                metalness={0.15}
             />
         </mesh>
+    );
+}
+
+// ─────────────────────────────────────────────────────────────────
+// MOON LIGHT — dodatkowe oświetlenie "księżycowe"
+// ─────────────────────────────────────────────────────────────────
+
+function SceneLighting() {
+    return (
+        <>
+            <ambientLight intensity={0.4} color="#8899bb" />
+            <directionalLight
+                position={[12, 18, 8]}
+                intensity={1.4}
+                castShadow
+                color="#ffe8c0"
+                shadow-mapSize-width={1024}
+                shadow-mapSize-height={1024}
+            />
+            <directionalLight
+                position={[-8, 10, -12]}
+                intensity={0.25}
+                color="#3366aa"
+            />
+            <pointLight
+                position={[0, 8, 0]}
+                intensity={0.2}
+                color="#ffd080"
+                distance={30}
+                decay={2}
+            />
+            <hemisphereLight
+                color="#1a2a44"
+                groundColor="#061018"
+                intensity={0.4}
+            />
+        </>
     );
 }
 
@@ -192,7 +287,7 @@ function JollyRogerFlag({ visible }: { visible: boolean }) {
 
     useFrame(({ clock }) => {
         if (ref.current && visible) {
-            ref.current.rotation.y = Math.sin(clock.getElapsedTime() * 2) * 0.1;
+            ref.current.rotation.y = Math.sin(clock.getElapsedTime() * 2) * 0.12;
         }
     });
 
@@ -210,14 +305,14 @@ function JollyRogerFlag({ visible }: { visible: boolean }) {
             </mesh>
             <mesh position={[0.4, 0.8, 0.01]}>
                 <circleGeometry args={[0.1, 16]} />
-                <meshStandardMaterial color="#fff" />
+                <meshStandardMaterial color="#ddd" />
             </mesh>
         </group>
     );
 }
 
 // ─────────────────────────────────────────────────────────────────
-// MODEL GLB — ustawia widoczność rekurencyjnie na wszystkich mesh
+// MODEL GLB
 // ─────────────────────────────────────────────────────────────────
 
 function GLBModel({ url, visible }: { url: string; visible: boolean }) {
@@ -225,7 +320,6 @@ function GLBModel({ url, visible }: { url: string; visible: boolean }) {
     const cloned = useMemo(() => scene.clone(true), [scene]);
     const groupRef = useRef<THREE.Group>(null);
 
-    // Rekurencyjnie ustaw visible na WSZYSTKICH obiektach w scenie
     useEffect(() => {
         cloned.traverse((child) => {
             child.visible = visible;
@@ -240,13 +334,21 @@ function GLBModel({ url, visible }: { url: string; visible: boolean }) {
 // ─────────────────────────────────────────────────────────────────
 
 function FallbackShip({ hasSailsSet }: FallbackShipProps) {
-    const sailColor = "#f5f0e0";
+    const sailColor = "#e8e0d0";
+    const hullDark = "#5a2e1c";
+    const hullMid = "#7a4a30";
+    const hullLight = "#8a5a3a";
+    const mastColor = "#3d2c1e";
+    const deckColor = "#906840";
+    const trimColor = "#4a2a14";
+
     const sailMat = (
         <meshStandardMaterial
             color={sailColor}
             side={THREE.DoubleSide}
             transparent
-            opacity={0.92}
+            opacity={0.9}
+            roughness={0.7}
         />
     );
 
@@ -255,117 +357,140 @@ function FallbackShip({ hasSailsSet }: FallbackShipProps) {
             {/* ── KADŁUB ── */}
             <mesh position={[0, 0, 0]}>
                 <boxGeometry args={[2.4, 1, 8]} />
-                <meshStandardMaterial color="#6B3A2A" />
+                <meshStandardMaterial color={hullDark} roughness={0.8} />
             </mesh>
+            {/* Dziób */}
             <mesh position={[0, 0, 4.5]} rotation={[0, 0, Math.PI / 4]}>
                 <boxGeometry args={[1.2, 0.7, 1.5]} />
-                <meshStandardMaterial color="#6B3A2A" />
+                <meshStandardMaterial color={hullDark} roughness={0.8} />
             </mesh>
+            {/* Bukszpryt */}
             <mesh position={[0, 0.6, 6]} rotation={[Math.PI / 6, 0, 0]}>
                 <cylinderGeometry args={[0.04, 0.06, 3.5]} />
-                <meshStandardMaterial color="#4a3728" />
+                <meshStandardMaterial color={mastColor} />
             </mesh>
+            {/* Rufa */}
             <mesh position={[0, 0.2, -4.2]} rotation={[0, 0, Math.PI / 4]}>
                 <boxGeometry args={[1, 0.5, 0.8]} />
-                <meshStandardMaterial color="#6B3A2A" />
+                <meshStandardMaterial color={hullDark} roughness={0.8} />
             </mesh>
+            {/* Pokład */}
             <mesh position={[0, 0.55, 0]}>
                 <boxGeometry args={[2.2, 0.08, 7.5]} />
-                <meshStandardMaterial color="#A0522D" />
+                <meshStandardMaterial color={deckColor} roughness={0.9} />
             </mesh>
+            {/* Nadbudówka rufowa */}
             <mesh position={[0, 1.1, -2.8]}>
                 <boxGeometry args={[2.2, 0.8, 2.5]} />
-                <meshStandardMaterial color="#5C3317" />
+                <meshStandardMaterial color={hullMid} roughness={0.8} />
             </mesh>
             <mesh position={[0, 1.55, -2.8]}>
                 <boxGeometry args={[2.3, 0.06, 2.6]} />
-                <meshStandardMaterial color="#4a2a14" />
+                <meshStandardMaterial color={trimColor} />
             </mesh>
+            {/* Burty */}
             <mesh position={[1.15, 0.8, 0]}>
                 <boxGeometry args={[0.06, 0.5, 7.5]} />
-                <meshStandardMaterial color="#5C3317" />
+                <meshStandardMaterial color={hullMid} roughness={0.8} />
             </mesh>
             <mesh position={[-1.15, 0.8, 0]}>
                 <boxGeometry args={[0.06, 0.5, 7.5]} />
-                <meshStandardMaterial color="#5C3317" />
+                <meshStandardMaterial color={hullMid} roughness={0.8} />
+            </mesh>
+            {/* Linia wodna — złoty pasek */}
+            <mesh position={[0, -0.1, 0]}>
+                <boxGeometry args={[2.5, 0.06, 8.1]} />
+                <meshStandardMaterial color="#8a6830" metalness={0.3} roughness={0.5} />
             </mesh>
 
             {/* ── MASZTY ── */}
+            {/* Grotmaszt (środkowy, najwyższy) */}
             <mesh position={[0, 3.8, 0]}>
                 <cylinderGeometry args={[0.07, 0.1, 7]} />
-                <meshStandardMaterial color="#4a3728" />
+                <meshStandardMaterial color={mastColor} />
             </mesh>
             <mesh position={[0, 3.5, 0]} rotation={[0, 0, Math.PI / 2]}>
                 <cylinderGeometry args={[0.03, 0.04, 3.5]} />
-                <meshStandardMaterial color="#4a3728" />
+                <meshStandardMaterial color={mastColor} />
             </mesh>
             <mesh position={[0, 5.5, 0]} rotation={[0, 0, Math.PI / 2]}>
                 <cylinderGeometry args={[0.025, 0.035, 2.8]} />
-                <meshStandardMaterial color="#4a3728" />
+                <meshStandardMaterial color={mastColor} />
             </mesh>
             <mesh position={[0, 6.8, 0]} rotation={[0, 0, Math.PI / 2]}>
                 <cylinderGeometry args={[0.02, 0.03, 2]} />
-                <meshStandardMaterial color="#4a3728" />
+                <meshStandardMaterial color={mastColor} />
             </mesh>
+            {/* Fokmaszt (przedni) */}
             <mesh position={[0, 3.2, 2.8]}>
                 <cylinderGeometry args={[0.06, 0.09, 6]} />
-                <meshStandardMaterial color="#4a3728" />
+                <meshStandardMaterial color={mastColor} />
             </mesh>
             <mesh position={[0, 2.8, 2.8]} rotation={[0, 0, Math.PI / 2]}>
                 <cylinderGeometry args={[0.03, 0.04, 3]} />
-                <meshStandardMaterial color="#4a3728" />
+                <meshStandardMaterial color={mastColor} />
             </mesh>
             <mesh position={[0, 4.5, 2.8]} rotation={[0, 0, Math.PI / 2]}>
                 <cylinderGeometry args={[0.025, 0.035, 2.4]} />
-                <meshStandardMaterial color="#4a3728" />
+                <meshStandardMaterial color={mastColor} />
             </mesh>
+            {/* Bezanmaszt (tylni) */}
             <mesh position={[0, 3, -2.5]}>
                 <cylinderGeometry args={[0.05, 0.08, 5.2]} />
-                <meshStandardMaterial color="#4a3728" />
+                <meshStandardMaterial color={mastColor} />
             </mesh>
             <mesh position={[0, 2.5, -2.5]} rotation={[0, 0, Math.PI / 2]}>
                 <cylinderGeometry args={[0.025, 0.035, 2.5]} />
-                <meshStandardMaterial color="#4a3728" />
+                <meshStandardMaterial color={mastColor} />
             </mesh>
+            {/* Bocianie gniazdo */}
             <mesh position={[0, 6.5, 0]}>
                 <cylinderGeometry args={[0.3, 0.25, 0.3, 8, 1, true]} />
-                <meshStandardMaterial color="#4a3728" side={THREE.DoubleSide} />
+                <meshStandardMaterial color={mastColor} side={THREE.DoubleSide} />
             </mesh>
 
             {/* ═══ ŻAGLE ═══ */}
             {hasSailsSet && (
                 <>
+                    {/* Grotżagiel dolny */}
                     <mesh position={[0, 3.5, 0.05]}>
                         <planeGeometry args={[3.2, 2.5]} />
                         {sailMat}
                     </mesh>
+                    {/* Grotżagiel górny */}
                     <mesh position={[0, 5.5, 0.05]}>
                         <planeGeometry args={[2.5, 1.8]} />
                         {sailMat}
                     </mesh>
+                    {/* Grotżagiel szczytowy */}
                     <mesh position={[0, 6.8, 0.05]}>
                         <planeGeometry args={[1.8, 1.2]} />
                         {sailMat}
                     </mesh>
+                    {/* Fokżagiel dolny */}
                     <mesh position={[0, 2.8, 2.85]}>
                         <planeGeometry args={[2.8, 2.2]} />
                         {sailMat}
                     </mesh>
+                    {/* Fokżagiel górny */}
                     <mesh position={[0, 4.5, 2.85]}>
                         <planeGeometry args={[2.2, 1.5]} />
                         {sailMat}
                     </mesh>
+                    {/* Bezanżagiel */}
                     <mesh position={[0, 2.5, -2.45]}>
                         <planeGeometry args={[2.2, 1.8]} />
                         {sailMat}
                     </mesh>
+                    {/* Sztaksel (trójkątny, do bukszprytu) */}
                     <mesh position={[-0.3, 3.2, 4.2]} rotation={[0.5, 0.2, 0.1]}>
                         <planeGeometry args={[1.5, 2.5]} />
                         <meshStandardMaterial
                             color={sailColor}
                             side={THREE.DoubleSide}
                             transparent
-                            opacity={0.8}
+                            opacity={0.75}
+                            roughness={0.7}
                         />
                     </mesh>
                 </>
@@ -375,7 +500,7 @@ function FallbackShip({ hasSailsSet }: FallbackShipProps) {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// MODEL STATKU — rotacja + wybór GLB/fallback
+// MODEL STATKU — rotacja + lekkie kołysanie
 // ─────────────────────────────────────────────────────────────────
 
 function ShipModel({ shipState }: ShipModelProps) {
@@ -389,17 +514,23 @@ function ShipModel({ shipState }: ShipModelProps) {
         }
     }, [shipState?.heading]);
 
-    useFrame((_, delta) => {
+    useFrame(({ clock }, delta) => {
         if (!groupRef.current) return;
         const current = groupRef.current.rotation.y;
         const target = targetRotation.current;
         const diff = target - current;
         const shortDiff = ((diff + Math.PI) % (Math.PI * 2)) - Math.PI;
         groupRef.current.rotation.y += shortDiff * Math.min(delta * 2, 1);
+
+        // Kołysanie na falach
+        const t = clock.getElapsedTime();
+        groupRef.current.rotation.x = Math.sin(t * 0.5) * 0.015;
+        groupRef.current.rotation.z = Math.sin(t * 0.3 + 1) * 0.01;
+        groupRef.current.position.y = Math.sin(t * 0.6) * 0.08;
     });
 
     const hasSailsSet = shipState
-        ? Object.values(shipState.sails).some((s) => s.state === "postawiony")
+        ? Object.values(shipState.sails).some((s) => s.state !== "zwinięty")
         : false;
 
     const jollyRoger = shipState?.flags?.jolly_roger ?? false;
@@ -412,11 +543,11 @@ function ShipModel({ shipState }: ShipModelProps) {
                 <ErrorBoundaryFallback onError={() => setHasGLB(false)}>
                     <Suspense fallback={<FallbackShip hasSailsSet={hasSailsSet} />}>
                         <GLBModel
-                            url="/models/ship_sails_up.glb"
+                            url="/models/ship_sails_down.glb"
                             visible={hasSailsSet}
                         />
                         <GLBModel
-                            url="/models/ship_sails_down.glb"
+                            url="/models/ship_sails_up.glb"
                             visible={!hasSailsSet}
                         />
                     </Suspense>
@@ -465,43 +596,38 @@ class ErrorBoundaryFallback extends React.Component<
 }
 
 // ─────────────────────────────────────────────────────────────────
-// SCENA GŁÓWNA (eksport)
+// SCENA GŁÓWNA
 // ─────────────────────────────────────────────────────────────────
 
 export default function ShipScene({ shipState }: ShipSceneProps) {
     const heading = shipState?.heading ?? 0;
+    const speed = shipState?.speed ?? 0;
+    const anchor = shipState?.anchor ?? "podniesiona";
 
     return (
         <div style={{ width: "100%", height: "100%", position: "relative" }}>
-            {/* Kompas — HTML overlay poza Canvas */}
-            <CompassOverlay heading={heading} />
+            <CompassOverlay heading={heading} speed={speed} anchor={anchor} />
 
             <Canvas
-                camera={{ position: [30, 14, 35], fov: 35 }}
-                style={{ background: "linear-gradient(180deg, #0d1f3c 0%, #0a1628 100%)" }}
+                camera={{ position: [22, 12, 28], fov: 38 }}
+                style={{ background: "linear-gradient(180deg, #0c1a2c 0%, #060d14 60%, #040a10 100%)" }}
+                shadows
             >
-                <ambientLight intensity={0.5} />
-                <directionalLight position={[10, 15, 5]} intensity={1.3} castShadow />
-                <directionalLight
-                    position={[-5, 8, -10]}
-                    intensity={0.3}
-                    color="#4488ff"
-                />
-                <hemisphereLight groundColor="#0a4a7a" intensity={0.35} />
+                <SceneLighting />
 
-                <fog attach="fog" args={["#0a1628", 60, 160]} />
+                <fog attach="fog" args={["#060d14", 50, 180]} />
 
                 <Suspense fallback={null}>
                     <ShipModel shipState={shipState} />
                     <Water />
                     <OrbitControls
-                        target={[0, 3, 0]}
-                        minDistance={8}
-                        maxDistance={120}
-                        maxPolarAngle={Math.PI / 2.2}
-                        minPolarAngle={0.2}
+                        target={[0, 2.5, 0]}
+                        minDistance={10}
+                        maxDistance={100}
+                        maxPolarAngle={Math.PI / 2.15}
+                        minPolarAngle={0.15}
                         enableDamping
-                        dampingFactor={0.08}
+                        dampingFactor={0.06}
                     />
                 </Suspense>
             </Canvas>

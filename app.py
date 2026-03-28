@@ -16,15 +16,15 @@ from interpreter.sail_visitor import SailingCommandVisitor
 from interpreter.ship_state import ShipState
 
 class ExecuteRequest(BaseModel):
-    commands: str                         # tekst poleceń do wykonania
-    reset: bool = True                    # czy resetować stan przed wykonaniem
+    commands: str
+    reset: bool = True
 
 
 class ExecuteResponse(BaseModel):
     success: bool
-    state: dict                           # pełny stan statku (ShipState.to_dict())
-    log: list                             # dziennik pokładowy
-    errors: list[str] = []                # błędy parsowania
+    state: dict
+    log: list
+    errors: list[str] = []
 
 
 class ErrorCollector:
@@ -46,10 +46,9 @@ class ErrorCollector:
 app = FastAPI(
     title="🏴‍☠️ Pirate Ship Command Interpreter",
     description="API interpretera poleceń żeglarskich / pirackich",
-    version="1.0.0",
+    version="2.0.0",
 )
 
-# CORS — pozwól frontendowi (Vite domyślnie na porcie 5173) łączyć się z API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173"],
@@ -58,7 +57,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Globalny stan statku (opcjonalnie utrzymywany między requestami)
 current_state: ShipState = ShipState()
 
 
@@ -68,7 +66,6 @@ def parse_and_execute(text: str, state: ShipState) -> tuple[ShipState, list[str]
     input_stream = InputStream(text.strip())
     lexer = SailingLexer(input_stream)
 
-    # Zbieranie błędów lexera
     error_collector = ErrorCollector()
     lexer.removeErrorListeners()
     lexer.addErrorListener(error_collector)
@@ -76,14 +73,12 @@ def parse_and_execute(text: str, state: ShipState) -> tuple[ShipState, list[str]
     token_stream = CommonTokenStream(lexer)
     parser = SailingParser(token_stream)
 
-    # Zbieranie błędów parsera
     parser.removeErrorListeners()
     parser.addErrorListener(error_collector)
 
     tree = parser.program()
     errors = error_collector.errors
 
-    # Wykonaj komendy przez visitor
     visitor = SailingCommandVisitor(state)
     visitor.visit(tree)
 
@@ -92,6 +87,10 @@ def parse_and_execute(text: str, state: ShipState) -> tuple[ShipState, list[str]
 @app.post("/execute", response_model=ExecuteResponse)
 async def execute_commands(request: ExecuteRequest):
     global current_state
+
+    # Walidacja długości inputu
+    if len(request.commands) > 50_000:
+        raise HTTPException(status_code=400, detail="Zbyt długi input (max 50 000 znaków)")
 
     if request.reset:
         current_state = ShipState()
@@ -135,43 +134,57 @@ async def get_examples():
     return {
         "examples": [
             {
-                "name": "Stawianie żagli",
-                "commands": "postaw grot;\npostaw fok;\npostaw bramsel;"
+                "name": "⛵ Żagle",
+                "commands": "postaw grot;\npostaw fok;\npostaw bezan;\npostaw sztaksel;"
             },
             {
-                "name": "Kurs i nawigacja",
+                "name": "🧭 Kurs",
                 "commands": "kurs 185;\npostaw pelne zagle;\ncala naprzod;"
             },
             {
-                "name": "Przygotowanie do walki",
-                "commands": 'alarm bojowy;\nladuj armaty kula;\nladuj karronady kartacz;\nprzygotuj muszkiety;'
+                "name": "💣 Salwa",
+                "commands": "alarm bojowy;\nladuj armaty kula;\nladuj karronady kartacz;\nsalwa lewa burta;"
             },
             {
-                "name": "Atak!",
-                "commands": 'podnies jolly roger;\nceluj dziala na galeon;\nsalwa lewa burta;\nognia muszkiety;'
-            },
-            {
-                "name": "Abordaż",
-                "commands": 'zadaj kapitulacji;\nprzygotuj abordaz;\nrzuc haki abordazowe;\nabordaz;\nszturm;'
-            },
-            {
-                "name": "Pełny scenariusz",
+                "name": "🏴‍☠️ Piracki rajd",
                 "commands": (
                     '// Przygotowania\n'
+                    'odcumuj;\n'
                     'postaw grot;\npostaw fok;\nkurs 185;\n'
-                    'postaw pelne zagle;\n\n'
-                    '// Zwiad\n'
-                    'obserwator na bocianie gniazdo;\n'
-                    'obserwuj horyzont;\n'
-                    'zidentyfikuj galeon;\n\n'
+                    'cala naprzod;\n\n'
                     '// Walka\n'
-                    'alarm bojowy;\nladuj armaty kula;\n'
+                    'alarm bojowy;\n'
+                    'laduj armaty kula;\n'
                     'podnies jolly roger;\n'
                     'salwa lewa burta;\n\n'
                     '// Łupy\n'
                     'zaladuj zloto 50 sztuk;\n'
                     'zaladuj rum 20 sztuk;\n'
                     'loguj zdarzenie "zdobyto galeon";\n'
+                )
+            },
+            {
+                "name": "⚙️ Pętla",
+                "commands": (
+                    '// Powtórz manewr 3 razy\n'
+                    'powtorz 3 razy {\n'
+                    '    zwrot przez sztag;\n'
+                    '    postaw grot;\n'
+                    '    loguj "manewr wykonany";\n'
+                    '};\n'
+                )
+            },
+            {
+                "name": "🌊 Sztorm",
+                "commands": (
+                    '// Przygotowanie na sztorm\n'
+                    'zwin wszystkie zagle;\n'
+                    'postaw zagle sztormowe;\n'
+                    'napin talrepy do 90 procent;\n'
+                    'dobij faly;\n'
+                    'ster prosto;\n'
+                    'napraw takielunek;\n'
+                    'loguj zdarzenie "sztorm nadchodzi";\n'
                 )
             },
         ]

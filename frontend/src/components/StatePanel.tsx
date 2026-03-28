@@ -44,10 +44,6 @@ function StateRow({ label, value, color }: StateRowProps) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────
-// MAIN COMPONENT
-// ─────────────────────────────────────────────────────────────────
-
 export default function StatePanel({ shipState }: StatePanelProps) {
   if (!shipState) {
     return (
@@ -64,25 +60,13 @@ export default function StatePanel({ shipState }: StatePanelProps) {
 
   const s = shipState;
 
-  // Żagle — pokaż tylko aktywne
   const activeSails = Object.entries(s.sails).filter(
     ([, sail]) => sail.state !== "zwinięty"
   );
   const totalSails = Object.keys(s.sails).length;
-
-  // Ładunek — niezerowe
   const activeCargo = Object.entries(s.cargo).filter(([, qty]) => qty > 0);
-
-  // Flagi
   const activeFlags = Object.entries(s.flags)
-    .filter(
-      ([, v]) => v === true || (Array.isArray(v) && v.length > 0)
-    )
-    .map(([k]) => k);
-
-  // Światła
-  const activeLights = Object.entries(s.lights)
-    .filter(([, v]) => v)
+    .filter(([, v]) => v === true || (Array.isArray(v) && v.length > 0))
     .map(([k]) => k);
 
   return (
@@ -97,7 +81,7 @@ export default function StatePanel({ shipState }: StatePanelProps) {
           <StateRow
             label="Prędkość"
             value={`${s.speed} kn`}
-            color={s.speed > 0 ? "#4ade80" : "#888"}
+            color={s.speed > 0 ? "#4ade80" : undefined}
           />
           <StateRow label="Ster" value={`${s.rudder_angle}°`} />
           {s.wind_course && (
@@ -106,9 +90,12 @@ export default function StatePanel({ shipState }: StatePanelProps) {
           <StateRow
             label="Kotwica"
             value={s.anchor}
-            color={s.anchor === "rzucona" ? "#fbbf24" : "#888"}
+            color={s.anchor === "rzucona" ? "#fbbf24" : undefined}
           />
           <StateRow label="Cumowanie" value={s.mooring} />
+          {s.rowing !== "wyłączone" && (
+            <StateRow label="Wiosła" value={s.rowing} color="#22d3ee" />
+          )}
         </Section>
 
         {/* Żagle */}
@@ -120,7 +107,11 @@ export default function StatePanel({ shipState }: StatePanelProps) {
               <StateRow
                 key={name}
                 label={name}
-                value={sail.state}
+                value={
+                  sail.state === "zrefowany"
+                    ? `${sail.state} (${sail.reef_percent}%)`
+                    : sail.state
+                }
                 color={sail.state === "postawiony" ? "#4ade80" : "#fbbf24"}
               />
             ))
@@ -134,13 +125,7 @@ export default function StatePanel({ shipState }: StatePanelProps) {
               key={name}
               label={name}
               value={`${info.state}${info.ammo ? " (" + info.ammo + ")" : ""}`}
-              color={
-                info.state === "załadowany"
-                  ? "#f97316"
-                  : info.state === "wycelowany"
-                    ? "#ef4444"
-                    : "#888"
-              }
+              color={info.state === "załadowany" ? "#f97316" : undefined}
             />
           ))}
         </Section>
@@ -173,33 +158,27 @@ export default function StatePanel({ shipState }: StatePanelProps) {
             value={`${s.damage.rigging}%`}
             color={s.damage.rigging < 50 ? "#ef4444" : "#4ade80"}
           />
-          <StateRow
-            label="Reje"
-            value={`${s.damage.yards}%`}
-            color={s.damage.yards < 50 ? "#ef4444" : "#4ade80"}
-          />
         </Section>
 
-        {/* Status — taktyka, alarmy, flagi */}
-        {(s.tactic !== "brak" ||
-          s.alert !== "brak" ||
-          activeFlags.length > 0) && (
+        {/* Status */}
+        {(s.alert !== "brak" ||
+          activeFlags.length > 0 ||
+          s.man_overboard) && (
           <Section title="Status" icon="🏴‍☠️">
-            {s.tactic !== "brak" && (
-              <StateRow label="Taktyka" value={s.tactic} color="#f97316" />
-            )}
             {s.alert !== "brak" && (
               <StateRow label="Alarm" value={s.alert} color="#ef4444" />
-            )}
-            {s.boarding !== "brak" && (
-              <StateRow label="Abordaż" value={s.boarding} color="#ef4444" />
             )}
             {activeFlags.length > 0 && (
               <StateRow label="Flagi" value={activeFlags.join(", ")} />
             )}
-            {activeLights.length > 0 && (
-              <StateRow label="Światła" value={activeLights.join(", ")} />
+            {s.man_overboard && (
+              <StateRow
+                label="Człowiek za burtą"
+                value={s.man_overboard_side || "TAK"}
+                color="#ef4444"
+              />
             )}
+            <StateRow label="Załoga" value={s.crew_station} />
           </Section>
         )}
       </div>

@@ -5,8 +5,7 @@ from gen.SailingParser import SailingParser
 from gen.SailingParserVisitor import SailingParserVisitor
 from .ship_state import (
     ShipState, SailState, SailInfo, AnchorState, MooringState,
-    EngineMode, CannonState, BoardingPhase, TacticMode,
-    AlertLevel, CrewStation
+    EngineMode, CannonState, AlertLevel, CrewStation
 )
 
 class SailingCommandVisitor(SailingParserVisitor):
@@ -23,7 +22,6 @@ class SailingCommandVisitor(SailingParserVisitor):
         return ctx.getText()
 
     def _get_number(self, token) -> float:
-        """Parsuje NUMBER token na float."""
         if token is None:
             return 0.0
         return float(token.text)
@@ -69,8 +67,7 @@ class SailingCommandVisitor(SailingParserVisitor):
     def visitSetStormSails(self, ctx):
         for key in self.state.sails:
             self.state.sails[key].state = SailState.FURLED
-        self.state.sails["trysel"].state = SailState.SET
-        self.state.sails["sztormfok"].state = SailState.SET
+        self.state.sails["fok"].state = SailState.SET
         self.state.add_log("Postawiono żagle sztormowe", "żagle")
 
     def visitFurlSail(self, ctx: SailingParser.FurlSailContext):
@@ -112,20 +109,6 @@ class SailingCommandVisitor(SailingParserVisitor):
         key = self.state.normalize_sail_key(name)
         self.state.sails[key].sheet_tension = max(0, self.state.sails[key].sheet_tension - 20)
         self.state.add_log(f"Poluzowano szoty {name}", "żagle")
-
-    def visitTrimSailToAngle(self, ctx: SailingParser.TrimSailToAngleContext):
-        name = self._get_sail_name(ctx.sail())
-        key = self.state.normalize_sail_key(name)
-        angle = self._get_number(ctx.angle)
-        self.state.sails[key].angle = angle
-        self.state.add_log(f"Wytrymowano {name} do {angle}°", "żagle")
-
-    def visitEaseSailPercent(self, ctx: SailingParser.EaseSailPercentContext):
-        name = self._get_sail_name(ctx.sail())
-        key = self.state.normalize_sail_key(name)
-        val = self._get_number(ctx.value)
-        self.state.sails[key].sheet_tension = val
-        self.state.add_log(f"Poluzowano szoty {name} na {val}%", "żagle")
 
     # ─────────────────────────────────────────────────────────────────────
     # OLINOWANIE
@@ -220,21 +203,7 @@ class SailingCommandVisitor(SailingParserVisitor):
 
     def visitRaiseAnchor(self, ctx):
         self.state.anchor = AnchorState.RAISED
-        self.state.chain_length = 0.0
         self.state.add_log("Podniesiono kotwicę", "kotwica")
-
-    def visitPayOutChain(self, ctx):
-        length = self._get_number(ctx.length) if ctx.length else 20.0
-        self.state.chain_length = length
-        self.state.add_log(f"Wytrawiono łańcuch na {length}", "kotwica")
-
-    def visitHaulChain(self, ctx):
-        self.state.chain_length = max(0, self.state.chain_length - 10)
-        self.state.add_log("Dobrano łańcuch", "kotwica")
-
-    def visitPayOutLine(self, ctx):
-        length = self._get_number(ctx.length) if ctx.length else 20.0
-        self.state.add_log(f"Wytrawiono linę kotwiczną na {length}", "kotwica")
 
     # ─────────────────────────────────────────────────────────────────────
     # CUMOWANIE
@@ -249,16 +218,6 @@ class SailingCommandVisitor(SailingParserVisitor):
         self.state.mooring = MooringState.FREE
         self.state.add_log("Odcumowano", "cumowanie")
 
-    def visitThrowMooringLines(self, ctx):
-        self.state.add_log("Rzucono cumy", "cumowanie")
-
-    def visitHaulMooringLines(self, ctx):
-        self.state.add_log("Dobrano cumy", "cumowanie")
-
-    def visitThrowGrapplingHooks(self, ctx):
-        self.state.grappling_hooks = True
-        self.state.add_log("Rzucono haki abordażowe!", "abordaż")
-
     # ─────────────────────────────────────────────────────────────────────
     # KURS KOMPASOWY
     # ─────────────────────────────────────────────────────────────────────
@@ -269,10 +228,10 @@ class SailingCommandVisitor(SailingParserVisitor):
             "poludnie": 180, "południe": 180,
             "wschod": 90, "wschód": 90,
             "zachod": 270, "zachód": 270,
-            "NE": 45, "polnocnywschod": 45, "polnocnywschód": 45,
-            "NW": 315, "polnocnyzachod": 315, "polnocnyzachód": 315,
-            "SE": 135, "poludniowywschod": 135, "poludniowywschód": 135,
-            "SW": 225, "poludniowyzachod": 225, "poludniowyzachód": 225,
+            "NE": 45, "polnocnywschod": 45,
+            "NW": 315, "polnocnyzachod": 315,
+            "SE": 135, "poludniowywschod": 135,
+            "SW": 225, "poludniowyzachod": 225,
         }
         clean = text.replace(" ", "").lower()
         return mapping.get(clean, 0.0)
@@ -290,22 +249,6 @@ class SailingCommandVisitor(SailingParserVisitor):
     def visitSetCourseWaypoint(self, ctx):
         point = self._get_string(ctx.point)
         self.state.add_log(f"Kurs na punkt: {point}", "nawigacja")
-
-    def visitSetCourseIsland(self, ctx):
-        point = self._get_string(ctx.point)
-        self.state.add_log(f"Kurs na wyspę: {point}", "nawigacja")
-
-    def visitSetCoursePort(self, ctx):
-        point = self._get_string(ctx.point)
-        self.state.add_log(f"Kurs na port: {point}", "nawigacja")
-
-    def visitSetCourseBay(self, ctx):
-        point = self._get_string(ctx.point)
-        self.state.add_log(f"Kurs na zatokę: {point}", "nawigacja")
-
-    def visitSetCourseHideout(self, ctx):
-        point = self._get_string(ctx.point)
-        self.state.add_log(f"Kurs na kryjówkę: {point}", "nawigacja")
 
     def visitSetCourseBearing(self, ctx):
         angle = self._get_number(ctx.angle)
@@ -379,14 +322,8 @@ class SailingCommandVisitor(SailingParserVisitor):
         self.state.rowing = EngineMode.OFF
         self.state.add_log("STOP!", "prędkość")
 
-    def visitFullSailSpeed(self, ctx):
-        for key in self.state.sails:
-            self.state.sails[key].state = SailState.SET
-        self.state.speed = 12.0
-        self.state.add_log("Pełne żagle — pełna prędkość!", "prędkość")
-
     # ─────────────────────────────────────────────────────────────────────
-    # UZBROJENIE / WALKA
+    # UZBROJENIE (ładowanie + salwa)
     # ─────────────────────────────────────────────────────────────────────
 
     def visitLoadCannons(self, ctx):
@@ -404,28 +341,11 @@ class SailingCommandVisitor(SailingParserVisitor):
         self.state.cannons[key].ammo = ammo
         self.state.add_log(f"Załadowano {name} ({ammo})", "uzbrojenie")
 
-    def visitAimCannons(self, ctx):
-        name = self._get_text(ctx.cannonGroup())
-        target = self._get_text(ctx.target())
-        key = self.state.normalize_cannon_key(name)
-        self.state.cannons[key].state = CannonState.AIMED
-        self.state.cannons[key].target = target
-        self.state.add_log(f"Wycelowano {name} na {target}", "uzbrojenie")
-
-    def visitAimCannonsAngle(self, ctx):
-        name = self._get_text(ctx.cannonGroup())
-        angle = self._get_number(ctx.angle)
-        key = self.state.normalize_cannon_key(name)
-        self.state.cannons[key].state = CannonState.AIMED
-        self.state.cannons[key].aim_angle = angle
-        self.state.add_log(f"Wycelowano {name} na {angle}°", "uzbrojenie")
-
     def visitFireCannons(self, ctx):
         name = self._get_text(ctx.cannonGroup())
         key = self.state.normalize_cannon_key(name)
         self.state.cannons[key].state = CannonState.EMPTY
         self.state.cannons[key].ammo = ""
-        self.state.cannons[key].target = ""
         self.state.cargo["proch"] = max(0, self.state.cargo["proch"] - 10)
         self.state.cargo["amunicja"] = max(0, self.state.cargo["amunicja"] - 5)
         self.state.add_log(f"OGNIA {name}! 💥", "uzbrojenie")
@@ -449,47 +369,6 @@ class SailingCommandVisitor(SailingParserVisitor):
     def visitBroadsideRight(self, ctx):
         self.state.cargo["proch"] = max(0, self.state.cargo["proch"] - 20)
         self.state.add_log("SALWA prawa burta! 💥💥", "uzbrojenie")
-
-    def visitPrepareMuskets(self, ctx):
-        self.state.cannons["muszkiety"].state = CannonState.LOADED
-        self.state.add_log("Przygotowano muszkiety", "uzbrojenie")
-
-    def visitFireMuskets(self, ctx):
-        self.state.cannons["muszkiety"].state = CannonState.EMPTY
-        self.state.add_log("Ogień z muszkietów! 💥", "uzbrojenie")
-
-    # ─────────────────────────────────────────────────────────────────────
-    # ABORDAŻ
-    # ─────────────────────────────────────────────────────────────────────
-
-    def visitPrepareBoarding(self, ctx):
-        self.state.boarding = BoardingPhase.PREPARING
-        self.state.add_log("Przygotowanie do abordażu!", "abordaż")
-
-    def visitBoard(self, ctx):
-        self.state.boarding = BoardingPhase.BOARDING
-        self.state.add_log("ABORDAŻ! ⚔️", "abordaż")
-
-    def visitStorm(self, ctx):
-        self.state.boarding = BoardingPhase.STORMING
-        self.state.add_log("SZTURM! ⚔️⚔️", "abordaż")
-
-    def visitRetreat(self, ctx):
-        self.state.boarding = BoardingPhase.RETREATING
-        self.state.add_log("Wycofanie z abordażu", "abordaż")
-
-    def visitThrowBoardingLines(self, ctx):
-        self.state.boarding = BoardingPhase.HOOKS_THROWN
-        self.state.add_log("Rzucono liny abordażowe!", "abordaż")
-
-    def visitThrowGrapplingHooksBoard(self, ctx):
-        self.state.grappling_hooks = True
-        self.state.boarding = BoardingPhase.HOOKS_THROWN
-        self.state.add_log("Rzucono haki abordażowe! ⚓", "abordaż")
-
-    def visitGangwayToSide(self, ctx):
-        side = self._get_text(ctx.boardSide())
-        self.state.add_log(f"Trap na {side}", "abordaż")
 
     # ─────────────────────────────────────────────────────────────────────
     # ŁADUNEK / ŁUPY
@@ -543,109 +422,11 @@ class SailingCommandVisitor(SailingParserVisitor):
         self.state.add_log("Raport stanu ładowni", "ładunek")
 
     # ─────────────────────────────────────────────────────────────────────
-    # OBSERWACJA / ZWIAD
-    # ─────────────────────────────────────────────────────────────────────
-
-    def visitScanHorizon(self, ctx):
-        self.state.scouting_active = True
-        self.state.add_log("Obserwacja horyzontu 🔭", "obserwacja")
-
-    def visitScanSide(self, ctx):
-        side = self._get_text(ctx.boardSide())
-        self.state.scouting_active = True
-        self.state.add_log(f"Obserwacja {side}", "obserwacja")
-
-    def visitScanDirection(self, ctx):
-        direction = self._get_text(ctx.compassPoint())
-        self.state.scouting_active = True
-        self.state.add_log(f"Obserwacja kierunek: {direction}", "obserwacja")
-
-    def visitIdentifyShip(self, ctx):
-        self.state.add_log("Identyfikacja statku", "obserwacja")
-
-    def visitIdentifyTarget(self, ctx):
-        target = self._get_text(ctx.target())
-        self.state.identified_targets.append(target)
-        self.state.add_log(f"Zidentyfikowano: {target}", "obserwacja")
-
-    def visitLookoutToCrowsNest(self, ctx):
-        self.state.lookout_position = "bocianie gniazdo"
-        self.state.scouting_active = True
-        self.state.add_log("Obserwator na bocianie gniazdo! 🔭", "obserwacja")
-
-    def visitLookoutReport(self, ctx):
-        self.state.add_log("Raport obserwatora", "obserwacja")
-
-    # ─────────────────────────────────────────────────────────────────────
-    # TAKTYKA
-    # ─────────────────────────────────────────────────────────────────────
-
-    def visitChaseTarget(self, ctx):
-        target = self._get_text(ctx.target())
-        self.state.tactic = TacticMode.CHASING
-        self.state.chase_target = target
-        self.state.add_log(f"Pościg za {target}! 🏴‍☠️", "taktyka")
-
-    def visitChaseNamed(self, ctx):
-        name = self._get_string(ctx.point)
-        self.state.tactic = TacticMode.CHASING
-        self.state.chase_target = name
-        self.state.add_log(f"Pościg za statkiem: {name}!", "taktyka")
-
-    def visitFlee(self, ctx):
-        self.state.tactic = TacticMode.FLEEING
-        self.state.add_log("Uciekamy! 💨", "taktyka")
-
-    def visitIntercept(self, ctx):
-        target = self._get_text(ctx.target())
-        self.state.tactic = TacticMode.INTERCEPTING
-        self.state.chase_target = target
-        self.state.add_log(f"Przechwyt {target}", "taktyka")
-
-    def visitBlockTarget(self, ctx):
-        target = self._get_text(ctx.target())
-        self.state.tactic = TacticMode.BLOCKING
-        self.state.add_log(f"Blokada {target}", "taktyka")
-
-    def visitAmbush(self, ctx):
-        self.state.tactic = TacticMode.AMBUSH
-        self.state.add_log("Zasadzka! 🏴‍☠️", "taktyka")
-
-    def visitEvadeTarget(self, ctx):
-        target = self._get_text(ctx.target())
-        self.state.tactic = TacticMode.EVADING
-        self.state.add_log(f"Unikanie {target}", "taktyka")
-
-    def visitRamTarget(self, ctx):
-        target = self._get_text(ctx.target())
-        self.state.tactic = TacticMode.RAMMING
-        self.state.add_log(f"TARANOWANIE {target}! 💀", "taktyka")
-
-    def visitDemandSurrender(self, ctx):
-        self.state.tactic = TacticMode.DEMANDING_SURRENDER
-        self.state.add_log("Żądanie kapitulacji! ☠️", "taktyka")
-
-    def visitSurrender(self, ctx):
-        self.state.tactic = TacticMode.SURRENDERING
-        self.state.add_log("Poddajemy się... 🏳️", "taktyka")
-
-    def visitExchangeFire(self, ctx):
-        self.state.tactic = TacticMode.EXCHANGING_FIRE
-        self.state.add_log("Wymiana ognia! 💥", "taktyka")
-
-    def visitBattleStations(self, ctx):
-        self.state.alert = AlertLevel.BATTLE_STATIONS
-        for role in self.state.crew:
-            self.state.crew[role].station = CrewStation.STATIONS
-        self.state.add_log("ALARM BOJOWY! ⚔️ Wszyscy na stanowiska!", "taktyka")
-
-    # ─────────────────────────────────────────────────────────────────────
-    # ZAŁOGA
+    # ZAŁOGA (uproszczona)
     # ─────────────────────────────────────────────────────────────────────
 
     def visitCrewToStations(self, ctx):
-        for role in self.state.crew:
-            self.state.crew[role].station = CrewStation.STATIONS
+        self.state.crew_station = CrewStation.STATIONS
         self.state.add_log("Załoga na stanowiska!", "załoga")
 
     def visitManOverboard(self, ctx):
@@ -655,26 +436,8 @@ class SailingCommandVisitor(SailingParserVisitor):
         self.state.add_log(f"🆘 CZŁOWIEK ZA BURTĄ! {self.state.man_overboard_side}", "załoga")
 
     def visitAllOnDeck(self, ctx):
-        for role in self.state.crew:
-            self.state.crew[role].station = CrewStation.ON_DECK
+        self.state.crew_station = CrewStation.ON_DECK
         self.state.add_log("Wszyscy na pokład!", "załoga")
-
-    def visitWatchChange(self, ctx):
-        self.state.watch = ctx.zmiana.text
-        self.state.add_log(f"Zmiana wachty: {self.state.watch}", "załoga")
-
-    def visitCrewReport(self, ctx):
-        role = self._get_text(ctx.role())
-        self.state.add_log(f"Raport od: {role}", "załoga")
-
-    def visitRoleToStation(self, ctx):
-        role = self._get_text(ctx.role())
-        if role in self.state.crew:
-            self.state.crew[role].station = CrewStation.STATIONS
-        self.state.add_log(f"{role} na stanowisko!", "załoga")
-
-    def visitCrewStateReport(self, ctx):
-        self.state.add_log("Raport stanu załogi", "załoga")
 
     # ─────────────────────────────────────────────────────────────────────
     # FLAGI
@@ -727,67 +490,14 @@ class SailingCommandVisitor(SailingParserVisitor):
         self.state.add_log("Sygnalizacja flagowa", "flagi")
 
     # ─────────────────────────────────────────────────────────────────────
-    # ŚWIATŁA
-    # ─────────────────────────────────────────────────────────────────────
-
-    def visitNavLights(self, ctx):
-        self.state.lights["nawigacyjne"] = True
-        self.state.add_log("Światła nawigacyjne ON", "światła")
-
-    def visitAnchorLights(self, ctx):
-        self.state.lights["kotwiczne"] = True
-        self.state.add_log("Światła kotwiczne ON", "światła")
-
-    def visitEmergencyLights(self, ctx):
-        self.state.lights["awaryjne"] = True
-        self.state.add_log("Światła awaryjne ON", "światła")
-
-    def visitMastHeadLights(self, ctx):
-        self.state.lights["topowe"] = True
-        self.state.add_log("Światła topowe ON", "światła")
-
-    def visitSternLights(self, ctx):
-        self.state.lights["rufowe"] = True
-        self.state.add_log("Światła rufowe ON", "światła")
-
-    def visitLightLantern(self, ctx):
-        self.state.lights["latarnia"] = True
-        self.state.add_log("Zapalono latarnię 🔥", "światła")
-
-    def visitExtinguishLantern(self, ctx):
-        self.state.lights["latarnia"] = False
-        self.state.add_log("Zgaszono latarnię", "światła")
-
-    def visitLightTorches(self, ctx):
-        self.state.lights["pochodnie"] = True
-        self.state.add_log("Zapalono pochodnie 🔥", "światła")
-
-    def visitExtinguishTorches(self, ctx):
-        self.state.lights["pochodnie"] = False
-        self.state.add_log("Zgaszono pochodnie", "światła")
-
-    def visitLightLamps(self, ctx):
-        self.state.lights["lampy"] = True
-        self.state.add_log("Zapalono lampy", "światła")
-
-    def visitExtinguishLamps(self, ctx):
-        self.state.lights["lampy"] = False
-        self.state.add_log("Zgaszono lampy", "światła")
-
-    def visitDarkenShip(self, ctx):
-        for key in self.state.lights:
-            self.state.lights[key] = False
-        self.state.add_log("Zgaszono wszystkie światła! 🌑", "światła")
-
-    # ─────────────────────────────────────────────────────────────────────
-    # NAPRAWY
+    # NAPRAWY (uproszczone)
     # ─────────────────────────────────────────────────────────────────────
 
     def _repair_key(self, ctx) -> str:
         text = self._get_text(ctx)
         mapping = {
             "kadłub": "hull", "kadlub": "hull",
-            "maszt": "mast", "rej": "yards", "reje": "yards",
+            "maszt": "mast",
             "takielunek": "rigging",
         }
         return mapping.get(text, text)
@@ -797,27 +507,6 @@ class SailingCommandVisitor(SailingParserVisitor):
         current = getattr(self.state.damage, key, 0)
         setattr(self.state.damage, key, min(100, current + 25))
         self.state.add_log(f"Naprawiono {self._get_text(ctx.repairTarget())}", "naprawy")
-
-    def visitPatch(self, ctx):
-        key = self._repair_key(ctx.repairTarget())
-        current = getattr(self.state.damage, key, 0)
-        setattr(self.state.damage, key, min(100, current + 15))
-        self.state.add_log(f"Załatano {self._get_text(ctx.repairTarget())}", "naprawy")
-
-    def visitSealHull(self, ctx):
-        self.state.damage.hull = min(100, self.state.damage.hull + 20)
-        self.state.add_log("Uszczelniono kadłub", "naprawy")
-
-    def visitRepairMast(self, ctx):
-        self.state.damage.mast = min(100, self.state.damage.mast + 25)
-        self.state.add_log("Naprawiono maszt", "naprawy")
-
-    def visitRepairRigging(self, ctx):
-        self.state.damage.rigging = min(100, self.state.damage.rigging + 25)
-        self.state.add_log("Naprawiono takielunek", "naprawy")
-
-    def visitCarpenterReport(self, ctx):
-        self.state.add_log(f"Raport cieśli: {self.state.damage}", "naprawy")
 
     # ─────────────────────────────────────────────────────────────────────
     # DZIENNIK POKŁADOWY
@@ -837,67 +526,20 @@ class SailingCommandVisitor(SailingParserVisitor):
         msg = self._get_string(ctx.message)
         self.state.add_log(f"Zdarzenie: {msg}", "dziennik")
 
-    def visitLogSailState(self, ctx):
-        self.state.add_log("Zalogowano stan żagli", "dziennik")
-
-    def visitLogWeaponsState(self, ctx):
-        self.state.add_log("Zalogowano stan uzbrojenia", "dziennik")
-
     def visitLogCargoState(self, ctx):
         self.state.add_log("Zalogowano stan ładowni", "dziennik")
-
-    def visitLogCrewState(self, ctx):
-        self.state.add_log("Zalogowano stan załogi", "dziennik")
 
     def visitLogShipState(self, ctx):
         self.state.add_log("Zalogowano stan jednostki", "dziennik")
 
     # ─────────────────────────────────────────────────────────────────────
-    # AWARYJNE
+    # ALARMY (uproszczone)
     # ─────────────────────────────────────────────────────────────────────
-
-    def visitFireAlarm(self, ctx):
-        self.state.alert = AlertLevel.FIRE
-        self.state.active_emergencies.append("pożar")
-        self.state.add_log("🔥 ALARM POŻAROWY!", "awaria")
-
-    def visitWaterAlarm(self, ctx):
-        self.state.alert = AlertLevel.FLOODING
-        self.state.active_emergencies.append("przeciek")
-        self.state.add_log("💧 ALARM WODNY!", "awaria")
 
     def visitBattleAlarm(self, ctx):
         self.state.alert = AlertLevel.BATTLE_STATIONS
+        self.state.crew_station = CrewStation.STATIONS
         self.state.add_log("⚔️ ALARM BOJOWY!", "awaria")
-
-    def visitPumpBilge(self, ctx):
-        self.state.add_log("Odpompowywanie wody z zęzy", "awaria")
-
-    def visitLifeJackets(self, ctx):
-        self.state.add_log("Kamizelki ratunkowe!", "awaria")
-
-    def visitEvacuate(self, ctx):
-        self.state.alert = AlertLevel.EVACUATE
-        self.state.add_log("🚨 EWAKUACJA!", "awaria")
-
-    def visitAbandonShip(self, ctx):
-        self.state.alert = AlertLevel.ABANDON_SHIP
-        self.state.add_log("🚨 OPUŚCIĆ JEDNOSTKĘ!", "awaria")
-
-    def visitFireOnBoard(self, ctx):
-        side = self._get_text(ctx.boardSide()) if ctx.boardSide() else ""
-        self.state.active_emergencies.append(f"pożar {side}".strip())
-        self.state.add_log(f"🔥 POŻAR na pokładzie! {side}", "awaria")
-
-    def visitLeakDetected(self, ctx):
-        side = self._get_text(ctx.boardSide()) if ctx.boardSide() else ""
-        self.state.active_emergencies.append(f"przeciek {side}".strip())
-        self.state.add_log(f"💧 PRZECIEK! {side}", "awaria")
-
-    def visitMastBroken(self, ctx):
-        self.state.damage.mast = 0.0
-        self.state.active_emergencies.append("maszt złamany")
-        self.state.add_log("💀 MASZT ZŁAMANY!", "awaria")
 
     # ─────────────────────────────────────────────────────────────────────
     # POGODA
@@ -906,40 +548,24 @@ class SailingCommandVisitor(SailingParserVisitor):
     def visitReportWind(self, ctx):
         self.state.add_log("Raport: wiatr", "pogoda")
 
-    def visitReportWave(self, ctx):
-        self.state.add_log("Raport: fala", "pogoda")
-
-    def visitReportVisibility(self, ctx):
-        self.state.add_log("Raport: widoczność", "pogoda")
-
     def visitReportWeather(self, ctx):
         self.state.add_log("Raport: pogoda", "pogoda")
 
     def visitReportDepth(self, ctx):
         self.state.add_log("Raport: głębokość", "pogoda")
 
-    def visitReportCurrent(self, ctx):
-        self.state.add_log("Raport: prąd", "pogoda")
-
     # ─────────────────────────────────────────────────────────────────────
     # KONTROLA PRZEPŁYWU
     # ─────────────────────────────────────────────────────────────────────
 
     def visitRepeat(self, ctx):
-        times = int(self._get_number(ctx.times))
+        times = min(int(self._get_number(ctx.times)), 1000)
+        if times > 1000:
+            self.state.add_log("Ograniczono powtórzenia do 1000!", "kontrola")
         self.state.add_log(f"Powtarzanie {times} razy...", "kontrola")
         for i in range(times):
             for cmd in ctx.command():
                 self.visit(cmd)
-
-    def visitWhileLoop(self, ctx):
-        self.state.add_log("Pętla while (max 100 iteracji)", "kontrola")
-        max_iter = 100
-        i = 0
-        while i < max_iter and self._evaluate_condition(ctx.condition()):
-            for cmd in ctx.command():
-                self.visit(cmd)
-            i += 1
 
     def visitWaitDuration(self, ctx):
         val = self._get_number(ctx.duration().value)
@@ -948,34 +574,6 @@ class SailingCommandVisitor(SailingParserVisitor):
 
     def visitWaitUntil(self, ctx):
         self.state.add_log("Czekanie na warunek...", "kontrola")
-
-    def visitDefineManeuver(self, ctx):
-        name = self._get_string(ctx.name)
-        self.state.maneuvers[name] = ctx.command()
-        self.state.add_log(f"Zdefiniowano manewr: {name}", "kontrola")
-
-    def visitExecuteManeuver(self, ctx):
-        name = self._get_string(ctx.name)
-        if name in self.state.maneuvers:
-            self.state.add_log(f"Wykonanie manewru: {name}", "kontrola")
-            for cmd in self.state.maneuvers[name]:
-                self.visit(cmd)
-        else:
-            self.state.add_log(f"Nieznany manewr: {name}!", "błąd")
-
-    def visitDefineProcedure(self, ctx):
-        name = self._get_string(ctx.name)
-        self.state.procedures[name] = ctx.command()
-        self.state.add_log(f"Zdefiniowano procedurę: {name}", "kontrola")
-
-    def visitExecuteProcedure(self, ctx):
-        name = self._get_string(ctx.name)
-        if name in self.state.procedures:
-            self.state.add_log(f"Wykonanie procedury: {name}", "kontrola")
-            for cmd in self.state.procedures[name]:
-                self.visit(cmd)
-        else:
-            self.state.add_log(f"Nieznana procedura: {name}!", "błąd")
 
     # ─────────────────────────────────────────────────────────────────────
     # WARUNKI

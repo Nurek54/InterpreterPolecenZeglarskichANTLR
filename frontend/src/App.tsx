@@ -19,21 +19,18 @@ export default function App() {
   const [examples, setExamples] = useState<ExampleCommand[]>([]);
   const [connected, setConnected] = useState(false);
 
-  // ── Sprawdź połączenie z backendem ──
   useEffect(() => {
     healthCheck()
       .then(() => setConnected(true))
       .catch(() => setConnected(false));
   }, []);
 
-  // ── Pobierz przykłady ──
   useEffect(() => {
     getExamples()
       .then((data) => setExamples(data.examples))
       .catch(() => {});
   }, []);
 
-  // ── Wykonaj polecenia ──
   const executeCommands = useCallback(
     async (commands: string, reset: boolean = true) => {
       setLoading(true);
@@ -54,7 +51,6 @@ export default function App() {
     []
   );
 
-  // ── Reset stanu ──
   const resetState = useCallback(async () => {
     try {
       await apiReset();
@@ -68,7 +64,6 @@ export default function App() {
 
   return (
     <div className="app">
-      {/* ── HEADER ── */}
       <header className="app-header">
         <div className="header-left">
           <h1>🏴‍☠️ Interpreter poleceń żeglarskich</h1>
@@ -78,16 +73,12 @@ export default function App() {
             className={`status-dot ${connected ? "connected" : "disconnected"}`}
           />
           <span className="status-text">
-            {connected
-              ? "Backend połączony"
-              : "Brak połączenia z backendem"}
+            {connected ? "Połączono" : "Brak połączenia"}
           </span>
         </div>
       </header>
 
-      {/* ── MAIN LAYOUT ── */}
       <div className="app-body">
-        {/* LEWA KOLUMNA: 3D + State */}
         <div className="left-column">
           <div className="scene-container">
             <ShipScene shipState={shipState} />
@@ -95,7 +86,6 @@ export default function App() {
           <StatePanel shipState={shipState} />
         </div>
 
-        {/* PRAWA KOLUMNA: Terminal + Log */}
         <div className="right-column">
           <CommandTerminal
             onExecute={executeCommands}
