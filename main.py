@@ -7,7 +7,7 @@ from gen.SailingParser import SailingParser
 from interpreter.sail_visitor import SailingCommandVisitor
 from interpreter.ship_state import (
     ShipState, SailState, SailInfo, AnchorState, MooringState,
-    EngineMode, CannonState, BoardingPhase, TacticMode,
+    EngineMode, CannonState,
     AlertLevel, CrewStation
 )
 

@@ -116,7 +116,6 @@ async def get_state():
         "log": [entry.to_dict() for entry in current_state.log],
     }
 
-
 @app.post("/reset")
 async def reset_state():
     global current_state

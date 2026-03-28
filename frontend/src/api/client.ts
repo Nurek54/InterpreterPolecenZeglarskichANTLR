@@ -68,3 +68,4 @@ export async function resetState(): Promise<{
 export async function getExamples(): Promise<{ examples: ExampleCommand[] }> {
   return request("/examples");
 }
+

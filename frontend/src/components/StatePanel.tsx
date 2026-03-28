@@ -185,3 +185,4 @@ export default function StatePanel({ shipState }: StatePanelProps) {
     </div>
   );
 }
+

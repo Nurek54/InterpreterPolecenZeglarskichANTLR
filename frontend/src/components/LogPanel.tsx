@@ -109,3 +109,4 @@ export default function LogPanel({ log }: LogPanelProps) {
     </div>
   );
 }
+

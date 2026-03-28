@@ -318,3 +318,4 @@ class ShipState:
 
         lines.append("\n" + "=" * 60)
         return "\n".join(lines)
+

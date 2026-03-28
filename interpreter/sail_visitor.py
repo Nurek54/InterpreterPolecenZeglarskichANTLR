@@ -596,3 +596,4 @@ class SailingCommandVisitor(SailingParserVisitor):
             self.state.add_log("Warunek blokowy spełniony", "kontrola")
             for cmd in ctx.command():
                 self.visit(cmd)
+

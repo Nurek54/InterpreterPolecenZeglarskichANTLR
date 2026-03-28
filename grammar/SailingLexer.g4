@@ -240,3 +240,4 @@ COORDINATE      : [0-9]+ '°' [0-9]+ '\'' ([0-9]+ ('"')?)? [NSEW] ;
 WS              : [ \t\r\n]+ -> skip ;
 LINE_COMMENT    : '//' ~[\r\n]* -> skip ;
 BLOCK_COMMENT   : '/*' .*? '*/' -> skip ;
+
