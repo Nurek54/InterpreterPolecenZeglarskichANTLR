@@ -11,7 +11,7 @@ import CommandTerminal from "./components/CommandTerminal";
 import StatePanel from "./components/StatePanel";
 import LogPanel from "./components/LogPanel";
 
-const SNAPSHOT_DELAY_MS = 800;
+const SNAPSHOT_DELAY_MS = 600;
 
 export default function App() {
   const [shipState, setShipState] = useState<ShipState | null>(null);
@@ -45,31 +45,25 @@ export default function App() {
       try {
         const data = await apiExecute(commands, reset);
 
-        if (data.snapshots && data.snapshots.length > 1) {
-          // Animate through snapshots with delay
+        if (data.errors.length > 0) {
+          setErrors(data.errors);
+        }
+
+        if (data.snapshots && data.snapshots.length > 0) {
+          // Animate through snapshots — each command visible one by one
           data.snapshots.forEach((snap, i) => {
             const timer = window.setTimeout(() => {
               setShipState(snap.state);
               setLog(snap.log);
-              // After last snapshot, show final state and stop loading
               if (i === data.snapshots.length - 1) {
-                setShipState(data.state);
-                setLog(data.log);
                 setLoading(false);
               }
             }, i * SNAPSHOT_DELAY_MS);
             snapshotTimers.current.push(timer);
           });
-          if (data.errors.length > 0) {
-            setErrors(data.errors);
-          }
         } else {
-          // No snapshots — apply final state immediately
           setShipState(data.state);
           setLog(data.log);
-          if (data.errors.length > 0) {
-            setErrors(data.errors);
-          }
           setLoading(false);
         }
       } catch (err) {
