@@ -11,7 +11,7 @@ import CommandTerminal from "./components/CommandTerminal";
 import StatePanel from "./components/StatePanel";
 import LogPanel from "./components/LogPanel";
 
-const SNAPSHOT_DELAY_MS = 600;
+const SNAPSHOT_DELAY_MS = 400;
 
 export default function App() {
   const [shipState, setShipState] = useState<ShipState | null>(null);
