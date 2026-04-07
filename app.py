@@ -25,6 +25,7 @@ class ExecuteResponse(BaseModel):
     state: dict
     log: list
     errors: list[str] = []
+    snapshots: list[dict] = []
 
 
 class ErrorCollector:
@@ -60,7 +61,7 @@ app.add_middleware(
 current_state: ShipState = ShipState()
 
 
-def parse_and_execute(text: str, state: ShipState) -> tuple[ShipState, list[str]]:
+def parse_and_execute(text: str, state: ShipState) -> tuple[ShipState, list[str], list[dict]]:
     errors = []
 
     input_stream = InputStream(text.strip())
@@ -82,7 +83,7 @@ def parse_and_execute(text: str, state: ShipState) -> tuple[ShipState, list[str]
     visitor = SailingCommandVisitor(state)
     visitor.visit(tree)
 
-    return state, errors
+    return state, errors, visitor.snapshots
 
 @app.post("/execute", response_model=ExecuteResponse)
 async def execute_commands(request: ExecuteRequest):
@@ -96,13 +97,14 @@ async def execute_commands(request: ExecuteRequest):
         current_state = ShipState()
 
     try:
-        current_state, errors = parse_and_execute(request.commands, current_state)
+        current_state, errors, snapshots = parse_and_execute(request.commands, current_state)
 
         return ExecuteResponse(
             success=len(errors) == 0,
             state=current_state.to_dict(),
             log=[entry.to_dict() for entry in current_state.log],
             errors=errors,
+            snapshots=snapshots,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Błąd interpretera: {str(e)}")

@@ -82,6 +82,7 @@ rudderCommand
     | STER PROSTO                                                  # SteerStraight
     | ZWROT PRZEZ SZTAG                                            # Tack
     | ZWROT PRZEZ RUFE                                             # Gybe
+    | ZWROT PRZEZ boardSide                                        # TurnThroughSide
     | ODPADAJ (DO angle=NUMBER STOPNI)?                            # BearAway
     | OSTRZEJ (DO angle=NUMBER STOPNI)?                            # HeadUp
     | KURS NA windDirection                                        # CourseToWindDir

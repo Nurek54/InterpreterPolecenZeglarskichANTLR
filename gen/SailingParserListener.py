@@ -1,4 +1,4 @@
-# Generated from C:/Users/g_sie/Desktop/InterpreterPolecenZeglarskichANTLR/grammar/SailingParser.g4 by ANTLR 4.13.2
+# Generated from grammar/SailingParser.g4 by ANTLR 4.13.2
 from antlr4 import *
 if "." in __name__:
     from .SailingParser import SailingParser
@@ -230,6 +230,15 @@ class SailingParserListener(ParseTreeListener):
 
     # Exit a parse tree produced by SailingParser#Gybe.
     def exitGybe(self, ctx:SailingParser.GybeContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#TurnThroughSide.
+    def enterTurnThroughSide(self, ctx:SailingParser.TurnThroughSideContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#TurnThroughSide.
+    def exitTurnThroughSide(self, ctx:SailingParser.TurnThroughSideContext):
         pass
 
 

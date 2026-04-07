@@ -26,6 +26,11 @@ const COMMANDS = new Set([
   "powtórz","powtorz","jeżeli","jezeli","jeśli","jesli",
   "czekaj","sygnalizuj","opuść","opusc",
   "napiń","napin","dobij","alarm",
+  // Komendy prędkości (multi-word)
+  "cała","cala","naprzód","naprzod","wolny","średni","sredni",
+  "wsteczny","wstecz",
+  // Załoga
+  "wszyscy","załoga","zaloga",
 ]);
 
 const OBJECTS = new Set([
@@ -35,10 +40,17 @@ const OBJECTS = new Set([
   "karronady","karronada","kotwicę","kotwice",
   "kadłub","kadlub","maszt","takielunek",
   "złoto","zloto","srebro","łupy","lupy",
-  "amunicja","amunicję","prowiant","rum","proch",
+  "amunicja","amunicję","amunicje","prowiant","rum","proch",
   "beczki","skrzynie","skarb",
-  "wiosła","wiosla","flagę","flage",
+  "wiosła","wiosla","flagę","flage","flaga",
   "bandera","banderę","bandere",
+  // Strony burty
+  "bakburta","sterburta",
+  "burta","burtą",
+  // Ładownia
+  "ładownia","ladownia",
+  // Żagle grupowe
+  "żagle","zagle",
 ]);
 
 const MODIFIERS = new Set([
@@ -46,6 +58,7 @@ const MODIFIERS = new Set([
   "prosto","sztag","rufę","rufe",
   "baksztag","bejdewind","półwiatr","polwiatr","fordewind",
   "półbaksztag","polbaksztag",
+  "ostry",
   "północ","polnoc","południe","poludnie",
   "wschód","wschod","zachód","zachod",
   "kula","kartacz","łańcuchówka","lancuchowka",
@@ -55,10 +68,15 @@ const MODIFIERS = new Set([
   "sekund","minut","sztuk","beaufort",
   "wiatr","prędkość","predkosc","głębokość","glebokosc",
   "pogodę","pogode","pozycję","pozycje","zdarzenie",
-  "cała","cala","naprzód","naprzod","wolny","średni","sredni",
-  "wsteczny","wstecz",
-  "załoga","zaloga","stanowiska","człowiek","czlowiek",
-  "wszyscy","pokład","poklad","punkt","wyspa",
+  "stanowiska","człowiek","czlowiek",
+  "pokład","poklad","punkt","wyspa","wyspę","wyspe",
+  // Multi-word token parts
+  "lewa","prawa",
+  "wszystkie","pełne","pelne","sztormowe",
+  "pitna","woda","wodę","wode",
+  "morskich","mil",
+  "stan","ładowni","ladowni","jednostki",
+  "aż","az",
 ]);
 
 type TT = "cmd"|"obj"|"mod"|"str"|"num"|"cmt"|"op"|"pun"|"txt";
