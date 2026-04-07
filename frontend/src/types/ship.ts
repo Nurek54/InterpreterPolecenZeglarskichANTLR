@@ -65,11 +65,17 @@ export interface ExecuteRequest {
   reset: boolean;
 }
 
+export interface StateSnapshot {
+  state: ShipState;
+  log: LogEntry[];
+}
+
 export interface ExecuteResponse {
   success: boolean;
   state: ShipState;
   log: LogEntry[];
   errors: string[];
+  snapshots: StateSnapshot[];
 }
 
 export interface ExampleCommand {

@@ -1,4 +1,5 @@
 import sys
+import copy
 sys.path.insert(0, "gen")
 
 from gen.SailingParser import SailingParser
@@ -12,6 +13,7 @@ class SailingCommandVisitor(SailingParserVisitor):
 
     def __init__(self, state: ShipState = None):
         self.state = state or ShipState()
+        self.snapshots: list[dict] = []
 
     def _get_sail_name(self, ctx) -> str:
         return ctx.getText()
@@ -172,6 +174,16 @@ class SailingCommandVisitor(SailingParserVisitor):
     def visitGybe(self, ctx):
         self.state.heading = (self.state.heading + 90) % 360
         self.state.add_log(f"Zwrot przez rufę! Nowy kurs: {self.state.heading}°", "ster")
+
+    def visitTurnThroughSide(self, ctx):
+        side = self._get_text(ctx.boardSide())
+        if "lewa" in side or "bak" in side:
+            self.state.heading = (self.state.heading - 90) % 360
+            self.state.rudder_angle = -30
+        else:
+            self.state.heading = (self.state.heading + 90) % 360
+            self.state.rudder_angle = 30
+        self.state.add_log(f"Zwrot przez {side}! Nowy kurs: {self.state.heading}°", "ster")
 
     def visitBearAway(self, ctx):
         angle = self._get_number(ctx.angle) if ctx.angle else 10.0
@@ -566,6 +578,11 @@ class SailingCommandVisitor(SailingParserVisitor):
         for i in range(times):
             for cmd in ctx.command():
                 self.visit(cmd)
+            # Snapshot after each iteration for animated playback
+            self.snapshots.append({
+                "state": self.state.to_dict(),
+                "log": [entry.to_dict() for entry in self.state.log],
+            })
 
     def visitWaitDuration(self, ctx):
         val = self._get_number(ctx.duration().value)

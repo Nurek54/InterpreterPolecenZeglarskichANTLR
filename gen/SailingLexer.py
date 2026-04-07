@@ -1,4 +1,4 @@
-# Generated from C:/Users/g_sie/Desktop/InterpreterPolecenZeglarskichANTLR/grammar/SailingLexer.g4 by ANTLR 4.13.2
+# Generated from grammar/SailingLexer.g4 by ANTLR 4.13.2
 from antlr4 import *
 from io import StringIO
 import sys
