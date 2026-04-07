@@ -38,9 +38,19 @@ class SailingCommandVisitor(SailingParserVisitor):
     # PROGRAM / COMMAND
     # ─────────────────────────────────────────────────────────────────────
 
+    def _take_snapshot(self):
+        self.snapshots.append({
+            "state": self.state.to_dict(),
+            "log": [entry.to_dict() for entry in self.state.log],
+        })
+
     def visitProgram(self, ctx: SailingParser.ProgramContext):
         for child in ctx.command():
+            count_before = len(self.snapshots)
             self.visit(child)
+            # Only snapshot if the command didn't already create its own
+            if len(self.snapshots) == count_before:
+                self._take_snapshot()
         return self.state
 
     # ─────────────────────────────────────────────────────────────────────
@@ -578,11 +588,7 @@ class SailingCommandVisitor(SailingParserVisitor):
         for i in range(times):
             for cmd in ctx.command():
                 self.visit(cmd)
-            # Snapshot after each iteration for animated playback
-            self.snapshots.append({
-                "state": self.state.to_dict(),
-                "log": [entry.to_dict() for entry in self.state.log],
-            })
+                self._take_snapshot()
 
     def visitWaitDuration(self, ctx):
         val = self._get_number(ctx.duration().value)
@@ -604,13 +610,16 @@ class SailingCommandVisitor(SailingParserVisitor):
         if self._evaluate_condition(ctx.condition()):
             self.state.add_log("Warunek spełniony — wykonuję", "kontrola")
             self.visit(ctx.command(0))
+            self._take_snapshot()
         elif len(ctx.command()) > 1:
             self.state.add_log("Warunek niespełniony — alternatywa", "kontrola")
             self.visit(ctx.command(1))
+            self._take_snapshot()
 
     def visitIfConditionBlock(self, ctx):
         if self._evaluate_condition(ctx.condition()):
             self.state.add_log("Warunek blokowy spełniony", "kontrola")
             for cmd in ctx.command():
                 self.visit(cmd)
+                self._take_snapshot()
 
