@@ -1,4 +1,4 @@
-# Generated from grammar/SailingParser.g4 by ANTLR 4.13.2
+# Generated from C:/Users/g_sie/PycharmProjects/InterpreterPolecenZeglarskichANTLR/grammar/SailingParser.g4 by ANTLR 4.13.2
 from antlr4 import *
 if "." in __name__:
     from .SailingParser import SailingParser
@@ -104,8 +104,8 @@ class SailingParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#SteerWindDirection.
-    def visitSteerWindDirection(self, ctx:SailingParser.SteerWindDirectionContext):
+    # Visit a parse tree produced by SailingParser#SteerPointOfSail.
+    def visitSteerPointOfSail(self, ctx:SailingParser.SteerPointOfSailContext):
         return self.visitChildren(ctx)
 
 
@@ -121,6 +121,16 @@ class SailingParserVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by SailingParser#SteerStraight.
     def visitSteerStraight(self, ctx:SailingParser.SteerStraightContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#SteerIntoWind.
+    def visitSteerIntoWind(self, ctx:SailingParser.SteerIntoWindContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#SteerWithWind.
+    def visitSteerWithWind(self, ctx:SailingParser.SteerWithWindContext):
         return self.visitChildren(ctx)
 
 
@@ -149,8 +159,8 @@ class SailingParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#CourseToWindDir.
-    def visitCourseToWindDir(self, ctx:SailingParser.CourseToWindDirContext):
+    # Visit a parse tree produced by SailingParser#CourseToPointOfSail.
+    def visitCourseToPointOfSail(self, ctx:SailingParser.CourseToPointOfSailContext):
         return self.visitChildren(ctx)
 
 
@@ -159,8 +169,8 @@ class SailingParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#windDirection.
-    def visitWindDirection(self, ctx:SailingParser.WindDirectionContext):
+    # Visit a parse tree produced by SailingParser#pointOfSail.
+    def visitPointOfSail(self, ctx:SailingParser.PointOfSailContext):
         return self.visitChildren(ctx)
 
 
@@ -224,18 +234,8 @@ class SailingParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#ReportPosition.
-    def visitReportPosition(self, ctx:SailingParser.ReportPositionContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by SailingParser#RequestPosition.
     def visitRequestPosition(self, ctx:SailingParser.RequestPositionContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#coordinate.
-    def visitCoordinate(self, ctx:SailingParser.CoordinateContext):
         return self.visitChildren(ctx)
 
 
@@ -269,173 +269,78 @@ class SailingParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#FullAhead.
-    def visitFullAhead(self, ctx:SailingParser.FullAheadContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#SlowAhead.
-    def visitSlowAhead(self, ctx:SailingParser.SlowAheadContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#MediumAhead.
-    def visitMediumAhead(self, ctx:SailingParser.MediumAheadContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by SailingParser#AllStop.
     def visitAllStop(self, ctx:SailingParser.AllStopContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#LoadCannons.
-    def visitLoadCannons(self, ctx:SailingParser.LoadCannonsContext):
+    # Visit a parse tree produced by SailingParser#RaiseEnsign.
+    def visitRaiseEnsign(self, ctx:SailingParser.RaiseEnsignContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#LoadCannonsAmmo.
-    def visitLoadCannonsAmmo(self, ctx:SailingParser.LoadCannonsAmmoContext):
+    # Visit a parse tree produced by SailingParser#LowerEnsign.
+    def visitLowerEnsign(self, ctx:SailingParser.LowerEnsignContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#FireCannons.
-    def visitFireCannons(self, ctx:SailingParser.FireCannonsContext):
+    # Visit a parse tree produced by SailingParser#RaiseClubFlag.
+    def visitRaiseClubFlag(self, ctx:SailingParser.RaiseClubFlagContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#FireAll.
-    def visitFireAll(self, ctx:SailingParser.FireAllContext):
+    # Visit a parse tree produced by SailingParser#LowerClubFlag.
+    def visitLowerClubFlag(self, ctx:SailingParser.LowerClubFlagContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#Broadside.
-    def visitBroadside(self, ctx:SailingParser.BroadsideContext):
+    # Visit a parse tree produced by SailingParser#RaiseCourtesyFlag.
+    def visitRaiseCourtesyFlag(self, ctx:SailingParser.RaiseCourtesyFlagContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#BroadsideLeft.
-    def visitBroadsideLeft(self, ctx:SailingParser.BroadsideLeftContext):
+    # Visit a parse tree produced by SailingParser#LowerCourtesyFlag.
+    def visitLowerCourtesyFlag(self, ctx:SailingParser.LowerCourtesyFlagContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#BroadsideRight.
-    def visitBroadsideRight(self, ctx:SailingParser.BroadsideRightContext):
+    # Visit a parse tree produced by SailingParser#RaiseQuarantineFlag.
+    def visitRaiseQuarantineFlag(self, ctx:SailingParser.RaiseQuarantineFlagContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#cannonGroup.
-    def visitCannonGroup(self, ctx:SailingParser.CannonGroupContext):
+    # Visit a parse tree produced by SailingParser#LowerQuarantineFlag.
+    def visitLowerQuarantineFlag(self, ctx:SailingParser.LowerQuarantineFlagContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#ammoType.
-    def visitAmmoType(self, ctx:SailingParser.AmmoTypeContext):
+    # Visit a parse tree produced by SailingParser#RaiseProtestFlag.
+    def visitRaiseProtestFlag(self, ctx:SailingParser.RaiseProtestFlagContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#LoadCargo.
-    def visitLoadCargo(self, ctx:SailingParser.LoadCargoContext):
+    # Visit a parse tree produced by SailingParser#LowerProtestFlag.
+    def visitLowerProtestFlag(self, ctx:SailingParser.LowerProtestFlagContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#UnloadCargo.
-    def visitUnloadCargo(self, ctx:SailingParser.UnloadCargoContext):
+    # Visit a parse tree produced by SailingParser#RaisePennant.
+    def visitRaisePennant(self, ctx:SailingParser.RaisePennantContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#TransferCargo.
-    def visitTransferCargo(self, ctx:SailingParser.TransferCargoContext):
+    # Visit a parse tree produced by SailingParser#LowerPennant.
+    def visitLowerPennant(self, ctx:SailingParser.LowerPennantContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#BuryTreasure.
-    def visitBuryTreasure(self, ctx:SailingParser.BuryTreasureContext):
+    # Visit a parse tree produced by SailingParser#RaiseCustomFlag.
+    def visitRaiseCustomFlag(self, ctx:SailingParser.RaiseCustomFlagContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#DigTreasure.
-    def visitDigTreasure(self, ctx:SailingParser.DigTreasureContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#CargoReport.
-    def visitCargoReport(self, ctx:SailingParser.CargoReportContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#CargoStateReport.
-    def visitCargoStateReport(self, ctx:SailingParser.CargoStateReportContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#cargoType.
-    def visitCargoType(self, ctx:SailingParser.CargoTypeContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#CrewToStations.
-    def visitCrewToStations(self, ctx:SailingParser.CrewToStationsContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#ManOverboard.
-    def visitManOverboard(self, ctx:SailingParser.ManOverboardContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#AllOnDeck.
-    def visitAllOnDeck(self, ctx:SailingParser.AllOnDeckContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#RaiseFlag.
-    def visitRaiseFlag(self, ctx:SailingParser.RaiseFlagContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#LowerFlag.
-    def visitLowerFlag(self, ctx:SailingParser.LowerFlagContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#RaiseJollyRoger.
-    def visitRaiseJollyRoger(self, ctx:SailingParser.RaiseJollyRogerContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#LowerJollyRoger.
-    def visitLowerJollyRoger(self, ctx:SailingParser.LowerJollyRogerContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#RaiseBanner.
-    def visitRaiseBanner(self, ctx:SailingParser.RaiseBannerContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#LowerBanner.
-    def visitLowerBanner(self, ctx:SailingParser.LowerBannerContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#RaiseFalseFlag.
-    def visitRaiseFalseFlag(self, ctx:SailingParser.RaiseFalseFlagContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#LowerFalseFlag.
-    def visitLowerFalseFlag(self, ctx:SailingParser.LowerFalseFlagContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#RaiseMerchantFlag.
-    def visitRaiseMerchantFlag(self, ctx:SailingParser.RaiseMerchantFlagContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#RaiseWhiteFlag.
-    def visitRaiseWhiteFlag(self, ctx:SailingParser.RaiseWhiteFlagContext):
+    # Visit a parse tree produced by SailingParser#LowerCustomFlag.
+    def visitLowerCustomFlag(self, ctx:SailingParser.LowerCustomFlagContext):
         return self.visitChildren(ctx)
 
 
@@ -446,16 +351,6 @@ class SailingParserVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by SailingParser#flagSequence.
     def visitFlagSequence(self, ctx:SailingParser.FlagSequenceContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#Repair.
-    def visitRepair(self, ctx:SailingParser.RepairContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#repairTarget.
-    def visitRepairTarget(self, ctx:SailingParser.RepairTargetContext):
         return self.visitChildren(ctx)
 
 
@@ -479,18 +374,28 @@ class SailingParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#LogCargoState.
-    def visitLogCargoState(self, ctx:SailingParser.LogCargoStateContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by SailingParser#LogShipState.
     def visitLogShipState(self, ctx:SailingParser.LogShipStateContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#BattleAlarm.
-    def visitBattleAlarm(self, ctx:SailingParser.BattleAlarmContext):
+    # Visit a parse tree produced by SailingParser#SetWindDirectionDeg.
+    def visitSetWindDirectionDeg(self, ctx:SailingParser.SetWindDirectionDegContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#SetWindCompass.
+    def visitSetWindCompass(self, ctx:SailingParser.SetWindCompassContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#SetWindSpeed.
+    def visitSetWindSpeed(self, ctx:SailingParser.SetWindSpeedContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#SetWindBeaufort.
+    def visitSetWindBeaufort(self, ctx:SailingParser.SetWindBeaufortContext):
         return self.visitChildren(ctx)
 
 

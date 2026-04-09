@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Optional
+from enum import Enum
 import time
 
 
@@ -21,7 +20,7 @@ class MooringState(Enum):
 
 
 class EngineMode(Enum):
-    """Tryb wiosłowania"""
+    """Tryb wiosłowania."""
     OFF = "wyłączone"
     FORWARD_FULL = "cała naprzód"
     FORWARD_SLOW = "wolny naprzód"
@@ -29,20 +28,13 @@ class EngineMode(Enum):
     REVERSE = "wsteczny"
 
 
-class CannonState(Enum):
-    EMPTY = "pusty"
-    LOADED = "załadowany"
-
-
-class AlertLevel(Enum):
-    NONE = "brak"
-    BATTLE_STATIONS = "alarm bojowy"
-
-
-class CrewStation(Enum):
-    IDLE = "wolny"
-    STATIONS = "na stanowisku"
-    ON_DECK = "na pokładzie"
+class PointOfSail(Enum):
+    """Kurs względem wiatru (TWA — True Wind Angle)."""
+    IN_IRONS = "martwy kąt"      # 0–30°
+    CLOSE_HAULED = "bejdewind"    # 30–60°
+    BEAM_REACH = "półwiatr"       # 60–100°
+    BROAD_REACH = "baksztag"      # 100–150°
+    RUNNING = "fordewind"         # 150–180°
 
 
 @dataclass
@@ -70,38 +62,20 @@ class SailInfo:
 
 
 @dataclass
-class CannonGroupInfo:
-    state: CannonState = CannonState.EMPTY
-    ammo: str = ""
+class WindState:
+    """Stan wiatru — kierunek Z którego wieje (0–360°) i prędkość."""
+    direction: float = 270.0   # kierunek Z którego wieje, 0=N, 90=E, 180=S, 270=W
+    speed: float = 12.0        # węzły
+    beaufort: int = 4
 
     def __str__(self):
-        s = f"{self.state.value}"
-        if self.ammo:
-            s += f", amunicja: {self.ammo}"
-        return s
+        return f"{self.direction:.0f}°, {self.speed:.0f} kn (B{self.beaufort})"
 
     def to_dict(self):
         return {
-            "state": self.state.value,
-            "ammo": self.ammo,
-        }
-
-
-@dataclass
-class DamageReport:
-    hull: float = 100.0
-    mast: float = 100.0
-    rigging: float = 100.0
-
-    def __str__(self):
-        return (f"kadłub: {self.hull}%, maszt: {self.mast}%, "
-                f"takielunek: {self.rigging}%")
-
-    def to_dict(self):
-        return {
-            "hull": self.hull,
-            "mast": self.mast,
-            "rigging": self.rigging,
+            "direction": self.direction,
+            "speed": self.speed,
+            "beaufort": self.beaufort,
         }
 
 
@@ -124,7 +98,7 @@ class LogEntry:
 
 @dataclass
 class ShipState:
-    """Pełny stan pirackiego statku."""
+    """Pełny stan żaglowca."""
 
     # ── Żagle ──
     sails: dict = field(default_factory=lambda: {
@@ -145,7 +119,8 @@ class ShipState:
     # ── Ster i kurs ──
     heading: float = 0.0
     target_heading: float = 0.0
-    wind_course: str = ""
+    wind_course: str = ""        # nazwa point of sail (bejdewind, etc.)
+    point_of_sail: str = ""      # aktualny point of sail obliczony z heading vs wiatru
     rudder_angle: float = 0.0
 
     # ── Kotwica i cumowanie ──
@@ -156,50 +131,19 @@ class ShipState:
     speed: float = 0.0
     rowing: EngineMode = EngineMode.OFF
 
-    # ── Uzbrojenie ──
-    cannons: dict = field(default_factory=lambda: {
-        "armaty": CannonGroupInfo(),
-        "dziala": CannonGroupInfo(),
-        "kolubryny": CannonGroupInfo(),
-        "karronady": CannonGroupInfo(),
-    })
+    # ── Wiatr ──
+    wind: WindState = field(default_factory=WindState)
 
-    # ── Ładunek / Łupy ──
-    cargo: dict = field(default_factory=lambda: {
-        "zloto": 0,
-        "srebro": 0,
-        "lupy": 0,
-        "amunicja": 0,
-        "prowiant": 100,
-        "rum": 50,
-        "woda_pitna": 100,
-        "proch": 100,
-        "beczki": 0,
-        "skrzynie": 0,
-        "skarb": 0,
-    })
-    buried_treasures: list = field(default_factory=list)
-
-    # ── Załoga (uproszczona) ──
-    crew_station: CrewStation = CrewStation.IDLE
-    man_overboard: bool = False
-    man_overboard_side: str = ""
-
-    # ── Flagi ──
+    # ── Flagi żeglarskie (nie pirackie) ──
     flags: dict = field(default_factory=lambda: {
-        "jolly_roger": False,
-        "bandera": False,
-        "falszywa_flaga": False,
-        "handlowa": False,
-        "biala": False,
-        "custom": [],
+        "bandera": True,        # bandera narodowa — zwykle zawsze podniesiona
+        "klubowa": False,       # flaga klubu żeglarskiego
+        "goscia": False,        # flaga gościa — kraju na którego wodach pływamy
+        "q": False,             # flaga Q — żółta, prośba o odprawę / kwarantanna
+        "protestowa": False,    # flaga protestowa (regaty)
+        "proporczyk": False,    # proporczyk
+        "custom": [],           # flagi sygnalizacyjne / inne
     })
-
-    # ── Uszkodzenia ──
-    damage: DamageReport = field(default_factory=DamageReport)
-
-    # ── Alarmy ──
-    alert: AlertLevel = AlertLevel.NONE
 
     # ── Dziennik pokładowy ──
     log: list = field(default_factory=list)
@@ -208,12 +152,18 @@ class ShipState:
     latitude: float = 0.0
     longitude: float = 0.0
 
+    # ─────────────────────────────────────────────────────────────
+    # LOG
+    # ─────────────────────────────────────────────────────────────
     def add_log(self, message: str, category: str = "ogólny"):
         ts = time.strftime("%H:%M:%S")
         entry = LogEntry(timestamp=ts, message=message, category=category)
         self.log.append(entry)
         print(f"  📜 {entry}")
 
+    # ─────────────────────────────────────────────────────────────
+    # NORMALIZACJA NAZW
+    # ─────────────────────────────────────────────────────────────
     def normalize_sail_key(self, name: str) -> str:
         mapping = {
             "grot": "grot", "fok": "fok", "bezan": "bezan",
@@ -221,40 +171,99 @@ class ShipState:
         }
         return mapping.get(name, name)
 
-    def normalize_cannon_key(self, name: str) -> str:
-        mapping = {
-            "armaty": "armaty", "działa": "dziala", "dziala": "dziala",
-            "kolubryna": "kolubryny", "kolubryny": "kolubryny",
-            "karronada": "karronady", "karronady": "karronady",
-        }
-        return mapping.get(name, name)
+    # ─────────────────────────────────────────────────────────────
+    # LOGIKA WIATRU
+    # ─────────────────────────────────────────────────────────────
+    def true_wind_angle(self) -> float:
+        """Kąt między dziobem a kierunkiem Z którego wieje wiatr (0–180°)."""
+        delta = (self.heading - self.wind.direction) % 360
+        if delta > 180:
+            delta = 360 - delta
+        return delta
 
+    def compute_point_of_sail(self) -> PointOfSail:
+        twa = self.true_wind_angle()
+        if twa < 30:
+            return PointOfSail.IN_IRONS
+        if twa < 60:
+            return PointOfSail.CLOSE_HAULED
+        if twa < 100:
+            return PointOfSail.BEAM_REACH
+        if twa < 150:
+            return PointOfSail.BROAD_REACH
+        return PointOfSail.RUNNING
+
+    def sail_efficiency(self) -> float:
+        """Wydajność żagli 0..1 zależna od kursu względem wiatru."""
+        twa = self.true_wind_angle()
+        if twa < 30:
+            return 0.0                      # martwy kąt
+        if twa < 60:
+            return (twa - 30) / 30 * 0.7    # ostry, rośnie do 0.7
+        if twa < 100:
+            return 1.0                      # półwiatr — max
+        if twa < 150:
+            return 0.9                      # baksztag
+        return 0.75                         # fordewind (bez spinakera)
+
+    def active_sail_area(self) -> float:
+        """Suma „aktywnej" powierzchni żagli — 0..1 (średnia z wszystkich)."""
+        total = 0.0
+        for info in self.sails.values():
+            if info.state == SailState.SET:
+                total += 1.0
+            elif info.state == SailState.REEFED:
+                total += max(0.0, 1.0 - info.reef_percent / 100.0)
+        return total / max(1, len(self.sails))
+
+    def recompute_sailing_speed(self):
+        """Przelicza prędkość statku na podstawie wiatru, żagli i stanu."""
+        # Zacumowany / zakotwiczony — stop
+        if self.anchor == AnchorState.DROPPED or self.mooring == MooringState.MOORED:
+            self.speed = 0.0
+            self.point_of_sail = ""
+            return
+
+        # Wiosła dominują — nie ruszamy prędkości wyliczonej przez komendy wiosłowe
+        if self.rowing != EngineMode.OFF:
+            self.point_of_sail = ""
+            return
+
+        area = self.active_sail_area()
+        if area <= 0:
+            self.speed = 0.0
+            self.point_of_sail = ""
+            return
+
+        pos = self.compute_point_of_sail()
+        self.point_of_sail = pos.value
+        eff = self.sail_efficiency()
+        # Teoretyczna prędkość max ~ 80% prędkości wiatru
+        max_speed = self.wind.speed * 0.8
+        self.speed = round(max_speed * eff * area, 1)
+
+    # ─────────────────────────────────────────────────────────────
+    # SERIALIZACJA
+    # ─────────────────────────────────────────────────────────────
     def to_dict(self) -> dict:
-        """Serializuje pełny stan statku do słownika (gotowy na JSON)."""
         return {
             "sails": {k: v.to_dict() for k, v in self.sails.items()},
             "rigging_tension": dict(self.rigging_tension),
             "heading": self.heading,
             "target_heading": self.target_heading,
             "wind_course": self.wind_course,
+            "point_of_sail": self.point_of_sail,
             "rudder_angle": self.rudder_angle,
             "anchor": self.anchor.value,
             "mooring": self.mooring.value,
             "speed": self.speed,
             "rowing": self.rowing.value,
-            "cannons": {k: v.to_dict() for k, v in self.cannons.items()},
-            "cargo": dict(self.cargo),
-            "buried_treasures": list(self.buried_treasures),
-            "crew_station": self.crew_station.value,
-            "man_overboard": self.man_overboard,
-            "man_overboard_side": self.man_overboard_side,
+            "wind": self.wind.to_dict(),
             "flags": {
                 k: (list(v) if isinstance(v, list) else v)
                 for k, v in self.flags.items()
             },
-            "damage": self.damage.to_dict(),
-            "alert": self.alert.value,
-            "log": [entry.to_dict() for entry in self.log],
+            "log": [e.to_dict() for e in self.log],
             "latitude": self.latitude,
             "longitude": self.longitude,
         }
@@ -262,60 +271,34 @@ class ShipState:
     def summary(self) -> str:
         lines = []
         lines.append("=" * 60)
-        lines.append("⚓ STAN PIRACKIEGO STATKU")
+        lines.append("⛵ STAN ŻAGLOWCA")
         lines.append("=" * 60)
 
         lines.append("\n⛵ ŻAGLE:")
-        for name, info in self.sails.items():
-            if info.state != SailState.FURLED:
-                lines.append(f"  {name:12s} → {info}")
-        active_sails = [n for n, s in self.sails.items() if s.state != SailState.FURLED]
-        if not active_sails:
+        active = [(n, s) for n, s in self.sails.items() if s.state != SailState.FURLED]
+        if not active:
             lines.append("  (wszystkie zwinięte)")
+        for name, info in active:
+            lines.append(f"  {name:12s} → {info}")
 
-        lines.append(f"\n🧭 KURS: {self.heading}°")
-        if self.wind_course:
-            lines.append(f"   Kurs wiatrowy: {self.wind_course}")
+        lines.append(f"\n🧭 KURS: {self.heading:.0f}°")
+        if self.point_of_sail:
+            lines.append(f"   Point of sail: {self.point_of_sail}")
         lines.append(f"   Ster: {self.rudder_angle}°")
 
         lines.append(f"\n💨 PRĘDKOŚĆ: {self.speed} kn")
         if self.rowing != EngineMode.OFF:
             lines.append(f"   Wiosła: {self.rowing.value}")
 
+        lines.append(f"\n🌬️  WIATR: {self.wind}")
+
         lines.append(f"\n⚓ KOTWICA: {self.anchor.value}")
         lines.append(f"   Cumowanie: {self.mooring.value}")
-
-        lines.append("\n💣 UZBROJENIE:")
-        for name, info in self.cannons.items():
-            if info.state != CannonState.EMPTY:
-                lines.append(f"  {name:12s} → {info}")
-
-        lines.append("\n📦 ŁADOWNIA:")
-        for item, qty in self.cargo.items():
-            if qty > 0:
-                lines.append(f"  {item:15s} → {qty}")
-
-        if self.buried_treasures:
-            lines.append("\n🗺️  ZAKOPANE SKARBY:")
-            for t in self.buried_treasures:
-                lines.append(f"  {t}")
 
         active_flags = [k for k, v in self.flags.items()
                         if v is True or (isinstance(v, list) and v)]
         if active_flags:
-            lines.append(f"\n🏴 FLAGI: {', '.join(active_flags)}")
-
-        lines.append(f"\n🔧 USZKODZENIA: {self.damage}")
-
-        if self.alert != AlertLevel.NONE:
-            lines.append(f"\n🚨 ALARM: {self.alert.value}")
-
-        if self.man_overboard:
-            side = f" ({self.man_overboard_side})" if self.man_overboard_side else ""
-            lines.append(f"\n🆘 CZŁOWIEK ZA BURTĄ{side}!")
-
-        lines.append(f"\n👥 ZAŁOGA: {self.crew_station.value}")
+            lines.append(f"\n🏳️  FLAGI: {', '.join(active_flags)}")
 
         lines.append("\n" + "=" * 60)
         return "\n".join(lines)
-

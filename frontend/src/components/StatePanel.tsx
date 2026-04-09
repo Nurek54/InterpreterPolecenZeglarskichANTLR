@@ -44,6 +44,15 @@ function StateRow({ label, value, color }: StateRowProps) {
   );
 }
 
+const FLAG_LABELS: Record<string, string> = {
+  bandera: "bandera",
+  klubowa: "klubowa",
+  goscia: "gościa",
+  q: "Q (kwarantanna)",
+  protestowa: "protestowa",
+  proporczyk: "proporczyk",
+};
+
 export default function StatePanel({ shipState }: StatePanelProps) {
   if (!shipState) {
     return (
@@ -64,10 +73,15 @@ export default function StatePanel({ shipState }: StatePanelProps) {
     ([, sail]) => sail.state !== "zwinięty"
   );
   const totalSails = Object.keys(s.sails).length;
-  const activeCargo = Object.entries(s.cargo).filter(([, qty]) => qty > 0);
+
   const activeFlags = Object.entries(s.flags)
-    .filter(([, v]) => v === true || (Array.isArray(v) && v.length > 0))
-    .map(([k]) => k);
+    .filter(([k, v]) => {
+      if (k === "custom") return Array.isArray(v) && v.length > 0;
+      return v === true;
+    })
+    .map(([k, v]) =>
+      k === "custom" ? (v as string[]).join(", ") : FLAG_LABELS[k] ?? k
+    );
 
   return (
     <div className="state-panel">
@@ -84,8 +98,12 @@ export default function StatePanel({ shipState }: StatePanelProps) {
             color={s.speed > 0 ? "#4ade80" : undefined}
           />
           <StateRow label="Ster" value={`${s.rudder_angle}°`} />
-          {s.wind_course && (
-            <StateRow label="Kurs wiatrowy" value={s.wind_course} />
+          {s.point_of_sail && (
+            <StateRow
+              label="Point of sail"
+              value={s.point_of_sail}
+              color="#a78bfa"
+            />
           )}
           <StateRow
             label="Kotwica"
@@ -98,8 +116,25 @@ export default function StatePanel({ shipState }: StatePanelProps) {
           )}
         </Section>
 
+        {/* Wiatr */}
+        <Section title="Wiatr" icon="🌬️">
+          <StateRow
+            label="Kierunek (z)"
+            value={`${s.wind.direction.toFixed(0)}°`}
+          />
+          <StateRow
+            label="Prędkość"
+            value={`${s.wind.speed.toFixed(0)} kn`}
+            color="#38bdf8"
+          />
+          <StateRow label="Siła" value={`${s.wind.beaufort} B`} />
+        </Section>
+
         {/* Żagle */}
-        <Section title={`Żagle (${activeSails.length}/${totalSails})`} icon="⛵">
+        <Section
+          title={`Żagle (${activeSails.length}/${totalSails})`}
+          icon="⛵"
+        >
           {activeSails.length === 0 ? (
             <div className="state-muted">Wszystkie zwinięte</div>
           ) : (
@@ -118,71 +153,20 @@ export default function StatePanel({ shipState }: StatePanelProps) {
           )}
         </Section>
 
-        {/* Uzbrojenie */}
-        <Section title="Uzbrojenie" icon="💣" defaultOpen={false}>
-          {Object.entries(s.cannons).map(([name, info]) => (
-            <StateRow
-              key={name}
-              label={name}
-              value={`${info.state}${info.ammo ? " (" + info.ammo + ")" : ""}`}
-              color={info.state === "załadowany" ? "#f97316" : undefined}
-            />
+        {/* Olinowanie */}
+        <Section title="Olinowanie" icon="🪢" defaultOpen={false}>
+          {Object.entries(s.rigging_tension).map(([name, val]) => (
+            <StateRow key={name} label={name} value={`${val}%`} />
           ))}
         </Section>
 
-        {/* Ładunek */}
-        <Section title="Ładownia" icon="📦" defaultOpen={false}>
-          {activeCargo.length === 0 ? (
-            <div className="state-muted">Pusto</div>
-          ) : (
-            activeCargo.map(([item, qty]) => (
-              <StateRow key={item} label={item} value={qty} />
-            ))
-          )}
-        </Section>
-
-        {/* Uszkodzenia */}
-        <Section title="Uszkodzenia" icon="🔧" defaultOpen={false}>
-          <StateRow
-            label="Kadłub"
-            value={`${s.damage.hull}%`}
-            color={s.damage.hull < 50 ? "#ef4444" : "#4ade80"}
-          />
-          <StateRow
-            label="Maszt"
-            value={`${s.damage.mast}%`}
-            color={s.damage.mast < 50 ? "#ef4444" : "#4ade80"}
-          />
-          <StateRow
-            label="Takielunek"
-            value={`${s.damage.rigging}%`}
-            color={s.damage.rigging < 50 ? "#ef4444" : "#4ade80"}
-          />
-        </Section>
-
-        {/* Status */}
-        {(s.alert !== "brak" ||
-          activeFlags.length > 0 ||
-          s.man_overboard) && (
-          <Section title="Status" icon="🏴‍☠️">
-            {s.alert !== "brak" && (
-              <StateRow label="Alarm" value={s.alert} color="#ef4444" />
-            )}
-            {activeFlags.length > 0 && (
-              <StateRow label="Flagi" value={activeFlags.join(", ")} />
-            )}
-            {s.man_overboard && (
-              <StateRow
-                label="Człowiek za burtą"
-                value={s.man_overboard_side || "TAK"}
-                color="#ef4444"
-              />
-            )}
-            <StateRow label="Załoga" value={s.crew_station} />
+        {/* Flagi */}
+        {activeFlags.length > 0 && (
+          <Section title="Flagi" icon="🏳️">
+            <StateRow label="Podniesione" value={activeFlags.join(", ")} />
           </Section>
         )}
       </div>
     </div>
   );
 }
-

@@ -1,9 +1,9 @@
 import { useRef, useMemo, useEffect, Suspense, useState } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, useGLTF, Html } from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import React from "react";
-import type { ShipState } from "../types/ship";
+import type { ShipState, WindState } from "../types/ship";
 
 interface ShipSceneProps {
     shipState: ShipState | null;
@@ -21,13 +21,14 @@ interface CompassOverlayProps {
     heading: number;
     speed: number;
     anchor: string;
+    pointOfSail: string;
 }
 
 // ─────────────────────────────────────────────────────────────────
-// KOMPAS + INFO OVERLAY
+// KOMPAS + INFO OVERLAY (top-right)
 // ─────────────────────────────────────────────────────────────────
 
-function CompassOverlay({ heading, speed, anchor }: CompassOverlayProps) {
+function CompassOverlay({ heading, speed, anchor, pointOfSail }: CompassOverlayProps) {
     const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
     const dirIndex = Math.round(((heading % 360) + 360) % 360 / 45) % 8;
     const dirName = directions[dirIndex];
@@ -134,7 +135,6 @@ function CompassOverlay({ heading, speed, anchor }: CompassOverlayProps) {
                     const angle = i * 30;
                     const rad = (angle * Math.PI) / 180;
                     const r1 = 38;
-                    const r2 = 41;
                     return (
                         <div
                             key={i}
@@ -193,15 +193,277 @@ function CompassOverlay({ heading, speed, anchor }: CompassOverlayProps) {
                     <span style={{ color: "#d4a843", fontSize: 11 }}>⚓</span>
                 )}
             </div>
+
+            {/* Point of sail */}
+            {pointOfSail && (
+                <div style={{
+                    background: compassBg,
+                    padding: "3px 10px",
+                    borderRadius: 5,
+                    fontFamily: font,
+                    fontSize: 10,
+                    color: "#a78bfa",
+                    border: `1px solid rgba(167, 139, 250, 0.3)`,
+                    backdropFilter: "blur(8px)",
+                }}>
+                    {pointOfSail}
+                </div>
+            )}
         </div>
     );
 }
 
 // ─────────────────────────────────────────────────────────────────
-// WODA — animowana, głębokie morze
+// WSKAŹNIK WIATRU (top-left)
 // ─────────────────────────────────────────────────────────────────
 
-function Water() {
+function WindIndicator({ wind }: { wind: WindState }) {
+    const bg = "rgba(6, 13, 20, 0.82)";
+    const ring = "rgba(56, 189, 248, 0.45)";
+    const blue = "#38bdf8";
+    const font = "'IBM Plex Mono', 'Menlo', monospace";
+
+    // Strzałka pokazuje kierunek W którym wiatr WIEJE (z direction + 180°)
+    const arrowRotation = (wind.direction + 180) % 360;
+
+    // Intensywność zależna od siły
+    const intensity = Math.min(1, wind.beaufort / 10);
+    const arrowColor = `rgba(56, 189, 248, ${0.5 + intensity * 0.5})`;
+
+    return (
+        <div style={{
+            position: "absolute",
+            top: 14,
+            left: 14,
+            zIndex: 10,
+            pointerEvents: "none",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 6,
+        }}>
+            {/* Koło z różą wiatrów */}
+            <div style={{
+                width: 86,
+                height: 86,
+                borderRadius: "50%",
+                background: bg,
+                border: `2px solid ${ring}`,
+                position: "relative",
+                backdropFilter: "blur(8px)",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)",
+            }}>
+                {/* Podziałka co 45° */}
+                {Array.from({ length: 8 }).map((_, i) => {
+                    const angle = i * 45;
+                    const rad = (angle * Math.PI) / 180;
+                    return (
+                        <div
+                            key={i}
+                            style={{
+                                position: "absolute",
+                                left: 43 + Math.sin(rad) * 38,
+                                top: 43 - Math.cos(rad) * 38,
+                                width: 1,
+                                height: i % 2 === 0 ? 6 : 3,
+                                background: i % 2 === 0
+                                    ? "rgba(56, 189, 248, 0.5)"
+                                    : "rgba(213, 221, 229, 0.2)",
+                                transform: `translate(-50%, -50%) rotate(${angle}deg)`,
+                            }}
+                        />
+                    );
+                })}
+
+                {/* Etykieta N */}
+                <span style={{
+                    position: "absolute",
+                    left: 43,
+                    top: 10,
+                    transform: "translate(-50%, -50%)",
+                    fontSize: 9,
+                    fontWeight: 700,
+                    fontFamily: font,
+                    color: "rgba(213, 221, 229, 0.5)",
+                }}>
+                    N
+                </span>
+
+                {/* Strzałka wiatru */}
+                <div style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    width: 0,
+                    height: 0,
+                    transform: `translate(-50%, -50%) rotate(${arrowRotation}deg)`,
+                    transition: "transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                }}>
+                    {/* Grot strzałki */}
+                    <div style={{
+                        position: "absolute",
+                        left: -6,
+                        top: -28,
+                        width: 0,
+                        height: 0,
+                        borderLeft: "6px solid transparent",
+                        borderRight: "6px solid transparent",
+                        borderBottom: `22px solid ${arrowColor}`,
+                        filter: `drop-shadow(0 0 4px ${arrowColor})`,
+                    }} />
+                    {/* Trzon strzałki */}
+                    <div style={{
+                        position: "absolute",
+                        left: -1.5,
+                        top: -6,
+                        width: 3,
+                        height: 32,
+                        background: arrowColor,
+                        borderRadius: 2,
+                    }} />
+                </div>
+
+                {/* Środek */}
+                <div style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: 6,
+                    height: 6,
+                    borderRadius: "50%",
+                    background: blue,
+                    boxShadow: `0 0 6px ${blue}`,
+                }} />
+            </div>
+
+            {/* Nagłówek */}
+            <div style={{
+                background: bg,
+                color: blue,
+                padding: "3px 10px",
+                borderRadius: 5,
+                fontFamily: font,
+                fontSize: 10,
+                fontWeight: 600,
+                border: `1px solid ${ring}`,
+                backdropFilter: "blur(8px)",
+                letterSpacing: 0.5,
+                textTransform: "uppercase",
+            }}>
+                🌬️ Wiatr
+            </div>
+
+            {/* Prędkość + Beaufort */}
+            <div style={{
+                background: bg,
+                color: "#e8f4fb",
+                padding: "3px 10px",
+                borderRadius: 5,
+                fontFamily: font,
+                fontSize: 11,
+                fontWeight: 600,
+                border: `1px solid rgba(22, 38, 56, 0.6)`,
+                backdropFilter: "blur(8px)",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
+            }}>
+                {wind.speed.toFixed(0)} kn · B{wind.beaufort}
+            </div>
+
+            {/* Kierunek */}
+            <div style={{
+                background: bg,
+                color: "rgba(213, 221, 229, 0.6)",
+                padding: "2px 9px",
+                borderRadius: 5,
+                fontFamily: font,
+                fontSize: 9,
+                border: `1px solid rgba(22, 38, 56, 0.6)`,
+                backdropFilter: "blur(8px)",
+            }}>
+                z {wind.direction.toFixed(0)}°
+            </div>
+        </div>
+    );
+}
+
+// ─────────────────────────────────────────────────────────────────
+// ANIMOWANE SMUGI WIATRU (cząstki)
+// ─────────────────────────────────────────────────────────────────
+
+interface Particle {
+    x: number;
+    y: number;
+    z: number;
+    life: number;
+}
+
+function WindStreaks({ wind }: { wind: WindState }) {
+    const groupRef = useRef<THREE.Group>(null);
+    const COUNT = 60;
+
+    const particles = useMemo<Particle[]>(
+        () =>
+            Array.from({ length: COUNT }).map(() => ({
+                x: (Math.random() - 0.5) * 120,
+                z: (Math.random() - 0.5) * 120,
+                y: 0.5 + Math.random() * 4,
+                life: Math.random(),
+            })),
+        []
+    );
+
+    useFrame((_, delta) => {
+        if (!groupRef.current) return;
+
+        // Kierunek W który wieje wiatr (direction + 180°)
+        const blowRad = ((wind.direction + 180) * Math.PI) / 180;
+        const windFactor = Math.max(0.3, wind.speed / 20);
+        const vx = Math.sin(blowRad) * wind.speed * 0.4 * windFactor;
+        const vz = -Math.cos(blowRad) * wind.speed * 0.4 * windFactor;
+
+        groupRef.current.children.forEach((child, i) => {
+            const p = particles[i];
+            if (!p) return;
+
+            p.x += vx * delta;
+            p.z += vz * delta;
+            p.life -= delta * 0.25;
+
+            if (p.life <= 0 || Math.abs(p.x) > 70 || Math.abs(p.z) > 70) {
+                p.x = (Math.random() - 0.5) * 140;
+                p.z = (Math.random() - 0.5) * 140;
+                p.y = 0.5 + Math.random() * 4;
+                p.life = 0.6 + Math.random() * 0.6;
+            }
+
+            child.position.set(p.x, p.y, p.z);
+            child.rotation.y = blowRad;
+
+            const mat = (child as THREE.Mesh).material as THREE.MeshBasicMaterial;
+            if (mat) {
+                mat.opacity = Math.min(0.45, p.life * 0.45) * windFactor;
+            }
+        });
+    });
+
+    return (
+        <group ref={groupRef}>
+            {particles.map((_, i) => (
+                <mesh key={i}>
+                    <boxGeometry args={[2.2, 0.025, 0.025]} />
+                    <meshBasicMaterial color="#c9e8ff" transparent opacity={0.3} />
+                </mesh>
+            ))}
+        </group>
+    );
+}
+
+// ─────────────────────────────────────────────────────────────────
+// WODA — animowana, reagująca na wiatr
+// ─────────────────────────────────────────────────────────────────
+
+function Water({ windSpeed }: { windSpeed: number }) {
     const meshRef = useRef<THREE.Mesh>(null);
     const geometry = useMemo(
         () => new THREE.PlaneGeometry(400, 400, 80, 80),
@@ -213,14 +475,15 @@ function Water() {
         const positions = meshRef.current.geometry.attributes
             .position as THREE.BufferAttribute;
         const time = clock.getElapsedTime();
+        const amp = 0.4 + Math.min(1.5, windSpeed / 20);
 
         for (let i = 0; i < positions.count; i++) {
             const x = positions.getX(i);
             const y = positions.getY(i);
             const z =
-                Math.sin(x * 0.06 + time * 0.6) * 0.35 +
-                Math.sin(y * 0.09 + time * 0.4) * 0.25 +
-                Math.sin((x + y) * 0.04 + time * 0.3) * 0.15;
+                Math.sin(x * 0.06 + time * 0.6) * 0.35 * amp +
+                Math.sin(y * 0.09 + time * 0.4) * 0.25 * amp +
+                Math.sin((x + y) * 0.04 + time * 0.3) * 0.15 * amp;
             positions.setZ(i, z);
         }
         positions.needsUpdate = true;
@@ -242,13 +505,13 @@ function Water() {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// MOON LIGHT — dodatkowe oświetlenie "księżycowe"
+// OŚWIETLENIE
 // ─────────────────────────────────────────────────────────────────
 
 function SceneLighting() {
     return (
         <>
-            <ambientLight intensity={0.4} color="#8899bb" />
+            <ambientLight intensity={0.45} color="#8899bb" />
             <directionalLight
                 position={[12, 18, 8]}
                 intensity={1.4}
@@ -279,33 +542,60 @@ function SceneLighting() {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// FLAGA JOLLY ROGER
+// BANDERA — powiewa zgodnie z wiatrem
 // ─────────────────────────────────────────────────────────────────
 
-function JollyRogerFlag({ visible }: { visible: boolean }) {
-    const ref = useRef<THREE.Group>(null);
+function Ensign({
+    visible,
+    shipHeading,
+    windDirection,
+}: {
+    visible: boolean;
+    shipHeading: number;
+    windDirection: number;
+}) {
+    const flagRef = useRef<THREE.Mesh>(null);
+
+    // Bandera ma być w świecie skierowana zgodnie z kierunkiem wiania (windDir + 180).
+    // Statek-grupa jest obracana o -heading*PI/180, więc kompensujemy lokalnie.
+    const localRotation = useMemo(() => {
+        const worldBlow = -((windDirection + 180) * Math.PI) / 180;
+        const shipRot = -(shipHeading * Math.PI) / 180;
+        return worldBlow - shipRot;
+    }, [windDirection, shipHeading]);
 
     useFrame(({ clock }) => {
-        if (ref.current && visible) {
-            ref.current.rotation.y = Math.sin(clock.getElapsedTime() * 2) * 0.12;
-        }
+        if (!flagRef.current) return;
+        const t = clock.getElapsedTime();
+        flagRef.current.scale.x = 1 + Math.sin(t * 4) * 0.06;
     });
 
     if (!visible) return null;
 
     return (
-        <group ref={ref} position={[0, 6.5, 0]}>
-            <mesh position={[0, 0.5, 0]}>
-                <cylinderGeometry args={[0.02, 0.02, 1.5]} />
-                <meshStandardMaterial color="#4a3728" />
+        <group position={[0, 4.8, -2.5]} rotation={[0, localRotation, 0]}>
+            {/* Drzewiec */}
+            <mesh position={[0, 0, 0]}>
+                <cylinderGeometry args={[0.015, 0.015, 1.2]} />
+                <meshStandardMaterial color="#3d2c1e" />
             </mesh>
-            <mesh position={[0.4, 0.8, 0]}>
-                <planeGeometry args={[0.8, 0.5]} />
-                <meshStandardMaterial color="#111" side={THREE.DoubleSide} />
+            {/* Płat flagi */}
+            <mesh ref={flagRef} position={[0.4, 0.35, 0]}>
+                <planeGeometry args={[0.8, 0.45]} />
+                <meshStandardMaterial
+                    color="#d45050"
+                    side={THREE.DoubleSide}
+                    roughness={0.8}
+                />
             </mesh>
-            <mesh position={[0.4, 0.8, 0.01]}>
-                <circleGeometry args={[0.1, 16]} />
-                <meshStandardMaterial color="#ddd" />
+            {/* Biały pasek */}
+            <mesh position={[0.4, 0.42, 0.005]}>
+                <planeGeometry args={[0.8, 0.15]} />
+                <meshStandardMaterial
+                    color="#f0f0f0"
+                    side={THREE.DoubleSide}
+                    roughness={0.8}
+                />
             </mesh>
         </group>
     );
@@ -330,14 +620,13 @@ function GLBModel({ url, visible }: { url: string; visible: boolean }) {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// FALLBACK — prosty statek z prymitywów (gdy brak GLB)
+// FALLBACK — prosty statek z prymitywów
 // ─────────────────────────────────────────────────────────────────
 
 function FallbackShip({ hasSailsSet }: FallbackShipProps) {
     const sailColor = "#e8e0d0";
     const hullDark = "#5a2e1c";
     const hullMid = "#7a4a30";
-    const hullLight = "#8a5a3a";
     const mastColor = "#3d2c1e";
     const deckColor = "#906840";
     const trimColor = "#4a2a14";
@@ -359,27 +648,22 @@ function FallbackShip({ hasSailsSet }: FallbackShipProps) {
                 <boxGeometry args={[2.4, 1, 8]} />
                 <meshStandardMaterial color={hullDark} roughness={0.8} />
             </mesh>
-            {/* Dziób */}
             <mesh position={[0, 0, 4.5]} rotation={[0, 0, Math.PI / 4]}>
                 <boxGeometry args={[1.2, 0.7, 1.5]} />
                 <meshStandardMaterial color={hullDark} roughness={0.8} />
             </mesh>
-            {/* Bukszpryt */}
             <mesh position={[0, 0.6, 6]} rotation={[Math.PI / 6, 0, 0]}>
                 <cylinderGeometry args={[0.04, 0.06, 3.5]} />
                 <meshStandardMaterial color={mastColor} />
             </mesh>
-            {/* Rufa */}
             <mesh position={[0, 0.2, -4.2]} rotation={[0, 0, Math.PI / 4]}>
                 <boxGeometry args={[1, 0.5, 0.8]} />
                 <meshStandardMaterial color={hullDark} roughness={0.8} />
             </mesh>
-            {/* Pokład */}
             <mesh position={[0, 0.55, 0]}>
                 <boxGeometry args={[2.2, 0.08, 7.5]} />
                 <meshStandardMaterial color={deckColor} roughness={0.9} />
             </mesh>
-            {/* Nadbudówka rufowa */}
             <mesh position={[0, 1.1, -2.8]}>
                 <boxGeometry args={[2.2, 0.8, 2.5]} />
                 <meshStandardMaterial color={hullMid} roughness={0.8} />
@@ -388,7 +672,6 @@ function FallbackShip({ hasSailsSet }: FallbackShipProps) {
                 <boxGeometry args={[2.3, 0.06, 2.6]} />
                 <meshStandardMaterial color={trimColor} />
             </mesh>
-            {/* Burty */}
             <mesh position={[1.15, 0.8, 0]}>
                 <boxGeometry args={[0.06, 0.5, 7.5]} />
                 <meshStandardMaterial color={hullMid} roughness={0.8} />
@@ -397,14 +680,12 @@ function FallbackShip({ hasSailsSet }: FallbackShipProps) {
                 <boxGeometry args={[0.06, 0.5, 7.5]} />
                 <meshStandardMaterial color={hullMid} roughness={0.8} />
             </mesh>
-            {/* Linia wodna — złoty pasek */}
             <mesh position={[0, -0.1, 0]}>
                 <boxGeometry args={[2.5, 0.06, 8.1]} />
                 <meshStandardMaterial color="#8a6830" metalness={0.3} roughness={0.5} />
             </mesh>
 
             {/* ── MASZTY ── */}
-            {/* Grotmaszt (środkowy, najwyższy) */}
             <mesh position={[0, 3.8, 0]}>
                 <cylinderGeometry args={[0.07, 0.1, 7]} />
                 <meshStandardMaterial color={mastColor} />
@@ -421,7 +702,6 @@ function FallbackShip({ hasSailsSet }: FallbackShipProps) {
                 <cylinderGeometry args={[0.02, 0.03, 2]} />
                 <meshStandardMaterial color={mastColor} />
             </mesh>
-            {/* Fokmaszt (przedni) */}
             <mesh position={[0, 3.2, 2.8]}>
                 <cylinderGeometry args={[0.06, 0.09, 6]} />
                 <meshStandardMaterial color={mastColor} />
@@ -434,7 +714,6 @@ function FallbackShip({ hasSailsSet }: FallbackShipProps) {
                 <cylinderGeometry args={[0.025, 0.035, 2.4]} />
                 <meshStandardMaterial color={mastColor} />
             </mesh>
-            {/* Bezanmaszt (tylni) */}
             <mesh position={[0, 3, -2.5]}>
                 <cylinderGeometry args={[0.05, 0.08, 5.2]} />
                 <meshStandardMaterial color={mastColor} />
@@ -443,7 +722,6 @@ function FallbackShip({ hasSailsSet }: FallbackShipProps) {
                 <cylinderGeometry args={[0.025, 0.035, 2.5]} />
                 <meshStandardMaterial color={mastColor} />
             </mesh>
-            {/* Bocianie gniazdo */}
             <mesh position={[0, 6.5, 0]}>
                 <cylinderGeometry args={[0.3, 0.25, 0.3, 8, 1, true]} />
                 <meshStandardMaterial color={mastColor} side={THREE.DoubleSide} />
@@ -452,37 +730,30 @@ function FallbackShip({ hasSailsSet }: FallbackShipProps) {
             {/* ═══ ŻAGLE ═══ */}
             {hasSailsSet && (
                 <>
-                    {/* Grotżagiel dolny */}
                     <mesh position={[0, 3.5, 0.05]}>
                         <planeGeometry args={[3.2, 2.5]} />
                         {sailMat}
                     </mesh>
-                    {/* Grotżagiel górny */}
                     <mesh position={[0, 5.5, 0.05]}>
                         <planeGeometry args={[2.5, 1.8]} />
                         {sailMat}
                     </mesh>
-                    {/* Grotżagiel szczytowy */}
                     <mesh position={[0, 6.8, 0.05]}>
                         <planeGeometry args={[1.8, 1.2]} />
                         {sailMat}
                     </mesh>
-                    {/* Fokżagiel dolny */}
                     <mesh position={[0, 2.8, 2.85]}>
                         <planeGeometry args={[2.8, 2.2]} />
                         {sailMat}
                     </mesh>
-                    {/* Fokżagiel górny */}
                     <mesh position={[0, 4.5, 2.85]}>
                         <planeGeometry args={[2.2, 1.5]} />
                         {sailMat}
                     </mesh>
-                    {/* Bezanżagiel */}
                     <mesh position={[0, 2.5, -2.45]}>
                         <planeGeometry args={[2.2, 1.8]} />
                         {sailMat}
                     </mesh>
-                    {/* Sztaksel (trójkątny, do bukszprytu) */}
                     <mesh position={[-0.3, 3.2, 4.2]} rotation={[0.5, 0.2, 0.1]}>
                         <planeGeometry args={[1.5, 2.5]} />
                         <meshStandardMaterial
@@ -500,7 +771,7 @@ function FallbackShip({ hasSailsSet }: FallbackShipProps) {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// MODEL STATKU — rotacja + lekkie kołysanie
+// MODEL STATKU — rotacja + kołysanie
 // ─────────────────────────────────────────────────────────────────
 
 function ShipModel({ shipState }: ShipModelProps) {
@@ -533,11 +804,17 @@ function ShipModel({ shipState }: ShipModelProps) {
         ? Object.values(shipState.sails).some((s) => s.state !== "zwinięty")
         : false;
 
-    const jollyRoger = shipState?.flags?.jolly_roger ?? false;
+    const ensignVisible = shipState?.flags?.bandera ?? true;
+    const heading = shipState?.heading ?? 0;
+    const windDir = shipState?.wind?.direction ?? 270;
 
     return (
         <group ref={groupRef}>
-            <JollyRogerFlag visible={jollyRoger} />
+            <Ensign
+                visible={ensignVisible}
+                shipHeading={heading}
+                windDirection={windDir}
+            />
 
             {hasGLB ? (
                 <ErrorBoundaryFallback onError={() => setHasGLB(false)}>
@@ -572,10 +849,7 @@ interface ErrorBoundaryState {
     hasError: boolean;
 }
 
-class ErrorBoundaryFallback extends React.Component<
-    ErrorBoundaryProps,
-    ErrorBoundaryState
-> {
+class ErrorBoundaryFallback extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
     constructor(props: ErrorBoundaryProps) {
         super(props);
         this.state = { hasError: false };
@@ -603,14 +877,29 @@ export default function ShipScene({ shipState }: ShipSceneProps) {
     const heading = shipState?.heading ?? 0;
     const speed = shipState?.speed ?? 0;
     const anchor = shipState?.anchor ?? "podniesiona";
+    const pointOfSail = shipState?.point_of_sail ?? "";
+    const wind: WindState = shipState?.wind ?? {
+        direction: 270,
+        speed: 12,
+        beaufort: 4,
+    };
 
     return (
         <div style={{ width: "100%", height: "100%", position: "relative" }}>
-            <CompassOverlay heading={heading} speed={speed} anchor={anchor} />
+            <CompassOverlay
+                heading={heading}
+                speed={speed}
+                anchor={anchor}
+                pointOfSail={pointOfSail}
+            />
+            <WindIndicator wind={wind} />
 
             <Canvas
                 camera={{ position: [22, 12, 28], fov: 38 }}
-                style={{ background: "linear-gradient(180deg, #0c1a2c 0%, #060d14 60%, #040a10 100%)" }}
+                style={{
+                    background:
+                        "linear-gradient(180deg, #0c1a2c 0%, #060d14 60%, #040a10 100%)",
+                }}
                 shadows
             >
                 <SceneLighting />
@@ -619,7 +908,8 @@ export default function ShipScene({ shipState }: ShipSceneProps) {
 
                 <Suspense fallback={null}>
                     <ShipModel shipState={shipState} />
-                    <Water />
+                    <Water windSpeed={wind.speed} />
+                    <WindStreaks wind={wind} />
                     <OrbitControls
                         target={[0, 2.5, 0]}
                         minDistance={10}
@@ -634,4 +924,3 @@ export default function ShipScene({ shipState }: ShipSceneProps) {
         </div>
     );
 }
-

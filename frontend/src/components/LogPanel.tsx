@@ -12,13 +12,9 @@ const CATEGORY_ICONS: Record<string, string> = {
   kotwica: "⚓",
   cumowanie: "🔗",
   prędkość: "💨",
-  uzbrojenie: "💣",
-  ładunek: "📦",
-  załoga: "👥",
-  flagi: "🏴",
-  naprawy: "🔧",
+  flagi: "🏳️",
   dziennik: "📜",
-  awaria: "🚨",
+  wiatr: "🌬️",
   pogoda: "🌊",
   kontrola: "⚙️",
   takielunek: "🪢",
@@ -32,13 +28,9 @@ const CATEGORY_COLORS: Record<string, string> = {
   kotwica: "#fbbf24",
   cumowanie: "#f97316",
   prędkość: "#22d3ee",
-  uzbrojenie: "#ef4444",
-  ładunek: "#fb923c",
-  załoga: "#34d399",
   flagi: "#fcd34d",
-  naprawy: "#a3a3a3",
   dziennik: "#d4d4d8",
-  awaria: "#ff4444",
+  wiatr: "#38bdf8",
   pogoda: "#38bdf8",
   kontrola: "#94a3b8",
   takielunek: "#78716c",
@@ -109,4 +101,3 @@ export default function LogPanel({ log }: LogPanelProps) {
     </div>
   );
 }
-

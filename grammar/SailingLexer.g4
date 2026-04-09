@@ -30,8 +30,11 @@ BRASY           : 'brasy' ;
 TALREPY         : 'talrepy' ;
 
 // ═══════════════════════════════════════════════════════════════
-// STER / KIERUNEK
+// STER / KIERUNEK  (multi-word tokens must come BEFORE single-word)
 // ═══════════════════════════════════════════════════════════════
+POD_WIATR       : 'pod wiatr' ;
+Z_WIATREM       : 'z wiatrem' ;
+
 STER            : 'ster' ;
 PROSTO          : 'prosto' ;
 ZWROT           : 'zwrot' ;
@@ -41,12 +44,12 @@ RUFE            : 'rufę' | 'rufe' ;
 ODPADAJ         : 'odpadaj' ;
 OSTRZEJ         : 'ostrzej' ;
 
+OSTRY_BEJDEWIND : 'ostry bejdewind' ;
 BAKSZTAG        : 'baksztag' ;
 BEJDEWIND       : 'bejdewind' ;
 POLWIATR        : 'półwiatr' | 'polwiatr' ;
 FORDEWIND       : 'fordewind' ;
 POLBAKSZTAG     : 'półbaksztag' | 'polbaksztag' ;
-OSTRY_BEJDEWIND : 'ostry bejdewind' ;
 
 LEWA_BURTA      : 'lewa burta' | 'bakburta' ;
 PRAWA_BURTA     : 'prawa burta' | 'sterburta' ;
@@ -61,7 +64,7 @@ CUMUJ           : 'cumuj' ;
 ODCUMUJ         : 'odcumuj' ;
 
 // ═══════════════════════════════════════════════════════════════
-// KURS KOMPASOWY I NAWIGACJA
+// KURS / NAWIGACJA
 // ═══════════════════════════════════════════════════════════════
 KURS            : 'kurs' ;
 NAMIAR          : 'namiar' ;
@@ -71,59 +74,17 @@ NA              : 'na' ;
 DO              : 'do' ;
 PUNKT           : 'punkt' ;
 
-POLNOC          : 'północ' | 'polnoc' | 'N' ;
-POLUDNIE        : 'południe' | 'poludnie' | 'S' ;
-WSCHOD          : 'wschód' | 'wschod' | 'E' ;
-ZACHOD          : 'zachód' | 'zachod' | 'W' ;
-POLNOCNY_WSCHOD : 'NE' | 'północny wschód' | 'polnocny wschod' ;
-POLNOCNY_ZACHOD : 'NW' | 'północny zachód' | 'polnocny zachod' ;
+POLNOC            : 'północ' | 'polnoc' | 'N' ;
+POLUDNIE          : 'południe' | 'poludnie' | 'S' ;
+WSCHOD            : 'wschód' | 'wschod' | 'E' ;
+ZACHOD            : 'zachód' | 'zachod' | 'W' ;
+POLNOCNY_WSCHOD   : 'NE' | 'północny wschód' | 'polnocny wschod' ;
+POLNOCNY_ZACHOD   : 'NW' | 'północny zachód' | 'polnocny zachod' ;
 POLUDNIOWY_WSCHOD : 'SE' | 'południowy wschód' | 'poludniowy wschod' ;
 POLUDNIOWY_ZACHOD : 'SW' | 'południowy zachód' | 'poludniowy zachod' ;
 
 // ═══════════════════════════════════════════════════════════════
-// UZBROJENIE (ładowanie + salwa)
-// ═══════════════════════════════════════════════════════════════
-LADUJ           : 'ładuj' | 'laduj' ;
-OGNIA           : 'ognia' ;
-SALWA           : 'salwa' ;
-ARMATY          : 'armaty' ;
-DZIALA          : 'działa' | 'dziala' ;
-KOLUBRYNA       : 'kolubryna' | 'kolubryny' ;
-KARRONADA       : 'karronada' | 'karronady' ;
-BURTA_LEWA      : 'burta lewa' ;
-BURTA_PRAWA     : 'burta prawa' ;
-WSZYSTKIE_DZIALA : 'wszystkie działa' | 'wszystkie dziala' ;
-
-KULA            : 'kula' | 'kulę' | 'kule' ;
-KARTACZ         : 'kartacz' ;
-LANCUCH_KULA    : 'łańcuchówka' | 'lancuchowka' ;
-ZAPALAJACA      : 'zapalająca' | 'zapalajaca' ;
-BOMBA           : 'bomba' | 'bombę' | 'bombe' ;
-
-// ═══════════════════════════════════════════════════════════════
-// ŁUPY I ŁADUNEK
-// ═══════════════════════════════════════════════════════════════
-ZALADUJ         : 'załaduj' | 'zaladuj' ;
-ROZLADUJ        : 'rozładuj' | 'rozladuj' ;
-PRZELADUJ       : 'przeładuj' | 'przeladuj' ;
-LADOWNIA        : 'ładownia' | 'ladownia' ;
-LUPY            : 'łupy' | 'lupy' ;
-SKARB           : 'skarb' ;
-ZLOTO           : 'złoto' | 'zloto' ;
-SREBRO          : 'srebro' ;
-AMUNICJA        : 'amunicja' | 'amunicję' | 'amunicje' ;
-PROWIANT        : 'prowiant' ;
-RUM             : 'rum' ;
-WODA_PITNA      : 'woda pitna' | 'wodę pitną' | 'wode pitna' ;
-PROCH           : 'proch' ;
-BECZKI          : 'beczki' ;
-SKRZYNIE        : 'skrzynie' ;
-ZAKOP           : 'zakop' ;
-WYKOP           : 'wykop' ;
-WYSPA           : 'wyspa' | 'wyspę' | 'wyspe' ;
-
-// ═══════════════════════════════════════════════════════════════
-// PRĘDKOŚĆ
+// PRĘDKOŚĆ / WIOSŁA
 // ═══════════════════════════════════════════════════════════════
 WIOSLA          : 'wiosła' | 'wiosla' ;
 WESLUJ          : 'wiosłuj' | 'wiosluj' ;
@@ -136,36 +97,17 @@ WSTECZNY        : 'wsteczny' | 'wstecz' ;
 WODE            : 'wodę' | 'wode' ;
 
 // ═══════════════════════════════════════════════════════════════
-// ZAŁOGA
+// FLAGI ŻEGLARSKIE (nie pirackie!)
 // ═══════════════════════════════════════════════════════════════
-ZALOGA          : 'załoga' | 'zaloga' ;
-STANOWISKA      : 'stanowiska' ;
-CZLOWIEK        : 'człowiek' | 'czlowiek' ;
-ZA              : 'za' ;
-BURTA           : 'burtą' | 'burta' ;
-WSZYSCY         : 'wszyscy' ;
-POKLAD          : 'pokład' | 'poklad' ;
-RAPORT          : 'raport' | 'zamelduj' ;
-
-// ═══════════════════════════════════════════════════════════════
-// FLAGI
-// ═══════════════════════════════════════════════════════════════
-FLAGE           : 'flagę' | 'flage' ;
-OPUSC           : 'opuść' | 'opusc' ;
-SYGNALIZUJ      : 'sygnalizuj' ;
-BANDERA         : 'bandera' | 'banderę' | 'bandere' ;
-JOLLY_ROGER     : 'jolly roger' | 'czarna flaga' | 'trupia czaszka' ;
-FLAGA_HANDLOWA  : 'flaga handlowa' | 'flagę handlową' | 'flage handlowa' ;
-FALS_FLAGA      : 'fałszywa flaga' | 'falszywa flaga' ;
-FLAGA_BIALA     : 'biała flaga' | 'biala flaga' ;
-
-// ═══════════════════════════════════════════════════════════════
-// NAPRAWY
-// ═══════════════════════════════════════════════════════════════
-NAPRAW          : 'napraw' ;
-KADLUB          : 'kadłub' | 'kadlub' ;
-MASZT           : 'maszt' ;
-TAKIELUNEK      : 'takielunek' ;
+FLAGA_KLUBOWA    : 'flaga klubowa' | 'flagę klubową' | 'flage klubowa' ;
+FLAGA_GOSCIA     : 'flaga gościa' | 'flagę gościa' | 'flage goscia' | 'flaga goscia' ;
+FLAGA_Q          : 'flaga Q' | 'flagę Q' | 'flaga kwarantanny' | 'flagę kwarantanny' ;
+FLAGA_PROTESTOWA : 'flaga protestowa' | 'flagę protestową' | 'flage protestowa' ;
+BANDERA          : 'bandera' | 'banderę' | 'bandere' ;
+PROPORCZYK       : 'proporczyk' | 'proporczyka' ;
+FLAGE            : 'flagę' | 'flage' ;
+OPUSC            : 'opuść' | 'opusc' ;
+SYGNALIZUJ       : 'sygnalizuj' ;
 
 // ═══════════════════════════════════════════════════════════════
 // DZIENNIK POKŁADOWY
@@ -174,17 +116,11 @@ LOGUJ           : 'loguj' ;
 POZYCJE         : 'pozycję' | 'pozycje' ;
 POGODE          : 'pogodę' | 'pogode' ;
 ZDARZENIE       : 'zdarzenie' ;
-STAN_LADOWNI    : 'stan ładowni' | 'stan ladowni' ;
+RAPORT          : 'raport' | 'zamelduj' ;
 STAN_JEDNOSTKI  : 'stan jednostki' ;
 
 // ═══════════════════════════════════════════════════════════════
-// ALARMY
-// ═══════════════════════════════════════════════════════════════
-ALARM           : 'alarm' ;
-ALARM_BOJOWY    : 'alarm bojowy' ;
-
-// ═══════════════════════════════════════════════════════════════
-// POGODA / WARUNKI
+// WIATR / POGODA
 // ═══════════════════════════════════════════════════════════════
 WIATR           : 'wiatr' ;
 PREDKOSC        : 'prędkość' | 'predkosc' ;
@@ -213,8 +149,7 @@ SEKUND          : 'sekund' | 's' ;
 MINUT           : 'minut' | 'min' ;
 KABELTOW        : 'kabli' | 'kabeltów' | 'kabeltow' ;
 JARDOW          : 'jardów' | 'jardow' | 'yd' ;
-SZTUK           : 'sztuk' | 'szt' ;
-BEAUFORT        : 'beaufort' ;
+BEAUFORT        : 'beaufort' | 'B' ;
 
 // ═══════════════════════════════════════════════════════════════
 // OPERATORY I INTERPUNKCJA
@@ -240,4 +175,3 @@ COORDINATE      : [0-9]+ '°' [0-9]+ '\'' ([0-9]+ ('"')?)? [NSEW] ;
 WS              : [ \t\r\n]+ -> skip ;
 LINE_COMMENT    : '//' ~[\r\n]* -> skip ;
 BLOCK_COMMENT   : '/*' .*? '*/' -> skip ;
-

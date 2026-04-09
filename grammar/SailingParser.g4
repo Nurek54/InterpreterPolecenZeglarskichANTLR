@@ -18,13 +18,9 @@ command
     | courseCommand
     | navigationCommand
     | speedCommand
-    | combatCommand
-    | cargoCommand
     | flagCommand
-    | repairCommand
     | logCommand
-    | crewCommand
-    | emergencyCommand
+    | windCommand
     | weatherQuery
     | repeatCommand
     | conditionCommand
@@ -55,7 +51,7 @@ sail
     ;
 
 // ═══════════════════════════════════════════════════════════════
-// OLINOWANIE / TAKIELUNEK
+// OLINOWANIE
 // ═══════════════════════════════════════════════════════════════
 riggingCommand
     : DOBIJ riggingElement                                         # TightenRigging
@@ -76,20 +72,22 @@ riggingElement
 // STER
 // ═══════════════════════════════════════════════════════════════
 rudderCommand
-    : STER NA windDirection                                        # SteerWindDirection
+    : STER NA pointOfSail                                          # SteerPointOfSail
     | STER NA boardSide                                            # SteerBoardSide
     | STER NA boardSide angle=NUMBER STOPNI                        # SteerAngle
     | STER PROSTO                                                  # SteerStraight
+    | STER POD_WIATR                                               # SteerIntoWind
+    | STER Z_WIATREM                                               # SteerWithWind
     | ZWROT PRZEZ SZTAG                                            # Tack
     | ZWROT PRZEZ RUFE                                             # Gybe
     | ZWROT PRZEZ boardSide                                        # TurnThroughSide
     | ODPADAJ (DO angle=NUMBER STOPNI)?                            # BearAway
     | OSTRZEJ (DO angle=NUMBER STOPNI)?                            # HeadUp
-    | KURS NA windDirection                                        # CourseToWindDir
+    | KURS NA pointOfSail                                          # CourseToPointOfSail
     | KURS NA boardSide                                            # CourseToBoardSide
     ;
 
-windDirection
+pointOfSail
     : BAKSZTAG
     | BEJDEWIND
     | OSTRY_BEJDEWIND
@@ -104,16 +102,13 @@ boardSide
     ;
 
 // ═══════════════════════════════════════════════════════════════
-// KOTWICA
+// KOTWICA / CUMOWANIE
 // ═══════════════════════════════════════════════════════════════
 anchorCommand
     : RZUC KOTWICE                                                 # DropAnchor
     | PODNIES KOTWICE                                              # RaiseAnchor
     ;
 
-// ═══════════════════════════════════════════════════════════════
-// CUMOWANIE
-// ═══════════════════════════════════════════════════════════════
 mooringCommand
     : CUMUJ                                                        # Moor
     | ODCUMUJ                                                      # CastOff
@@ -141,13 +136,7 @@ compassPoint
 navigationCommand
     : NAMIAR NA PUNKT point=STRING                                 # BearingToPoint
     | PELENG angle=NUMBER STOPNI                                   # SetBearing
-    | POZYCJA coordinate coordinate                                # ReportPosition
     | POZYCJA                                                      # RequestPosition
-    ;
-
-coordinate
-    : COORDINATE
-    | NUMBER STOPNI NUMBER
     ;
 
 // ═══════════════════════════════════════════════════════════════
@@ -160,108 +149,32 @@ speedCommand
     | WESLUJ WSTECZNY                                              # RowReverse
     | WIOSLA NA WODE                                               # OarsInWater
     | PODNIES WIOSLA                                               # OarsUp
-    | CALA NAPRZOD                                                 # FullAhead
-    | WOLNY NAPRZOD                                                # SlowAhead
-    | SREDNI NAPRZOD                                               # MediumAhead
     | STOP_KW                                                      # AllStop
     ;
 
 // ═══════════════════════════════════════════════════════════════
-// UZBROJENIE
-// ═══════════════════════════════════════════════════════════════
-combatCommand
-    : LADUJ cannonGroup                                            # LoadCannons
-    | LADUJ cannonGroup ammoType                                   # LoadCannonsAmmo
-    | OGNIA cannonGroup                                            # FireCannons
-    | OGNIA WSZYSTKIE_DZIALA                                       # FireAll
-    | SALWA boardSide                                              # Broadside
-    | SALWA BURTA_LEWA                                             # BroadsideLeft
-    | SALWA BURTA_PRAWA                                            # BroadsideRight
-    ;
-
-cannonGroup
-    : ARMATY
-    | DZIALA
-    | KOLUBRYNA
-    | KARRONADA
-    ;
-
-ammoType
-    : KULA
-    | KARTACZ
-    | LANCUCH_KULA
-    | ZAPALAJACA
-    | BOMBA
-    ;
-
-// ═══════════════════════════════════════════════════════════════
-// ŁUPY / ŁADUNEK
-// ═══════════════════════════════════════════════════════════════
-cargoCommand
-    : ZALADUJ cargoType (value=NUMBER SZTUK)?                      # LoadCargo
-    | ROZLADUJ cargoType (value=NUMBER SZTUK)?                     # UnloadCargo
-    | PRZELADUJ cargoType                                          # TransferCargo
-    | ZAKOP SKARB NA WYSPA point=STRING                            # BuryTreasure
-    | WYKOP SKARB NA WYSPA point=STRING                            # DigTreasure
-    | RAPORT LADOWNIA                                              # CargoReport
-    | RAPORT STAN_LADOWNI                                          # CargoStateReport
-    ;
-
-cargoType
-    : LUPY
-    | SKARB
-    | ZLOTO
-    | SREBRO
-    | AMUNICJA
-    | PROWIANT
-    | RUM
-    | WODA_PITNA
-    | PROCH
-    | BECZKI
-    | SKRZYNIE
-    ;
-
-// ═══════════════════════════════════════════════════════════════
-// ZAŁOGA
-// ═══════════════════════════════════════════════════════════════
-crewCommand
-    : ZALOGA NA STANOWISKA                                         # CrewToStations
-    | CZLOWIEK ZA BURTA boardSide?                                 # ManOverboard
-    | WSZYSCY NA POKLAD                                            # AllOnDeck
-    ;
-
-// ═══════════════════════════════════════════════════════════════
-// FLAGI
+// FLAGI ŻEGLARSKIE
 // ═══════════════════════════════════════════════════════════════
 flagCommand
-    : PODNIES FLAGE flag=STRING                                    # RaiseFlag
-    | OPUSC FLAGE flag=STRING                                      # LowerFlag
-    | PODNIES JOLLY_ROGER                                          # RaiseJollyRoger
-    | OPUSC JOLLY_ROGER                                            # LowerJollyRoger
-    | PODNIES BANDERA                                              # RaiseBanner
-    | OPUSC BANDERA                                                # LowerBanner
-    | PODNIES FALS_FLAGA                                           # RaiseFalseFlag
-    | OPUSC FALS_FLAGA                                             # LowerFalseFlag
-    | PODNIES FLAGA_HANDLOWA                                       # RaiseMerchantFlag
-    | PODNIES FLAGA_BIALA                                          # RaiseWhiteFlag
+    : PODNIES BANDERA                                              # RaiseEnsign
+    | OPUSC BANDERA                                                # LowerEnsign
+    | PODNIES FLAGA_KLUBOWA                                        # RaiseClubFlag
+    | OPUSC FLAGA_KLUBOWA                                          # LowerClubFlag
+    | PODNIES FLAGA_GOSCIA                                         # RaiseCourtesyFlag
+    | OPUSC FLAGA_GOSCIA                                           # LowerCourtesyFlag
+    | PODNIES FLAGA_Q                                              # RaiseQuarantineFlag
+    | OPUSC FLAGA_Q                                                # LowerQuarantineFlag
+    | PODNIES FLAGA_PROTESTOWA                                     # RaiseProtestFlag
+    | OPUSC FLAGA_PROTESTOWA                                       # LowerProtestFlag
+    | PODNIES PROPORCZYK                                           # RaisePennant
+    | OPUSC PROPORCZYK                                             # LowerPennant
+    | PODNIES FLAGE flag=STRING                                    # RaiseCustomFlag
+    | OPUSC FLAGE flag=STRING                                      # LowerCustomFlag
     | SYGNALIZUJ flagSequence                                      # SignalFlags
     ;
 
 flagSequence
     : STRING (COMMA STRING)*
-    ;
-
-// ═══════════════════════════════════════════════════════════════
-// NAPRAWY
-// ═══════════════════════════════════════════════════════════════
-repairCommand
-    : NAPRAW repairTarget                                          # Repair
-    ;
-
-repairTarget
-    : KADLUB
-    | MASZT
-    | TAKIELUNEK
     ;
 
 // ═══════════════════════════════════════════════════════════════
@@ -272,19 +185,21 @@ logCommand
     | LOGUJ POZYCJE                                                # LogPosition
     | LOGUJ POGODE                                                 # LogWeather
     | LOGUJ ZDARZENIE message=STRING                               # LogEvent
-    | LOGUJ STAN_LADOWNI                                           # LogCargoState
     | LOGUJ STAN_JEDNOSTKI                                         # LogShipState
     ;
 
 // ═══════════════════════════════════════════════════════════════
-// ALARMY
+// WIATR — ustawianie warunków
 // ═══════════════════════════════════════════════════════════════
-emergencyCommand
-    : ALARM_BOJOWY                                                 # BattleAlarm
+windCommand
+    : WIATR angle=NUMBER STOPNI                                    # SetWindDirectionDeg
+    | WIATR compassPoint                                           # SetWindCompass
+    | WIATR value=NUMBER WEZLOW                                    # SetWindSpeed
+    | WIATR value=NUMBER BEAUFORT                                  # SetWindBeaufort
     ;
 
 // ═══════════════════════════════════════════════════════════════
-// POGODA (uproszczona)
+// POGODA / QUERY
 // ═══════════════════════════════════════════════════════════════
 weatherQuery
     : RAPORT WIATR                                                 # ReportWind
@@ -296,7 +211,7 @@ weatherQuery
 // KONTROLA PRZEPŁYWU
 // ═══════════════════════════════════════════════════════════════
 repeatCommand
-    : POWTORZ times=NUMBER RAZY LBRACE (command SEMICOLON)+ RBRACE   # Repeat
+    : POWTORZ times=NUMBER RAZY LBRACE (command SEMICOLON)+ RBRACE  # Repeat
     ;
 
 waitCommand
@@ -314,7 +229,7 @@ timeUnit
     ;
 
 conditionCommand
-    : JEZELI condition WTEDY command (INACZEJ command)?             # IfCondition
+    : JEZELI condition WTEDY command (INACZEJ command)?            # IfCondition
     | JEZELI condition LBRACE (command SEMICOLON)+ RBRACE
       (INACZEJ LBRACE (command SEMICOLON)+ RBRACE)?                # IfConditionBlock
     ;
@@ -338,4 +253,3 @@ unit
     | MIL_MORSKICH
     | JARDOW
     ;
-

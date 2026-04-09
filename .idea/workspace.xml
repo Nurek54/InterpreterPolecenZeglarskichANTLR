@@ -5,9 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ff8a59a6-378a-45b7-9db6-a064ceb9679f" name="Changes" comment="Poprawki">
-      <change afterPath="$PROJECT_DIR$/preview.jpeg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/CommandTerminal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/CommandTerminal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/LogPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/LogPanel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/ShipScene.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ShipScene.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/StatePanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/StatePanel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/types/ship.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/types/ship.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grammar/SailingLexer.g4" beforeDir="false" afterPath="$PROJECT_DIR$/grammar/SailingLexer.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grammar/SailingParser.g4" beforeDir="false" afterPath="$PROJECT_DIR$/grammar/SailingParser.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interpreter/sail_visitor.py" beforeDir="false" afterPath="$PROJECT_DIR$/interpreter/sail_visitor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interpreter/ship_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/interpreter/ship_state.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,8 +102,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.32098.74" />
-        <option value="bundled-python-sdk-1cd77e80b48f-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.32098.74" />
+        <option value="bundled-python-sdk-2653e85de345-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.31033.139" />
       </set>
     </attachedChunks>
   </component>

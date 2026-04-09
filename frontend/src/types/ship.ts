@@ -9,15 +9,10 @@ export interface SailInfo {
   sheet_tension: number;
 }
 
-export interface CannonGroupInfo {
-  state: "pusty" | "załadowany";
-  ammo: string;
-}
-
-export interface DamageReport {
-  hull: number;
-  mast: number;
-  rigging: number;
+export interface WindState {
+  direction: number;   // 0–360°, kierunek Z którego wieje
+  speed: number;       // węzły
+  beaufort: number;    // stopnie Beauforta
 }
 
 export interface LogEntry {
@@ -27,11 +22,12 @@ export interface LogEntry {
 }
 
 export interface ShipFlags {
-  jolly_roger: boolean;
   bandera: boolean;
-  falszywa_flaga: boolean;
-  handlowa: boolean;
-  biala: boolean;
+  klubowa: boolean;
+  goscia: boolean;
+  q: boolean;
+  protestowa: boolean;
+  proporczyk: boolean;
   custom: string[];
 }
 
@@ -41,20 +37,14 @@ export interface ShipState {
   heading: number;
   target_heading: number;
   wind_course: string;
+  point_of_sail: string;
   rudder_angle: number;
   anchor: "podniesiona" | "rzucona";
   mooring: "wolny" | "zacumowany";
   speed: number;
   rowing: string;
-  cannons: Record<string, CannonGroupInfo>;
-  cargo: Record<string, number>;
-  buried_treasures: string[];
-  crew_station: string;
-  man_overboard: boolean;
-  man_overboard_side: string;
+  wind: WindState;
   flags: ShipFlags;
-  damage: DamageReport;
-  alert: string;
   log: LogEntry[];
   latitude: number;
   longitude: number;
@@ -87,4 +77,3 @@ export interface HealthResponse {
   status: string;
   message: string;
 }
-

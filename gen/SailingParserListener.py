@@ -1,4 +1,4 @@
-# Generated from grammar/SailingParser.g4 by ANTLR 4.13.2
+# Generated from C:/Users/g_sie/PycharmProjects/InterpreterPolecenZeglarskichANTLR/grammar/SailingParser.g4 by ANTLR 4.13.2
 from antlr4 import *
 if "." in __name__:
     from .SailingParser import SailingParser
@@ -179,12 +179,12 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#SteerWindDirection.
-    def enterSteerWindDirection(self, ctx:SailingParser.SteerWindDirectionContext):
+    # Enter a parse tree produced by SailingParser#SteerPointOfSail.
+    def enterSteerPointOfSail(self, ctx:SailingParser.SteerPointOfSailContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#SteerWindDirection.
-    def exitSteerWindDirection(self, ctx:SailingParser.SteerWindDirectionContext):
+    # Exit a parse tree produced by SailingParser#SteerPointOfSail.
+    def exitSteerPointOfSail(self, ctx:SailingParser.SteerPointOfSailContext):
         pass
 
 
@@ -212,6 +212,24 @@ class SailingParserListener(ParseTreeListener):
 
     # Exit a parse tree produced by SailingParser#SteerStraight.
     def exitSteerStraight(self, ctx:SailingParser.SteerStraightContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#SteerIntoWind.
+    def enterSteerIntoWind(self, ctx:SailingParser.SteerIntoWindContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#SteerIntoWind.
+    def exitSteerIntoWind(self, ctx:SailingParser.SteerIntoWindContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#SteerWithWind.
+    def enterSteerWithWind(self, ctx:SailingParser.SteerWithWindContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#SteerWithWind.
+    def exitSteerWithWind(self, ctx:SailingParser.SteerWithWindContext):
         pass
 
 
@@ -260,12 +278,12 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#CourseToWindDir.
-    def enterCourseToWindDir(self, ctx:SailingParser.CourseToWindDirContext):
+    # Enter a parse tree produced by SailingParser#CourseToPointOfSail.
+    def enterCourseToPointOfSail(self, ctx:SailingParser.CourseToPointOfSailContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#CourseToWindDir.
-    def exitCourseToWindDir(self, ctx:SailingParser.CourseToWindDirContext):
+    # Exit a parse tree produced by SailingParser#CourseToPointOfSail.
+    def exitCourseToPointOfSail(self, ctx:SailingParser.CourseToPointOfSailContext):
         pass
 
 
@@ -278,12 +296,12 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#windDirection.
-    def enterWindDirection(self, ctx:SailingParser.WindDirectionContext):
+    # Enter a parse tree produced by SailingParser#pointOfSail.
+    def enterPointOfSail(self, ctx:SailingParser.PointOfSailContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#windDirection.
-    def exitWindDirection(self, ctx:SailingParser.WindDirectionContext):
+    # Exit a parse tree produced by SailingParser#pointOfSail.
+    def exitPointOfSail(self, ctx:SailingParser.PointOfSailContext):
         pass
 
 
@@ -395,30 +413,12 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#ReportPosition.
-    def enterReportPosition(self, ctx:SailingParser.ReportPositionContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#ReportPosition.
-    def exitReportPosition(self, ctx:SailingParser.ReportPositionContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#RequestPosition.
     def enterRequestPosition(self, ctx:SailingParser.RequestPositionContext):
         pass
 
     # Exit a parse tree produced by SailingParser#RequestPosition.
     def exitRequestPosition(self, ctx:SailingParser.RequestPositionContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#coordinate.
-    def enterCoordinate(self, ctx:SailingParser.CoordinateContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#coordinate.
-    def exitCoordinate(self, ctx:SailingParser.CoordinateContext):
         pass
 
 
@@ -476,33 +476,6 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#FullAhead.
-    def enterFullAhead(self, ctx:SailingParser.FullAheadContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#FullAhead.
-    def exitFullAhead(self, ctx:SailingParser.FullAheadContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#SlowAhead.
-    def enterSlowAhead(self, ctx:SailingParser.SlowAheadContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#SlowAhead.
-    def exitSlowAhead(self, ctx:SailingParser.SlowAheadContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#MediumAhead.
-    def enterMediumAhead(self, ctx:SailingParser.MediumAheadContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#MediumAhead.
-    def exitMediumAhead(self, ctx:SailingParser.MediumAheadContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#AllStop.
     def enterAllStop(self, ctx:SailingParser.AllStopContext):
         pass
@@ -512,273 +485,129 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#LoadCannons.
-    def enterLoadCannons(self, ctx:SailingParser.LoadCannonsContext):
+    # Enter a parse tree produced by SailingParser#RaiseEnsign.
+    def enterRaiseEnsign(self, ctx:SailingParser.RaiseEnsignContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#LoadCannons.
-    def exitLoadCannons(self, ctx:SailingParser.LoadCannonsContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LoadCannonsAmmo.
-    def enterLoadCannonsAmmo(self, ctx:SailingParser.LoadCannonsAmmoContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LoadCannonsAmmo.
-    def exitLoadCannonsAmmo(self, ctx:SailingParser.LoadCannonsAmmoContext):
+    # Exit a parse tree produced by SailingParser#RaiseEnsign.
+    def exitRaiseEnsign(self, ctx:SailingParser.RaiseEnsignContext):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#FireCannons.
-    def enterFireCannons(self, ctx:SailingParser.FireCannonsContext):
+    # Enter a parse tree produced by SailingParser#LowerEnsign.
+    def enterLowerEnsign(self, ctx:SailingParser.LowerEnsignContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#FireCannons.
-    def exitFireCannons(self, ctx:SailingParser.FireCannonsContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#FireAll.
-    def enterFireAll(self, ctx:SailingParser.FireAllContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#FireAll.
-    def exitFireAll(self, ctx:SailingParser.FireAllContext):
+    # Exit a parse tree produced by SailingParser#LowerEnsign.
+    def exitLowerEnsign(self, ctx:SailingParser.LowerEnsignContext):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#Broadside.
-    def enterBroadside(self, ctx:SailingParser.BroadsideContext):
+    # Enter a parse tree produced by SailingParser#RaiseClubFlag.
+    def enterRaiseClubFlag(self, ctx:SailingParser.RaiseClubFlagContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#Broadside.
-    def exitBroadside(self, ctx:SailingParser.BroadsideContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#BroadsideLeft.
-    def enterBroadsideLeft(self, ctx:SailingParser.BroadsideLeftContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#BroadsideLeft.
-    def exitBroadsideLeft(self, ctx:SailingParser.BroadsideLeftContext):
+    # Exit a parse tree produced by SailingParser#RaiseClubFlag.
+    def exitRaiseClubFlag(self, ctx:SailingParser.RaiseClubFlagContext):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#BroadsideRight.
-    def enterBroadsideRight(self, ctx:SailingParser.BroadsideRightContext):
+    # Enter a parse tree produced by SailingParser#LowerClubFlag.
+    def enterLowerClubFlag(self, ctx:SailingParser.LowerClubFlagContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#BroadsideRight.
-    def exitBroadsideRight(self, ctx:SailingParser.BroadsideRightContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#cannonGroup.
-    def enterCannonGroup(self, ctx:SailingParser.CannonGroupContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#cannonGroup.
-    def exitCannonGroup(self, ctx:SailingParser.CannonGroupContext):
+    # Exit a parse tree produced by SailingParser#LowerClubFlag.
+    def exitLowerClubFlag(self, ctx:SailingParser.LowerClubFlagContext):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#ammoType.
-    def enterAmmoType(self, ctx:SailingParser.AmmoTypeContext):
+    # Enter a parse tree produced by SailingParser#RaiseCourtesyFlag.
+    def enterRaiseCourtesyFlag(self, ctx:SailingParser.RaiseCourtesyFlagContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#ammoType.
-    def exitAmmoType(self, ctx:SailingParser.AmmoTypeContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LoadCargo.
-    def enterLoadCargo(self, ctx:SailingParser.LoadCargoContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LoadCargo.
-    def exitLoadCargo(self, ctx:SailingParser.LoadCargoContext):
+    # Exit a parse tree produced by SailingParser#RaiseCourtesyFlag.
+    def exitRaiseCourtesyFlag(self, ctx:SailingParser.RaiseCourtesyFlagContext):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#UnloadCargo.
-    def enterUnloadCargo(self, ctx:SailingParser.UnloadCargoContext):
+    # Enter a parse tree produced by SailingParser#LowerCourtesyFlag.
+    def enterLowerCourtesyFlag(self, ctx:SailingParser.LowerCourtesyFlagContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#UnloadCargo.
-    def exitUnloadCargo(self, ctx:SailingParser.UnloadCargoContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#TransferCargo.
-    def enterTransferCargo(self, ctx:SailingParser.TransferCargoContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#TransferCargo.
-    def exitTransferCargo(self, ctx:SailingParser.TransferCargoContext):
+    # Exit a parse tree produced by SailingParser#LowerCourtesyFlag.
+    def exitLowerCourtesyFlag(self, ctx:SailingParser.LowerCourtesyFlagContext):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#BuryTreasure.
-    def enterBuryTreasure(self, ctx:SailingParser.BuryTreasureContext):
+    # Enter a parse tree produced by SailingParser#RaiseQuarantineFlag.
+    def enterRaiseQuarantineFlag(self, ctx:SailingParser.RaiseQuarantineFlagContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#BuryTreasure.
-    def exitBuryTreasure(self, ctx:SailingParser.BuryTreasureContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#DigTreasure.
-    def enterDigTreasure(self, ctx:SailingParser.DigTreasureContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#DigTreasure.
-    def exitDigTreasure(self, ctx:SailingParser.DigTreasureContext):
+    # Exit a parse tree produced by SailingParser#RaiseQuarantineFlag.
+    def exitRaiseQuarantineFlag(self, ctx:SailingParser.RaiseQuarantineFlagContext):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#CargoReport.
-    def enterCargoReport(self, ctx:SailingParser.CargoReportContext):
+    # Enter a parse tree produced by SailingParser#LowerQuarantineFlag.
+    def enterLowerQuarantineFlag(self, ctx:SailingParser.LowerQuarantineFlagContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#CargoReport.
-    def exitCargoReport(self, ctx:SailingParser.CargoReportContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#CargoStateReport.
-    def enterCargoStateReport(self, ctx:SailingParser.CargoStateReportContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#CargoStateReport.
-    def exitCargoStateReport(self, ctx:SailingParser.CargoStateReportContext):
+    # Exit a parse tree produced by SailingParser#LowerQuarantineFlag.
+    def exitLowerQuarantineFlag(self, ctx:SailingParser.LowerQuarantineFlagContext):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#cargoType.
-    def enterCargoType(self, ctx:SailingParser.CargoTypeContext):
+    # Enter a parse tree produced by SailingParser#RaiseProtestFlag.
+    def enterRaiseProtestFlag(self, ctx:SailingParser.RaiseProtestFlagContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#cargoType.
-    def exitCargoType(self, ctx:SailingParser.CargoTypeContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#CrewToStations.
-    def enterCrewToStations(self, ctx:SailingParser.CrewToStationsContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#CrewToStations.
-    def exitCrewToStations(self, ctx:SailingParser.CrewToStationsContext):
+    # Exit a parse tree produced by SailingParser#RaiseProtestFlag.
+    def exitRaiseProtestFlag(self, ctx:SailingParser.RaiseProtestFlagContext):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#ManOverboard.
-    def enterManOverboard(self, ctx:SailingParser.ManOverboardContext):
+    # Enter a parse tree produced by SailingParser#LowerProtestFlag.
+    def enterLowerProtestFlag(self, ctx:SailingParser.LowerProtestFlagContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#ManOverboard.
-    def exitManOverboard(self, ctx:SailingParser.ManOverboardContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#AllOnDeck.
-    def enterAllOnDeck(self, ctx:SailingParser.AllOnDeckContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#AllOnDeck.
-    def exitAllOnDeck(self, ctx:SailingParser.AllOnDeckContext):
+    # Exit a parse tree produced by SailingParser#LowerProtestFlag.
+    def exitLowerProtestFlag(self, ctx:SailingParser.LowerProtestFlagContext):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#RaiseFlag.
-    def enterRaiseFlag(self, ctx:SailingParser.RaiseFlagContext):
+    # Enter a parse tree produced by SailingParser#RaisePennant.
+    def enterRaisePennant(self, ctx:SailingParser.RaisePennantContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#RaiseFlag.
-    def exitRaiseFlag(self, ctx:SailingParser.RaiseFlagContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LowerFlag.
-    def enterLowerFlag(self, ctx:SailingParser.LowerFlagContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LowerFlag.
-    def exitLowerFlag(self, ctx:SailingParser.LowerFlagContext):
+    # Exit a parse tree produced by SailingParser#RaisePennant.
+    def exitRaisePennant(self, ctx:SailingParser.RaisePennantContext):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#RaiseJollyRoger.
-    def enterRaiseJollyRoger(self, ctx:SailingParser.RaiseJollyRogerContext):
+    # Enter a parse tree produced by SailingParser#LowerPennant.
+    def enterLowerPennant(self, ctx:SailingParser.LowerPennantContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#RaiseJollyRoger.
-    def exitRaiseJollyRoger(self, ctx:SailingParser.RaiseJollyRogerContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LowerJollyRoger.
-    def enterLowerJollyRoger(self, ctx:SailingParser.LowerJollyRogerContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LowerJollyRoger.
-    def exitLowerJollyRoger(self, ctx:SailingParser.LowerJollyRogerContext):
+    # Exit a parse tree produced by SailingParser#LowerPennant.
+    def exitLowerPennant(self, ctx:SailingParser.LowerPennantContext):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#RaiseBanner.
-    def enterRaiseBanner(self, ctx:SailingParser.RaiseBannerContext):
+    # Enter a parse tree produced by SailingParser#RaiseCustomFlag.
+    def enterRaiseCustomFlag(self, ctx:SailingParser.RaiseCustomFlagContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#RaiseBanner.
-    def exitRaiseBanner(self, ctx:SailingParser.RaiseBannerContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LowerBanner.
-    def enterLowerBanner(self, ctx:SailingParser.LowerBannerContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LowerBanner.
-    def exitLowerBanner(self, ctx:SailingParser.LowerBannerContext):
+    # Exit a parse tree produced by SailingParser#RaiseCustomFlag.
+    def exitRaiseCustomFlag(self, ctx:SailingParser.RaiseCustomFlagContext):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#RaiseFalseFlag.
-    def enterRaiseFalseFlag(self, ctx:SailingParser.RaiseFalseFlagContext):
+    # Enter a parse tree produced by SailingParser#LowerCustomFlag.
+    def enterLowerCustomFlag(self, ctx:SailingParser.LowerCustomFlagContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#RaiseFalseFlag.
-    def exitRaiseFalseFlag(self, ctx:SailingParser.RaiseFalseFlagContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#LowerFalseFlag.
-    def enterLowerFalseFlag(self, ctx:SailingParser.LowerFalseFlagContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LowerFalseFlag.
-    def exitLowerFalseFlag(self, ctx:SailingParser.LowerFalseFlagContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#RaiseMerchantFlag.
-    def enterRaiseMerchantFlag(self, ctx:SailingParser.RaiseMerchantFlagContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#RaiseMerchantFlag.
-    def exitRaiseMerchantFlag(self, ctx:SailingParser.RaiseMerchantFlagContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#RaiseWhiteFlag.
-    def enterRaiseWhiteFlag(self, ctx:SailingParser.RaiseWhiteFlagContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#RaiseWhiteFlag.
-    def exitRaiseWhiteFlag(self, ctx:SailingParser.RaiseWhiteFlagContext):
+    # Exit a parse tree produced by SailingParser#LowerCustomFlag.
+    def exitLowerCustomFlag(self, ctx:SailingParser.LowerCustomFlagContext):
         pass
 
 
@@ -797,24 +626,6 @@ class SailingParserListener(ParseTreeListener):
 
     # Exit a parse tree produced by SailingParser#flagSequence.
     def exitFlagSequence(self, ctx:SailingParser.FlagSequenceContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#Repair.
-    def enterRepair(self, ctx:SailingParser.RepairContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#Repair.
-    def exitRepair(self, ctx:SailingParser.RepairContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#repairTarget.
-    def enterRepairTarget(self, ctx:SailingParser.RepairTargetContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#repairTarget.
-    def exitRepairTarget(self, ctx:SailingParser.RepairTargetContext):
         pass
 
 
@@ -854,15 +665,6 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#LogCargoState.
-    def enterLogCargoState(self, ctx:SailingParser.LogCargoStateContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#LogCargoState.
-    def exitLogCargoState(self, ctx:SailingParser.LogCargoStateContext):
-        pass
-
-
     # Enter a parse tree produced by SailingParser#LogShipState.
     def enterLogShipState(self, ctx:SailingParser.LogShipStateContext):
         pass
@@ -872,12 +674,39 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#BattleAlarm.
-    def enterBattleAlarm(self, ctx:SailingParser.BattleAlarmContext):
+    # Enter a parse tree produced by SailingParser#SetWindDirectionDeg.
+    def enterSetWindDirectionDeg(self, ctx:SailingParser.SetWindDirectionDegContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#BattleAlarm.
-    def exitBattleAlarm(self, ctx:SailingParser.BattleAlarmContext):
+    # Exit a parse tree produced by SailingParser#SetWindDirectionDeg.
+    def exitSetWindDirectionDeg(self, ctx:SailingParser.SetWindDirectionDegContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#SetWindCompass.
+    def enterSetWindCompass(self, ctx:SailingParser.SetWindCompassContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#SetWindCompass.
+    def exitSetWindCompass(self, ctx:SailingParser.SetWindCompassContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#SetWindSpeed.
+    def enterSetWindSpeed(self, ctx:SailingParser.SetWindSpeedContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#SetWindSpeed.
+    def exitSetWindSpeed(self, ctx:SailingParser.SetWindSpeedContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#SetWindBeaufort.
+    def enterSetWindBeaufort(self, ctx:SailingParser.SetWindBeaufortContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#SetWindBeaufort.
+    def exitSetWindBeaufort(self, ctx:SailingParser.SetWindBeaufortContext):
         pass
 
 
