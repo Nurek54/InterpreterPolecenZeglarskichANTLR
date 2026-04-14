@@ -18,6 +18,7 @@ SZTAKSEL        : 'sztaksel' ;
 WSZYSTKIE_ZAGLE : 'wszystkie żagle' | 'wszystkie zagle' ;
 ZAGLE_SZTORMOWE : 'żagle sztormowe' | 'zagle sztormowe' ;
 PELNE_ZAGLE     : 'pełne żagle' | 'pelne zagle' ;
+ZAGLE           : 'żagle' | 'zagle' ;
 
 // ═══════════════════════════════════════════════════════════════
 // OLINOWANIE
@@ -30,7 +31,7 @@ BRASY           : 'brasy' ;
 TALREPY         : 'talrepy' ;
 
 // ═══════════════════════════════════════════════════════════════
-// STER / KIERUNEK  (multi-word tokens must come BEFORE single-word)
+// STER / KIERUNEK
 // ═══════════════════════════════════════════════════════════════
 POD_WIATR       : 'pod wiatr' ;
 Z_WIATREM       : 'z wiatrem' ;
@@ -130,7 +131,7 @@ GLEBOKOSC       : 'głębokość' | 'glebokosc' ;
 // KONTROLA PRZEPŁYWU
 // ═══════════════════════════════════════════════════════════════
 POWTORZ         : 'powtórz' | 'powtorz' ;
-RAZY            : 'razy' | 'x' ;
+RAZY            : 'razy' ;
 JEZELI          : 'jeżeli' | 'jezeli' | 'jeśli' | 'jesli' ;
 WTEDY           : 'wtedy' | 'to' ;
 INACZEJ         : 'inaczej' | 'albo' ;
@@ -138,18 +139,26 @@ CZEKAJ          : 'czekaj' ;
 CZEKAJ_AZ       : 'czekaj aż' | 'czekaj az' ;
 
 // ═══════════════════════════════════════════════════════════════
+// ZMIENNE I WYRAŻENIA  ★ NOWE ★
+// ═══════════════════════════════════════════════════════════════
+NIECH           : 'niech' ;
+AND             : 'oraz' | '&&' ;
+OR              : 'lub' | '||' ;
+NOT             : 'negacja' | '!' ;
+
+// ═══════════════════════════════════════════════════════════════
 // JEDNOSTKI
 // ═══════════════════════════════════════════════════════════════
 STOPNI          : 'stopni' | '°' ;
 PROCENT         : '%' | 'procent' ;
-METROW          : 'metrów' | 'metrow' | 'm' ;
+METROW          : 'metrów' | 'metrow' ;
 WEZLOW          : 'węzłów' | 'wezlow' | 'kt' | 'kn' ;
 MIL_MORSKICH    : 'mil morskich' | 'Mm' | 'NM' ;
-SEKUND          : 'sekund' | 's' ;
+SEKUND          : 'sekund' ;
 MINUT           : 'minut' | 'min' ;
 KABELTOW        : 'kabli' | 'kabeltów' | 'kabeltow' ;
 JARDOW          : 'jardów' | 'jardow' | 'yd' ;
-BEAUFORT        : 'beaufort' | 'B' ;
+BEAUFORT        : 'beaufort' ;
 
 // ═══════════════════════════════════════════════════════════════
 // OPERATORY I INTERPUNKCJA
@@ -159,6 +168,14 @@ LTE             : '<=' ;
 GT              : '>' ;
 LT              : '<' ;
 EQ              : '==' | '=' ;
+
+PLUS            : '+' ;
+MINUS           : '-' ;
+STAR            : '*' ;
+SLASH           : '/' ;
+LPAREN          : '(' ;
+RPAREN          : ')' ;
+KROPKA          : '.' ;
 
 SEMICOLON       : ';' ;
 COMMA           : ',' ;
@@ -171,6 +188,8 @@ RBRACE          : '}' ;
 NUMBER          : [0-9]+ ('.' [0-9]+)? ;
 STRING          : '"' (~["])* '"' ;
 COORDINATE      : [0-9]+ '°' [0-9]+ '\'' ([0-9]+ ('"')?)? [NSEW] ;
+
+IDENTIFIER      : [a-zA-Z_ąćęłńóśźżĄĆĘŁŃÓŚŹŻ] [a-zA-Z_0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]* ;
 
 WS              : [ \t\r\n]+ -> skip ;
 LINE_COMMENT    : '//' ~[\r\n]* -> skip ;

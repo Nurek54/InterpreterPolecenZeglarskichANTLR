@@ -78,7 +78,7 @@ export default function LogPanel({ log }: LogPanelProps) {
         {filtered.length === 0 ? (
           <div className="log-empty">
             {log.length === 0
-              ? "Dziennik pusty — wykonaj polecenia"
+              ? "Dziennik pusty - wykonaj polecenia"
               : "Brak wpisów w wybranej kategorii"}
           </div>
         ) : (

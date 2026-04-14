@@ -1,4 +1,4 @@
-# Generated from C:/Users/g_sie/PycharmProjects/InterpreterPolecenZeglarskichANTLR/grammar/SailingParser.g4 by ANTLR 4.13.2
+# Generated from C:/Users/g_sie/Desktop/InterpreterPolecenZeglarskichANTLR/grammar/SailingParser.g4 by ANTLR 4.13.2
 from antlr4 import *
 if "." in __name__:
     from .SailingParser import SailingParser
@@ -23,6 +23,150 @@ class SailingParserListener(ParseTreeListener):
 
     # Exit a parse tree produced by SailingParser#command.
     def exitCommand(self, ctx:SailingParser.CommandContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#ExprVar.
+    def enterExprVar(self, ctx:SailingParser.ExprVarContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#ExprVar.
+    def exitExprVar(self, ctx:SailingParser.ExprVarContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#ExprAddSub.
+    def enterExprAddSub(self, ctx:SailingParser.ExprAddSubContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#ExprAddSub.
+    def exitExprAddSub(self, ctx:SailingParser.ExprAddSubContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#ExprParen.
+    def enterExprParen(self, ctx:SailingParser.ExprParenContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#ExprParen.
+    def exitExprParen(self, ctx:SailingParser.ExprParenContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#ExprNum.
+    def enterExprNum(self, ctx:SailingParser.ExprNumContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#ExprNum.
+    def exitExprNum(self, ctx:SailingParser.ExprNumContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#ExprMulDiv.
+    def enterExprMulDiv(self, ctx:SailingParser.ExprMulDivContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#ExprMulDiv.
+    def exitExprMulDiv(self, ctx:SailingParser.ExprMulDivContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#ExprState.
+    def enterExprState(self, ctx:SailingParser.ExprStateContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#ExprState.
+    def exitExprState(self, ctx:SailingParser.ExprStateContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#ExprCompare.
+    def enterExprCompare(self, ctx:SailingParser.ExprCompareContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#ExprCompare.
+    def exitExprCompare(self, ctx:SailingParser.ExprCompareContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#ExprNot.
+    def enterExprNot(self, ctx:SailingParser.ExprNotContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#ExprNot.
+    def exitExprNot(self, ctx:SailingParser.ExprNotContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#ExprLogic.
+    def enterExprLogic(self, ctx:SailingParser.ExprLogicContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#ExprLogic.
+    def exitExprLogic(self, ctx:SailingParser.ExprLogicContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#ExprStr.
+    def enterExprStr(self, ctx:SailingParser.ExprStrContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#ExprStr.
+    def exitExprStr(self, ctx:SailingParser.ExprStrContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#StateSpeed.
+    def enterStateSpeed(self, ctx:SailingParser.StateSpeedContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#StateSpeed.
+    def exitStateSpeed(self, ctx:SailingParser.StateSpeedContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#StateHeading.
+    def enterStateHeading(self, ctx:SailingParser.StateHeadingContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#StateHeading.
+    def exitStateHeading(self, ctx:SailingParser.StateHeadingContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#StateWindField.
+    def enterStateWindField(self, ctx:SailingParser.StateWindFieldContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#StateWindField.
+    def exitStateWindField(self, ctx:SailingParser.StateWindFieldContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#StateSailField.
+    def enterStateSailField(self, ctx:SailingParser.StateSailFieldContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#StateSailField.
+    def exitStateSailField(self, ctx:SailingParser.StateSailFieldContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#windField.
+    def enterWindField(self, ctx:SailingParser.WindFieldContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#windField.
+    def exitWindField(self, ctx:SailingParser.WindFieldContext):
+        pass
+
+
+    # Enter a parse tree produced by SailingParser#AssignVar.
+    def enterAssignVar(self, ctx:SailingParser.AssignVarContext):
+        pass
+
+    # Exit a parse tree produced by SailingParser#AssignVar.
+    def exitAssignVar(self, ctx:SailingParser.AssignVarContext):
         pass
 
 
@@ -800,39 +944,12 @@ class SailingParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SailingParser#WindCondition.
-    def enterWindCondition(self, ctx:SailingParser.WindConditionContext):
+    # Enter a parse tree produced by SailingParser#condition.
+    def enterCondition(self, ctx:SailingParser.ConditionContext):
         pass
 
-    # Exit a parse tree produced by SailingParser#WindCondition.
-    def exitWindCondition(self, ctx:SailingParser.WindConditionContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#SpeedCondition.
-    def enterSpeedCondition(self, ctx:SailingParser.SpeedConditionContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#SpeedCondition.
-    def exitSpeedCondition(self, ctx:SailingParser.SpeedConditionContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#DepthCondition.
-    def enterDepthCondition(self, ctx:SailingParser.DepthConditionContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#DepthCondition.
-    def exitDepthCondition(self, ctx:SailingParser.DepthConditionContext):
-        pass
-
-
-    # Enter a parse tree produced by SailingParser#compOp.
-    def enterCompOp(self, ctx:SailingParser.CompOpContext):
-        pass
-
-    # Exit a parse tree produced by SailingParser#compOp.
-    def exitCompOp(self, ctx:SailingParser.CompOpContext):
+    # Exit a parse tree produced by SailingParser#condition.
+    def exitCondition(self, ctx:SailingParser.ConditionContext):
         pass
 
 

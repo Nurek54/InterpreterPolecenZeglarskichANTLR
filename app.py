@@ -32,7 +32,7 @@ class ErrorCollector:
         self.errors = []
 
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
-        self.errors.append(f"Linia {line}:{column} — {msg}")
+        self.errors.append(f"Linia {line}:{column} - {msg}")
 
     def reportAmbiguity(self, *args): pass
     def reportAttemptingFullContext(self, *args): pass
@@ -42,7 +42,7 @@ class ErrorCollector:
 app = FastAPI(
     title="⛵ Sailing Command Interpreter",
     description="API interpretera poleceń żeglarskich",
-    version="3.0.0",
+    version="4.0.0",
 )
 
 app.add_middleware(
@@ -149,13 +149,64 @@ async def get_examples():
                 )
             },
             {
-                "name": "🧭 Kurs + bejdewind",
+                "name": "🧭 Zmienne + wyrażenia",
                 "commands": (
+                    "// Zmienne sterują parametrami manewru\n"
+                    "niech kurs_bazowy = 180;\n"
+                    "niech przesuniecie = 45;\n\n"
                     "wiatr 270 stopni;\n"
                     "wiatr 12 wezlow;\n"
                     "postaw grot;\n"
+                    "postaw fok;\n\n"
+                    "// Wyrażenie arytmetyczne w komendzie\n"
+                    "kurs (kurs_bazowy + przesuniecie) stopni;\n"
+                )
+            },
+            {
+                "name": "🧠 Warunki na stanie",
+                "commands": (
+                    "// Decyzja na podstawie stanu statku\n"
+                    "wiatr 7 beaufort;\n\n"
+                    "jezeli wiatr.sila >= 6 {\n"
+                    "    refuj grot do 50 procent;\n"
+                    "    jezeli wiatr.sila >= 8 {\n"
+                    "        zwin wszystkie zagle;\n"
+                    "        postaw zagle sztormowe;\n"
+                    "        podnies flaga Q;\n"
+                    "    };\n"
+                    "} inaczej {\n"
+                    "    postaw pelne zagle;\n"
+                    "};\n"
+                )
+            },
+            {
+                "name": "🔁 Pętla ze zmienną",
+                "commands": (
+                    "niech ile_halsow = 4;\n"
+                    "wiatr 0 stopni;\n"
+                    "wiatr 15 wezlow;\n"
+                    "postaw grot;\n"
                     "postaw fok;\n"
-                    "kurs na bejdewind;\n"
+                    "kurs na bejdewind;\n\n"
+                    "powtorz (ile_halsow) razy {\n"
+                    "    zwrot przez sztag;\n"
+                    "    loguj \"hals kolejny\";\n"
+                    "};\n"
+                )
+            },
+            {
+                "name": "⚡ Logika złożona",
+                "commands": (
+                    "// Operatory oraz/lub/negacja na warunkach\n"
+                    "wiatr 5 beaufort;\n"
+                    "postaw grot;\n"
+                    "postaw fok;\n"
+                    "kurs na polwiatr;\n\n"
+                    "jezeli wiatr.sila >= 4 oraz predkosc < 10 {\n"
+                    "    dobij faly;\n"
+                    "    napin talrepy do 80 procent;\n"
+                    "    loguj \"trymujemy — mało prędkości na mocnym wietrze\";\n"
+                    "};\n"
                 )
             },
             {
@@ -168,65 +219,52 @@ async def get_examples():
                 )
             },
             {
-                "name": "⚙️ Pętla — zwroty",
+                "name": "🌊 Sztorm (reakcja)",
                 "commands": (
-                    "wiatr 0 stopni;\n"
-                    "wiatr 15 wezlow;\n"
-                    "postaw grot;\n"
-                    "postaw fok;\n"
-                    "kurs na bejdewind;\n"
-                    "powtorz 3 razy {\n"
-                    "    zwrot przez sztag;\n"
-                    "    loguj \"halsowanie\";\n"
+                    "wiatr 8 beaufort;\n\n"
+                    "jezeli wiatr.sila >= 7 {\n"
+                    "    zwin wszystkie zagle;\n"
+                    "    postaw zagle sztormowe;\n"
+                    "    napin talrepy do 90 procent;\n"
+                    "    dobij faly;\n"
+                    "    ster prosto;\n"
+                    "    podnies flaga Q;\n"
+                    "    loguj zdarzenie \"sztorm nadchodzi\";\n"
                     "};\n"
-                )
-            },
-            {
-                "name": "🌊 Sztorm",
-                "commands": (
-                    "wiatr 8 beaufort;\n"
-                    "zwin wszystkie zagle;\n"
-                    "postaw zagle sztormowe;\n"
-                    "napin talrepy do 90 procent;\n"
-                    "dobij faly;\n"
-                    "ster prosto;\n"
-                    "podnies flaga Q;\n"
-                    "loguj zdarzenie \"sztorm nadchodzi\";\n"
                 )
             },
             {
                 "name": "🎬 Pełne demo",
                 "commands": (
                     "// === DEMO REJS ===\n\n"
+                    "niech docelowy_hals = 3;\n\n"
                     "// Warunki\n"
                     "wiatr 270 stopni;\n"
                     "wiatr 14 wezlow;\n\n"
-                    "// Wypłynięcie z portu\n"
+                    "// Wypłynięcie\n"
                     "odcumuj;\n"
                     "podnies bandera;\n"
                     "podnies flaga klubowa;\n"
                     "loguj zdarzenie \"Wypływamy!\";\n\n"
-                    "// Stawianie żagli\n"
-                    "postaw grot;\n"
-                    "postaw fok;\n"
-                    "postaw bezan;\n"
-                    "postaw sztaksel;\n\n"
-                    "// Ustawienie kursu względem wiatru\n"
+                    "// Żagle - adaptacja do wiatru\n"
+                    "jezeli wiatr.sila >= 6 {\n"
+                    "    postaw grot;\n"
+                    "    refuj grot do 30 procent;\n"
+                    "    postaw fok;\n"
+                    "} inaczej {\n"
+                    "    postaw pelne zagle;\n"
+                    "};\n\n"
                     "kurs na polwiatr;\n"
-                    "dobij faly;\n"
-                    "napin talrepy do 80 procent;\n\n"
-                    "// Halsowanie\n"
-                    "powtorz 2 razy {\n"
+                    "dobij faly;\n\n"
+                    "// Halsowanie - liczba z zmiennej\n"
+                    "powtorz (docelowy_hals) razy {\n"
                     "    zwrot przez sztag;\n"
                     "    loguj \"halsuję\";\n"
                     "};\n\n"
-                    "// Zmiana kursu\n"
                     "kurs na baksztag;\n"
                     "loguj pogode;\n\n"
                     "// Powrót\n"
                     "ster z wiatrem;\n"
-                    "loguj stan jednostki;\n\n"
-                    "// Cumowanie\n"
                     "zwin wszystkie zagle;\n"
                     "stop;\n"
                     "rzuc kotwice;\n"

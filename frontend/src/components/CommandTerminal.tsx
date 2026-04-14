@@ -33,6 +33,8 @@ const COMMANDS = new Set([
   "napiń", "napin", "dobij",
   "cała", "cala", "naprzód", "naprzod", "wolny", "średni", "sredni",
   "wsteczny", "wstecz",
+  // ★ NOWE
+  "niech",
 ]);
 
 const OBJECTS = new Set([
@@ -42,7 +44,6 @@ const OBJECTS = new Set([
   "maszt", "takielunek",
   "wiosła", "wiosla",
   "żagle", "zagle",
-  // Flagi żeglarskie
   "bandera", "banderę", "bandere",
   "klubowa", "klubową",
   "gościa", "goscia",
@@ -50,6 +51,9 @@ const OBJECTS = new Set([
   "proporczyk", "proporczyka",
   "flagę", "flage", "flaga",
   "Q", "kwarantanny",
+  // ★ NOWE - pola stanu (dla wiatr.sila, zagle.grot.stan itp.)
+  "sila", "siła", "kierunek", "predkosc", "prędkość",
+  "stan", "kat", "kąt", "ref", "szot",
 ]);
 
 const MODIFIERS = new Set([
@@ -72,6 +76,8 @@ const MODIFIERS = new Set([
   "stan", "jednostki",
   "aż", "az",
   "pod", "wiatrem",
+  // ★ NOWE - operatory logiczne (słowne)
+  "oraz", "lub", "negacja",
 ]);
 
 type TT = "cmd" | "obj" | "mod" | "str" | "num" | "cmt" | "op" | "pun" | "txt";
@@ -105,17 +111,18 @@ function tokenizeLine(line: string): Array<{ t: TT; v: string }> {
       continue;
     }
     const two = line.substring(i, i + 2);
-    if (two === ">=" || two === "<=" || two === "==") {
+    if (two === ">=" || two === "<=" || two === "==" || two === "&&" || two === "||") {
       out.push({ t: "op", v: two });
       i += 2;
       continue;
     }
-    if ("><=%".includes(line[i])) {
+    // ★ NOWE - arytmetyka jako operatory
+    if ("><=%+-*/!".includes(line[i])) {
       out.push({ t: "op", v: line[i] });
       i++;
       continue;
     }
-    if (";{}(),".includes(line[i])) {
+    if (";{}(),.".includes(line[i])) {
       out.push({ t: "pun", v: line[i] });
       i++;
       continue;
@@ -129,7 +136,7 @@ function tokenizeLine(line: string): Array<{ t: TT; v: string }> {
     }
     if (/[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/.test(line[i])) {
       let j = i;
-      while (j < line.length && /[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ_]/.test(line[j])) j++;
+      while (j < line.length && /[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ_0-9]/.test(line[j])) j++;
       const w = line.substring(i, j);
       const lo = w.toLowerCase();
       out.push({
@@ -188,11 +195,19 @@ function Highlighted({ code }: { code: string }) {
 // COMPONENT
 // ─────────────────────────────────────────────────────────────────
 
-const DEFAULT_CODE = `// Wpisz polecenia żeglarskie
+const DEFAULT_CODE = `// Wpisz polecenia żeglarskie. Używaj zmiennych i wyrażeń!
 wiatr 270 stopni;
 wiatr 14 wezlow;
-postaw grot;
-postaw fok;
+
+niech baza_ref = 30;
+
+jezeli wiatr.sila >= 6 {
+    refuj grot do (baza_ref + 20) procent;
+} inaczej {
+    postaw grot;
+    postaw fok;
+};
+
 kurs na polwiatr;
 `;
 

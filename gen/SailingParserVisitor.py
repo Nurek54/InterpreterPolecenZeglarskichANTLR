@@ -1,4 +1,4 @@
-# Generated from C:/Users/g_sie/PycharmProjects/InterpreterPolecenZeglarskichANTLR/grammar/SailingParser.g4 by ANTLR 4.13.2
+# Generated from C:/Users/g_sie/Desktop/InterpreterPolecenZeglarskichANTLR/grammar/SailingParser.g4 by ANTLR 4.13.2
 from antlr4 import *
 if "." in __name__:
     from .SailingParser import SailingParser
@@ -16,6 +16,86 @@ class SailingParserVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by SailingParser#command.
     def visitCommand(self, ctx:SailingParser.CommandContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#ExprVar.
+    def visitExprVar(self, ctx:SailingParser.ExprVarContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#ExprAddSub.
+    def visitExprAddSub(self, ctx:SailingParser.ExprAddSubContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#ExprParen.
+    def visitExprParen(self, ctx:SailingParser.ExprParenContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#ExprNum.
+    def visitExprNum(self, ctx:SailingParser.ExprNumContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#ExprMulDiv.
+    def visitExprMulDiv(self, ctx:SailingParser.ExprMulDivContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#ExprState.
+    def visitExprState(self, ctx:SailingParser.ExprStateContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#ExprCompare.
+    def visitExprCompare(self, ctx:SailingParser.ExprCompareContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#ExprNot.
+    def visitExprNot(self, ctx:SailingParser.ExprNotContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#ExprLogic.
+    def visitExprLogic(self, ctx:SailingParser.ExprLogicContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#ExprStr.
+    def visitExprStr(self, ctx:SailingParser.ExprStrContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#StateSpeed.
+    def visitStateSpeed(self, ctx:SailingParser.StateSpeedContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#StateHeading.
+    def visitStateHeading(self, ctx:SailingParser.StateHeadingContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#StateWindField.
+    def visitStateWindField(self, ctx:SailingParser.StateWindFieldContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#StateSailField.
+    def visitStateSailField(self, ctx:SailingParser.StateSailFieldContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#windField.
+    def visitWindField(self, ctx:SailingParser.WindFieldContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SailingParser#AssignVar.
+    def visitAssignVar(self, ctx:SailingParser.AssignVarContext):
         return self.visitChildren(ctx)
 
 
@@ -449,23 +529,8 @@ class SailingParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by SailingParser#WindCondition.
-    def visitWindCondition(self, ctx:SailingParser.WindConditionContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#SpeedCondition.
-    def visitSpeedCondition(self, ctx:SailingParser.SpeedConditionContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#DepthCondition.
-    def visitDepthCondition(self, ctx:SailingParser.DepthConditionContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by SailingParser#compOp.
-    def visitCompOp(self, ctx:SailingParser.CompOpContext):
+    # Visit a parse tree produced by SailingParser#condition.
+    def visitCondition(self, ctx:SailingParser.ConditionContext):
         return self.visitChildren(ctx)
 
 

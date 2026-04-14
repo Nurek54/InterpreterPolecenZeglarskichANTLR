@@ -1,0 +1,260 @@
+Zestaw pokazujący że DSL robi coś więcej niż mapowanie. Każdy ma konkretny "haczyk" do zademonstrowania.
+
+---
+
+## 1. "Adaptacja do wzrastającego wiatru"
+Pokazuje że warunek realnie czyta stan, a nie zwraca true.
+
+```
+wiatr 3 beaufort;
+postaw pelne zagle;
+kurs na polwiatr;
+
+// Symulujemy wzrost wiatru
+wiatr 7 beaufort;
+
+jezeli wiatr.sila >= 6 {
+    refuj grot do 40 procent;
+    refuj fok do 30 procent;
+    loguj "Refujemy — wiatr mocno wzrósł";
+} inaczej {
+    loguj "Wiatr spokojny";
+};
+```
+
+---
+
+## 2. "Zmienna sterująca serią halsów"
+Liczba w `powtorz` liczona z wyrażenia, nie z literału.
+
+```
+niech planowane_halsy = 2;
+niech bonus_za_sztorm = 3;
+
+wiatr 8 beaufort;
+postaw grot;
+postaw fok;
+kurs na bejdewind;
+
+// Na sztormie halsujemy więcej dla bezpieczeństwa
+powtorz (planowane_halsy + bonus_za_sztorm) razy {
+    zwrot przez sztag;
+    loguj "hals";
+};
+```
+
+---
+
+## 3. "Dwukryterialny warunek z oraz"
+Demonstruje logikę na kilku polach stanu naraz.
+
+```
+wiatr 5 beaufort;
+postaw grot;
+postaw fok;
+kurs na polwiatr;
+
+jezeli wiatr.sila >= 4 oraz predkosc < 8 {
+    dobij faly;
+    napin talrepy do 85 procent;
+    loguj "Trymujemy — dużo wiatru, mała prędkość";
+} inaczej {
+    loguj "Ustawienie bazowe wystarczy";
+};
+```
+
+---
+
+## 4. "Kurs liczony arytmetycznie"
+Kurs nie jest literałem tylko wynikiem wyrażenia na zmiennych.
+
+```
+niech port_macierzysty = 90;
+niech odchylenie_od_wiatru = 45;
+
+wiatr 270 stopni;
+wiatr 14 wezlow;
+postaw grot;
+postaw fok;
+
+// Kurs = port + korekta na wiatr
+kurs (port_macierzysty + odchylenie_od_wiatru) stopni;
+loguj pogode;
+```
+
+---
+
+## 5. "Stopniowa redukcja żagli według Beauforta"
+Trzypoziomowe zagnieżdżenie — dla każdego poziomu siły wiatru inna reakcja.
+
+```
+wiatr 9 beaufort;
+
+jezeli wiatr.sila >= 9 {
+    zwin wszystkie zagle;
+    podnies flaga Q;
+    loguj zdarzenie "SZTORM — schodzimy pod gołym drzewcem";
+} inaczej {
+    jezeli wiatr.sila >= 7 {
+        zwin wszystkie zagle;
+        postaw zagle sztormowe;
+        loguj zdarzenie "Sztormowe postawione";
+    } inaczej {
+        jezeli wiatr.sila >= 5 {
+            postaw grot;
+            refuj grot do 50 procent;
+            postaw fok;
+            loguj "Grot zrefowany na połowę";
+        } inaczej {
+            postaw pelne zagle;
+            loguj "Pełne żagle — warunki świetne";
+        };
+    };
+};
+```
+
+---
+
+## 6. "Procent refu proporcjonalny do wiatru"
+Najładniejszy przykład — parametr komendy liczony z pola stanu.
+
+```
+wiatr 7 beaufort;
+postaw grot;
+
+// Refujemy proporcjonalnie: każdy stopień B powyżej 4 = +15% refu
+refuj grot do ((wiatr.sila - 4) * 15) procent;
+
+loguj "Ref obliczony automatycznie";
+```
+
+---
+
+## 7. "Pętla z wewnętrznym warunkiem"
+Każda iteracja podejmuje decyzję na świeżym stanie.
+
+```
+niech ile_prob = 4;
+
+wiatr 6 beaufort;
+postaw grot;
+postaw fok;
+kurs na bejdewind;
+
+powtorz (ile_prob) razy {
+    zwrot przez sztag;
+    jezeli predkosc < 3 {
+        loguj "Utknęliśmy w zwrocie — poluzuj szoty";
+        luzuj szoty grot;
+    } inaczej {
+        loguj "Zwrot udany";
+    };
+};
+```
+
+---
+
+## 8. "Negacja warunku"
+Pokazuje `negacja`/`!` na stanie.
+
+```
+wiatr 2 beaufort;
+
+jezeli negacja (wiatr.sila >= 4) {
+    loguj "Wiatr za słaby — bierzemy wiosła";
+    wiosluj wolny naprzod;
+} inaczej {
+    postaw pelne zagle;
+};
+```
+
+---
+
+## 9. "Trzy zmienne + wyrażenie w kursie"
+Łączy wszystko: deklaracje, arytmetykę, dostęp do stanu.
+
+```
+niech kurs_celu = 120;
+niech korekta_pradu = 8;
+
+wiatr 45 stopni;
+wiatr 16 wezlow;
+postaw grot;
+postaw fok;
+
+// Kurs = cel + korekta prądu + poprawka za odchył od wiatru
+kurs (kurs_celu + korekta_pradu + (wiatr.kierunek / 20)) stopni;
+
+jezeli predkosc < 5 {
+    dobij faly;
+    loguj "Dociskamy fały";
+};
+
+loguj stan jednostki;
+```
+
+---
+
+## 10. "Full scenariusz — rejs reaktywny"
+Końcowy, pokazujący kompletny przepływ: inicjalizacja, zmienne, warunki, pętla, reakcja na stan.
+
+```
+// === REJS ADAPTACYJNY ===
+
+niech docelowa_liczba_halsow = 3;
+niech prog_refowania = 6;
+
+// Warunki początkowe
+wiatr 270 stopni;
+wiatr 15 wezlow;
+
+// Wypłynięcie
+odcumuj;
+podnies bandera;
+podnies flaga klubowa;
+loguj zdarzenie "Wypływamy!";
+
+// Adaptacyjne postawienie żagli
+jezeli wiatr.sila >= prog_refowania {
+    postaw grot;
+    refuj grot do ((wiatr.sila - 3) * 12) procent;
+    postaw fok;
+    loguj "Żagle zredukowane do warunków";
+} inaczej {
+    postaw pelne zagle;
+};
+
+kurs na bejdewind;
+dobij faly;
+
+// Halsowanie adaptacyjne
+powtorz (docelowa_liczba_halsow) razy {
+    zwrot przez sztag;
+    jezeli predkosc < 3 oraz wiatr.sila >= 5 {
+        luzuj szoty grot;
+        loguj "Zatrzymani w zwrocie — luzujemy";
+    };
+};
+
+// Powrót
+kurs na baksztag;
+loguj pogode;
+
+// Cumowanie
+jezeli wiatr.sila >= 7 {
+    zwin wszystkie zagle;
+    loguj "Podejście na silnym wietrze — wiosłujemy";
+    wiosluj wolny naprzod;
+} inaczej {
+    zwin wszystkie zagle;
+    stop;
+};
+
+rzuc kotwice;
+cumuj;
+opusc flaga klubowa;
+```
+
+---
+
+Każdy pokazuje *inny* aspekt, więc przy obronie możesz pokazywać po 2-3 w zależności o co pytają. Numer 5 i 10 to najmocniejsze argumenty przeciw „to tylko mapowanie" — pierwszy przez głębokość zagnieżdżenia, drugi przez realną reakcję na stan podczas wykonania.

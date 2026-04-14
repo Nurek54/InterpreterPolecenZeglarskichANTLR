@@ -25,6 +25,38 @@ command
     | repeatCommand
     | conditionCommand
     | waitCommand
+    | assignment
+    ;
+
+// ═══════════════════════════════════════════════════════════════
+// ★ WYRAŻENIA  -  arytmetyka + porównania + logika + stan
+// ═══════════════════════════════════════════════════════════════
+expression
+    : LPAREN expression RPAREN                                     # ExprParen
+    | NOT expression                                               # ExprNot
+    | expression op=(STAR|SLASH) expression                        # ExprMulDiv
+    | expression op=(PLUS|MINUS) expression                        # ExprAddSub
+    | expression op=(GT|LT|GTE|LTE|EQ) expression                  # ExprCompare
+    | expression op=(AND|OR) expression                            # ExprLogic
+    | stateRef                                                     # ExprState
+    | NUMBER                                                       # ExprNum
+    | STRING                                                       # ExprStr
+    | IDENTIFIER                                                   # ExprVar
+    ;
+
+stateRef
+    : PREDKOSC                                                     # StateSpeed
+    | KURS                                                         # StateHeading
+    | WIATR KROPKA windField                                       # StateWindField
+    | ZAGLE KROPKA sail KROPKA IDENTIFIER                          # StateSailField
+    ;
+
+windField
+    : IDENTIFIER | PREDKOSC
+    ;
+
+assignment
+    : NIECH IDENTIFIER EQ expression                               # AssignVar
     ;
 
 // ═══════════════════════════════════════════════════════════════
@@ -37,7 +69,7 @@ sailCommand
     | POSTAW ZAGLE_SZTORMOWE                                       # SetStormSails
     | ZWIN sail                                                    # FurlSail
     | ZWIN WSZYSTKIE_ZAGLE                                         # FurlAllSails
-    | REFUJ sail (DO value=NUMBER PROCENT)?                        # ReefSail
+    | REFUJ sail (DO value=expression PROCENT)?                    # ReefSail
     | USTAW sail NA angle=NUMBER STOPNI                            # SetSailAngle
     | WYBIERZ SZOTY sail                                           # TrimSail
     | LUZUJ SZOTY sail                                             # EaseSail
@@ -58,7 +90,7 @@ riggingCommand
     | LUZUJ riggingElement                                         # LoosenRigging
     | NAPIN riggingElement                                         # TensionRigging
     | WYBIERZ riggingElement                                       # HaulRigging
-    | NAPIN riggingElement DO value=NUMBER PROCENT                 # TensionRiggingPercent
+    | NAPIN riggingElement DO value=expression PROCENT             # TensionRiggingPercent
     ;
 
 riggingElement
@@ -118,7 +150,7 @@ mooringCommand
 // KURS KOMPASOWY
 // ═══════════════════════════════════════════════════════════════
 courseCommand
-    : KURS angle=NUMBER (STOPNI)?                                  # SetCourseNumeric
+    : KURS value=expression (STOPNI)?                              # SetCourseNumeric
     | KURS compassPoint                                            # SetCourseCompass
     | KURS NA PUNKT point=STRING                                   # SetCourseWaypoint
     | KURS NA NAMIAR angle=NUMBER STOPNI                           # SetCourseBearing
@@ -189,13 +221,13 @@ logCommand
     ;
 
 // ═══════════════════════════════════════════════════════════════
-// WIATR — ustawianie warunków
+// WIATR
 // ═══════════════════════════════════════════════════════════════
 windCommand
-    : WIATR angle=NUMBER STOPNI                                    # SetWindDirectionDeg
+    : WIATR angle=expression STOPNI                                # SetWindDirectionDeg
     | WIATR compassPoint                                           # SetWindCompass
-    | WIATR value=NUMBER WEZLOW                                    # SetWindSpeed
-    | WIATR value=NUMBER BEAUFORT                                  # SetWindBeaufort
+    | WIATR value=expression WEZLOW                                # SetWindSpeed
+    | WIATR value=expression BEAUFORT                              # SetWindBeaufort
     ;
 
 // ═══════════════════════════════════════════════════════════════
@@ -208,10 +240,10 @@ weatherQuery
     ;
 
 // ═══════════════════════════════════════════════════════════════
-// KONTROLA PRZEPŁYWU
+// KONTROLA PRZEPŁYWU  - wszystko przez expression
 // ═══════════════════════════════════════════════════════════════
 repeatCommand
-    : POWTORZ times=NUMBER RAZY LBRACE (command SEMICOLON)+ RBRACE  # Repeat
+    : POWTORZ times=expression RAZY LBRACE (command SEMICOLON)+ RBRACE  # Repeat
     ;
 
 waitCommand
@@ -220,7 +252,7 @@ waitCommand
     ;
 
 duration
-    : value=NUMBER timeUnit
+    : value=expression timeUnit
     ;
 
 timeUnit
@@ -235,13 +267,7 @@ conditionCommand
     ;
 
 condition
-    : WIATR compOp value=NUMBER (WEZLOW | BEAUFORT)?               # WindCondition
-    | PREDKOSC compOp value=NUMBER WEZLOW?                         # SpeedCondition
-    | GLEBOKOSC compOp value=NUMBER METROW?                        # DepthCondition
-    ;
-
-compOp
-    : GT | LT | EQ | GTE | LTE
+    : expression
     ;
 
 // ═══════════════════════════════════════════════════════════════

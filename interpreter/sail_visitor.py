@@ -6,6 +6,7 @@ from gen.SailingParserVisitor import SailingParserVisitor
 from .ship_state import (
     ShipState, SailState, AnchorState, MooringState, EngineMode,
 )
+from .evaluator import Environment, ExpressionEvaluator
 
 
 class SailingCommandVisitor(SailingParserVisitor):
@@ -13,6 +14,7 @@ class SailingCommandVisitor(SailingParserVisitor):
     def __init__(self, state: ShipState = None):
         self.state = state or ShipState()
         self.snapshots: list[dict] = []
+        self.env = Environment()
 
     # ─────────────────────────────────────────────────────────
     # HELPERS
@@ -37,6 +39,20 @@ class SailingCommandVisitor(SailingParserVisitor):
     def _sync(self):
         """Przelicza prędkość po każdej komendzie."""
         self.state.recompute_sailing_speed()
+
+    # ★ NOWE: ewaluacja wyrażeń
+    def _eval(self, expr_ctx) -> object:
+        return ExpressionEvaluator(self.state, self.env).eval(expr_ctx)
+
+    def _eval_number(self, expr_ctx, default: float = 0.0) -> float:
+        """Ewaluacja z rzutowaniem na float"""
+        if expr_ctx is None:
+            return default
+        val = self._eval(expr_ctx)
+        try:
+            return float(val)
+        except (TypeError, ValueError):
+            raise RuntimeError(f"Oczekiwano liczby, dostałem: {val!r}")
 
     @staticmethod
     def _kts_to_beaufort(kts: float) -> int:
@@ -70,7 +86,6 @@ class SailingCommandVisitor(SailingParserVisitor):
     # PROGRAM
     # ─────────────────────────────────────────────────────────
     def visitProgram(self, ctx: SailingParser.ProgramContext):
-        # Ustalamy wyjściową prędkość
         self._sync()
         for child in ctx.command():
             count_before = len(self.snapshots)
@@ -79,6 +94,15 @@ class SailingCommandVisitor(SailingParserVisitor):
             if len(self.snapshots) == count_before:
                 self._take_snapshot()
         return self.state
+
+    # ─────────────────────────────────────────────────────────
+    # ★ ZMIENNE
+    # ─────────────────────────────────────────────────────────
+    def visitAssignVar(self, ctx):
+        name = ctx.IDENTIFIER().getText()
+        value = self._eval(ctx.expression())
+        self.env.set(name, value)
+        self.state.add_log(f"niech {name} = {value}", "kontrola")
 
     # ─────────────────────────────────────────────────────────
     # ŻAGLE
@@ -125,10 +149,11 @@ class SailingCommandVisitor(SailingParserVisitor):
     def visitReefSail(self, ctx):
         name = self._get_text(ctx.sail())
         key = self.state.normalize_sail_key(name)
-        percent = self._get_number(ctx.value) if ctx.value else 50.0
+        # ★ ctx.value to teraz expression, nie token
+        percent = self._eval_number(ctx.value, 50.0) if ctx.value else 50.0
         self.state.sails[key].state = SailState.REEFED
         self.state.sails[key].reef_percent = percent
-        self.state.add_log(f"Zrefowano {name} do {percent}%", "żagle")
+        self.state.add_log(f"Zrefowano {name} do {percent:g}%", "żagle")
 
     def visitSetSailAngle(self, ctx):
         name = self._get_text(ctx.sail())
@@ -174,15 +199,14 @@ class SailingCommandVisitor(SailingParserVisitor):
 
     def visitTensionRiggingPercent(self, ctx):
         elem = self._get_text(ctx.riggingElement())
-        val = self._get_number(ctx.value)
+        val = self._eval_number(ctx.value)   # ★ expression
         self.state.rigging_tension[elem] = val
-        self.state.add_log(f"Napięto {elem} do {val}%", "takielunek")
+        self.state.add_log(f"Napięto {elem} do {val:g}%", "takielunek")
 
     # ─────────────────────────────────────────────────────────
     # STER
     # ─────────────────────────────────────────────────────────
     def _heading_for_point_of_sail(self, pos_name: str, starboard_tack: bool = True) -> float:
-        """Zwraca heading odpowiadający danemu point of sail przy aktualnym wietrze."""
         clean = pos_name.replace(" ", "").lower()
         twa_map = {
             "ostrybejdewind": 35,
@@ -195,7 +219,6 @@ class SailingCommandVisitor(SailingParserVisitor):
         twa = twa_map.get(clean, 90)
         wind_from = self.state.wind.direction
         if starboard_tack:
-            # wiatr z prawej burty
             return (wind_from - twa + 360) % 360
         else:
             return (wind_from + twa) % 360
@@ -204,17 +227,13 @@ class SailingCommandVisitor(SailingParserVisitor):
         name = self._get_text(ctx.pointOfSail())
         self.state.heading = self._heading_for_point_of_sail(name)
         self.state.wind_course = name
-        self.state.add_log(
-            f"Ster na {name} (heading {self.state.heading:.0f}°)", "ster"
-        )
+        self.state.add_log(f"Ster na {name} (heading {self.state.heading:.0f}°)", "ster")
 
     def visitCourseToPointOfSail(self, ctx):
         name = self._get_text(ctx.pointOfSail())
         self.state.heading = self._heading_for_point_of_sail(name)
         self.state.wind_course = name
-        self.state.add_log(
-            f"Kurs: {name} (heading {self.state.heading:.0f}°)", "nawigacja"
-        )
+        self.state.add_log(f"Kurs: {name} (heading {self.state.heading:.0f}°)", "nawigacja")
 
     def visitSteerBoardSide(self, ctx):
         side = self._get_text(ctx.boardSide())
@@ -234,32 +253,23 @@ class SailingCommandVisitor(SailingParserVisitor):
 
     def visitSteerIntoWind(self, ctx):
         self.state.heading = self.state.wind.direction
-        self.state.add_log(
-            f"Ster pod wiatr — martwy kąt (heading {self.state.heading:.0f}°)", "ster"
-        )
+        self.state.add_log(f"Ster pod wiatr - martwy kąt (heading {self.state.heading:.0f}°)", "ster")
 
     def visitSteerWithWind(self, ctx):
         self.state.heading = (self.state.wind.direction + 180) % 360
-        self.state.add_log(
-            f"Ster z wiatrem — fordewind (heading {self.state.heading:.0f}°)", "ster"
-        )
+        self.state.add_log(f"Ster z wiatrem - fordewind (heading {self.state.heading:.0f}°)", "ster")
 
     def visitTack(self, ctx):
-        # Zwrot przez sztag — zmieniamy hals, heading lustrzany względem wiatru
         wind_from = self.state.wind.direction
         delta = (self.state.heading - wind_from + 360) % 360
         self.state.heading = (wind_from - delta + 360) % 360
-        self.state.add_log(
-            f"Zwrot przez sztag! Nowy kurs: {self.state.heading:.0f}°", "ster"
-        )
+        self.state.add_log(f"Zwrot przez sztag! Nowy kurs: {self.state.heading:.0f}°", "ster")
 
     def visitGybe(self, ctx):
         wind_from = self.state.wind.direction
         delta = (self.state.heading - wind_from + 360) % 360
         self.state.heading = (wind_from - delta + 360) % 360
-        self.state.add_log(
-            f"Zwrot przez rufę! Nowy kurs: {self.state.heading:.0f}°", "ster"
-        )
+        self.state.add_log(f"Zwrot przez rufę! Nowy kurs: {self.state.heading:.0f}°", "ster")
 
     def visitTurnThroughSide(self, ctx):
         side = self._get_text(ctx.boardSide())
@@ -269,23 +279,17 @@ class SailingCommandVisitor(SailingParserVisitor):
         else:
             self.state.heading = (self.state.heading + 90) % 360
             self.state.rudder_angle = 30
-        self.state.add_log(
-            f"Zwrot przez {side}! Nowy kurs: {self.state.heading:.0f}°", "ster"
-        )
+        self.state.add_log(f"Zwrot przez {side}! Nowy kurs: {self.state.heading:.0f}°", "ster")
 
     def visitBearAway(self, ctx):
         angle = self._get_number(ctx.angle) if ctx.angle else 10.0
         self.state.heading = (self.state.heading + angle) % 360
-        self.state.add_log(
-            f"Odpadnięto o {angle}°, kurs: {self.state.heading:.0f}°", "ster"
-        )
+        self.state.add_log(f"Odpadnięto o {angle}°, kurs: {self.state.heading:.0f}°", "ster")
 
     def visitHeadUp(self, ctx):
         angle = self._get_number(ctx.angle) if ctx.angle else 10.0
         self.state.heading = (self.state.heading - angle) % 360
-        self.state.add_log(
-            f"Ostrzono o {angle}°, kurs: {self.state.heading:.0f}°", "ster"
-        )
+        self.state.add_log(f"Ostrzono o {angle}°, kurs: {self.state.heading:.0f}°", "ster")
 
     def visitCourseToBoardSide(self, ctx):
         side = self._get_text(ctx.boardSide())
@@ -316,7 +320,7 @@ class SailingCommandVisitor(SailingParserVisitor):
     # KURS KOMPASOWY
     # ─────────────────────────────────────────────────────────
     def visitSetCourseNumeric(self, ctx):
-        angle = self._get_number(ctx.angle)
+        angle = self._eval_number(ctx.value)   # ★ expression
         self.state.heading = angle % 360
         self.state.add_log(f"Kurs: {self.state.heading:.0f}°", "nawigacja")
 
@@ -346,9 +350,7 @@ class SailingCommandVisitor(SailingParserVisitor):
         self.state.add_log(f"Peleng: {angle}°", "nawigacja")
 
     def visitRequestPosition(self, ctx):
-        self.state.add_log(
-            f"Pozycja: {self.state.latitude}, {self.state.longitude}", "nawigacja"
-        )
+        self.state.add_log(f"Pozycja: {self.state.latitude}, {self.state.longitude}", "nawigacja")
 
     # ─────────────────────────────────────────────────────────
     # PRĘDKOŚĆ / WIOSŁA
@@ -361,17 +363,17 @@ class SailingCommandVisitor(SailingParserVisitor):
     def visitRowFullAhead(self, ctx):
         self.state.rowing = EngineMode.FORWARD_FULL
         self.state.speed = 5.0
-        self.state.add_log("Wiosła — cała naprzód!", "prędkość")
+        self.state.add_log("Wiosła - cała naprzód!", "prędkość")
 
     def visitRowSlowAhead(self, ctx):
         self.state.rowing = EngineMode.FORWARD_SLOW
         self.state.speed = 2.0
-        self.state.add_log("Wiosła — wolny naprzód", "prędkość")
+        self.state.add_log("Wiosła - wolny naprzód", "prędkość")
 
     def visitRowReverse(self, ctx):
         self.state.rowing = EngineMode.REVERSE
         self.state.speed = -1.0
-        self.state.add_log("Wiosła — wstecz!", "prędkość")
+        self.state.add_log("Wiosła - wstecz!", "prędkość")
 
     def visitOarsInWater(self, ctx):
         self.state.rowing = EngineMode.FORWARD_SLOW
@@ -383,7 +385,6 @@ class SailingCommandVisitor(SailingParserVisitor):
         self.state.add_log("Wiosła podniesione", "prędkość")
 
     def visitAllStop(self, ctx):
-        # Zwijamy żagle + wiosła off → _sync ustawi 0
         for sail in self.state.sails.values():
             sail.state = SailState.FURLED
         self.state.rowing = EngineMode.OFF
@@ -462,14 +463,10 @@ class SailingCommandVisitor(SailingParserVisitor):
         self.state.add_log(msg, "dziennik")
 
     def visitLogPosition(self, ctx):
-        self.state.add_log(
-            f"Pozycja: {self.state.latitude}, {self.state.longitude}", "dziennik"
-        )
+        self.state.add_log(f"Pozycja: {self.state.latitude}, {self.state.longitude}", "dziennik")
 
     def visitLogWeather(self, ctx):
-        self.state.add_log(
-            f"Wiatr: {self.state.wind}, kurs {self.state.heading:.0f}°", "dziennik"
-        )
+        self.state.add_log(f"Wiatr: {self.state.wind}, kurs {self.state.heading:.0f}°", "dziennik")
 
     def visitLogEvent(self, ctx):
         msg = self._get_string(ctx.message)
@@ -482,54 +479,45 @@ class SailingCommandVisitor(SailingParserVisitor):
     # WIATR
     # ─────────────────────────────────────────────────────────
     def visitSetWindDirectionDeg(self, ctx):
-        angle = self._get_number(ctx.angle)
+        angle = self._eval_number(ctx.angle)
         self.state.wind.direction = angle % 360
-        self.state.add_log(
-            f"Wiatr z kierunku {self.state.wind.direction:.0f}°", "wiatr"
-        )
+        self.state.add_log(f"Wiatr z kierunku {self.state.wind.direction:.0f}°", "wiatr")
 
     def visitSetWindCompass(self, ctx):
         text = self._get_text(ctx.compassPoint())
         self.state.wind.direction = self._compass_to_degrees(text)
-        self.state.add_log(
-            f"Wiatr z kierunku: {text} ({self.state.wind.direction:.0f}°)", "wiatr"
-        )
+        self.state.add_log(f"Wiatr z kierunku: {text} ({self.state.wind.direction:.0f}°)", "wiatr")
 
     def visitSetWindSpeed(self, ctx):
-        val = self._get_number(ctx.value)
+        val = self._eval_number(ctx.value)
         self.state.wind.speed = val
         self.state.wind.beaufort = self._kts_to_beaufort(val)
-        self.state.add_log(
-            f"Prędkość wiatru: {val:.0f} kn (B{self.state.wind.beaufort})", "wiatr"
-        )
+        self.state.add_log(f"Prędkość wiatru: {val:.0f} kn (B{self.state.wind.beaufort})", "wiatr")
 
     def visitSetWindBeaufort(self, ctx):
-        val = int(self._get_number(ctx.value))
+        val = int(self._eval_number(ctx.value))
         self.state.wind.beaufort = val
         self.state.wind.speed = self._beaufort_to_kts(val)
-        self.state.add_log(
-            f"Siła wiatru: {val} B (~{self.state.wind.speed:.0f} kn)", "wiatr"
-        )
+        self.state.add_log(f"Siła wiatru: {val} B (~{self.state.wind.speed:.0f} kn)", "wiatr")
 
     # ─────────────────────────────────────────────────────────
-    # RAPORTY POGODOWE
+    # RAPORTY
     # ─────────────────────────────────────────────────────────
     def visitReportWind(self, ctx):
         self.state.add_log(f"Raport wiatru: {self.state.wind}", "pogoda")
 
     def visitReportWeather(self, ctx):
-        self.state.add_log(
-            f"Raport pogody: wiatr {self.state.wind}", "pogoda"
-        )
+        self.state.add_log(f"Raport pogody: wiatr {self.state.wind}", "pogoda")
 
     def visitReportDepth(self, ctx):
         self.state.add_log("Raport: głębokość", "pogoda")
 
     # ─────────────────────────────────────────────────────────
-    # KONTROLA PRZEPŁYWU
+    # ★ KONTROLA PRZEPŁYWU
     # ─────────────────────────────────────────────────────────
     def visitRepeat(self, ctx):
-        times = min(int(self._get_number(ctx.times)), 1000)
+        times = int(self._eval_number(ctx.times))
+        times = max(0, min(times, 1000))
         self.state.add_log(f"Powtarzanie {times} razy...", "kontrola")
         for _ in range(times):
             for cmd in ctx.command():
@@ -538,36 +526,67 @@ class SailingCommandVisitor(SailingParserVisitor):
                 self._take_snapshot()
 
     def visitWaitDuration(self, ctx):
-        val = self._get_number(ctx.duration().value)
+        val = self._eval_number(ctx.duration().value)
         unit = self._get_text(ctx.duration().timeUnit())
-        self.state.add_log(f"Czekanie {val} {unit}...", "kontrola")
+        self.state.add_log(f"Czekanie {val:g} {unit}...", "kontrola")
 
     def visitWaitUntil(self, ctx):
-        self.state.add_log("Czekanie na warunek...", "kontrola")
+        result = self._evaluate_condition(ctx.condition())
+        self.state.add_log(
+            f"Czekanie na warunek... (aktualnie: {'spełniony' if result else 'nie'})",
+            "kontrola"
+        )
 
     # ─────────────────────────────────────────────────────────
     # WARUNKI
     # ─────────────────────────────────────────────────────────
-    def _evaluate_condition(self, ctx) -> bool:
-        # Uproszczona ewaluacja — zawsze True, można rozbudować
-        return True
+    def _evaluate_condition(self, cond_ctx) -> bool:
+        """cond_ctx to ConditionContext, który opakowuje expression."""
+        try:
+            return bool(self._eval(cond_ctx.expression()))
+        except Exception as e:
+            self.state.add_log(f"Błąd warunku: {e}", "kontrola")
+            return False
 
     def visitIfCondition(self, ctx):
         if self._evaluate_condition(ctx.condition()):
-            self.state.add_log("Warunek spełniony — wykonuję", "kontrola")
+            self.state.add_log("Warunek spełniony - wykonuję", "kontrola")
             self.visit(ctx.command(0))
             self._sync()
             self._take_snapshot()
         elif len(ctx.command()) > 1:
-            self.state.add_log("Warunek niespełniony — alternatywa", "kontrola")
+            self.state.add_log("Warunek niespełniony - alternatywa", "kontrola")
             self.visit(ctx.command(1))
             self._sync()
             self._take_snapshot()
+        else:
+            self.state.add_log("Warunek niespełniony - pomijam", "kontrola")
 
     def visitIfConditionBlock(self, ctx):
+        # Gramatyka: `JEZELI cond { cmd+ } (INACZEJ { cmd+ })?`
+        # ctx.command() zwraca komendy z obu bloków - dzielimy po pozycji tokenu INACZEJ.
+        commands = list(ctx.command())
+        inaczej_node = ctx.INACZEJ()
+
+        if inaczej_node is None:
+            then_cmds = commands
+            else_cmds = []
+        else:
+            inaczej_idx = inaczej_node.getSymbol().tokenIndex
+            then_cmds = [c for c in commands if c.stop.tokenIndex < inaczej_idx]
+            else_cmds = [c for c in commands if c.start.tokenIndex > inaczej_idx]
+
         if self._evaluate_condition(ctx.condition()):
             self.state.add_log("Warunek blokowy spełniony", "kontrola")
-            for cmd in ctx.command():
+            for cmd in then_cmds:
                 self.visit(cmd)
                 self._sync()
                 self._take_snapshot()
+        elif else_cmds:
+            self.state.add_log("Warunek blokowy - blok alternatywny", "kontrola")
+            for cmd in else_cmds:
+                self.visit(cmd)
+                self._sync()
+                self._take_snapshot()
+        else:
+            self.state.add_log("Warunek blokowy niespełniony - pomijam", "kontrola")

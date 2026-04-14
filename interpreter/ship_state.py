@@ -29,7 +29,7 @@ class EngineMode(Enum):
 
 
 class PointOfSail(Enum):
-    """Kurs względem wiatru (TWA — True Wind Angle)."""
+    """Kurs względem wiatru (TWA - True Wind Angle)."""
     IN_IRONS = "martwy kąt"      # 0–30°
     CLOSE_HAULED = "bejdewind"    # 30–60°
     BEAM_REACH = "półwiatr"       # 60–100°
@@ -63,7 +63,7 @@ class SailInfo:
 
 @dataclass
 class WindState:
-    """Stan wiatru — kierunek Z którego wieje (0–360°) i prędkość."""
+    """Stan wiatru - kierunek Z którego wieje (0–360°) i prędkość."""
     direction: float = 270.0   # kierunek Z którego wieje, 0=N, 90=E, 180=S, 270=W
     speed: float = 12.0        # węzły
     beaufort: int = 4
@@ -136,10 +136,10 @@ class ShipState:
 
     # ── Flagi żeglarskie (nie pirackie) ──
     flags: dict = field(default_factory=lambda: {
-        "bandera": True,        # bandera narodowa — zwykle zawsze podniesiona
+        "bandera": True,        # bandera narodowa - zwykle zawsze podniesiona
         "klubowa": False,       # flaga klubu żeglarskiego
-        "goscia": False,        # flaga gościa — kraju na którego wodach pływamy
-        "q": False,             # flaga Q — żółta, prośba o odprawę / kwarantanna
+        "goscia": False,        # flaga gościa - kraju na którego wodach pływamy
+        "q": False,             # flaga Q - żółta, prośba o odprawę / kwarantanna
         "protestowa": False,    # flaga protestowa (regaty)
         "proporczyk": False,    # proporczyk
         "custom": [],           # flagi sygnalizacyjne / inne
@@ -201,13 +201,13 @@ class ShipState:
         if twa < 60:
             return (twa - 30) / 30 * 0.7    # ostry, rośnie do 0.7
         if twa < 100:
-            return 1.0                      # półwiatr — max
+            return 1.0                      # półwiatr - max
         if twa < 150:
             return 0.9                      # baksztag
-        return 0.75                         # fordewind (bez spinakera)
+        return 0.75                         # fordewind
 
     def active_sail_area(self) -> float:
-        """Suma „aktywnej" powierzchni żagli — 0..1 (średnia z wszystkich)."""
+        """Suma „aktywnej" powierzchni żagli - 0..1 (średnia z wszystkich)."""
         total = 0.0
         for info in self.sails.values():
             if info.state == SailState.SET:
@@ -218,13 +218,13 @@ class ShipState:
 
     def recompute_sailing_speed(self):
         """Przelicza prędkość statku na podstawie wiatru, żagli i stanu."""
-        # Zacumowany / zakotwiczony — stop
+        # Zacumowany / zakotwiczony - stop
         if self.anchor == AnchorState.DROPPED or self.mooring == MooringState.MOORED:
             self.speed = 0.0
             self.point_of_sail = ""
             return
 
-        # Wiosła dominują — nie ruszamy prędkości wyliczonej przez komendy wiosłowe
+        # Wiosła dominują - nie ruszamy prędkości wyliczonej przez komendy wiosłowe
         if self.rowing != EngineMode.OFF:
             self.point_of_sail = ""
             return
