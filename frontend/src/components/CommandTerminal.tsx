@@ -18,9 +18,9 @@ interface CommandTerminalProps {
   connected: boolean;
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // SYNTAX HIGHLIGHTING
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 const COMMANDS = new Set([
   "postaw", "zwin", "zwiń", "refuj", "ustaw", "wybierz", "luzuj",
@@ -30,7 +30,7 @@ const COMMANDS = new Set([
   "loguj", "raport", "zamelduj",
   "powtórz", "powtorz", "jeżeli", "jezeli", "jeśli", "jesli",
   "czekaj", "sygnalizuj", "opuść", "opusc",
-  "napiń", "napin", "dobij",
+  "napnij", "dobij",
   "cała", "cala", "naprzód", "naprzod", "wolny", "średni", "sredni",
   "wsteczny", "wstecz",
   // ★ NOWE
@@ -191,9 +191,9 @@ function Highlighted({ code }: { code: string }) {
   return <>{els}</>;
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // COMPONENT
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 const DEFAULT_CODE = `// Wpisz polecenia żeglarskie. Używaj zmiennych i wyrażeń!
 wiatr 270 stopni;

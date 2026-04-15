@@ -25,7 +25,7 @@ class ExpressionEvaluator:
         self.state = state
         self.env = env
 
-    # ── Dispatch
+    # -- Dispatch
     def eval(self, ctx) -> Any:
         cls_name = type(ctx).__name__
         method = getattr(self, f"eval_{cls_name}", None)
@@ -38,7 +38,7 @@ class ExpressionEvaluator:
             raise RuntimeError(f"Nieobsługiwany węzeł wyrażenia: {cls_name}")
         return method(ctx)
 
-    # ── Literały / zmienne
+    # -- Literały / zmienne
     def eval_ExprNumContext(self, ctx):
         return float(ctx.NUMBER().getText())
 
@@ -51,7 +51,7 @@ class ExpressionEvaluator:
     def eval_ExprParenContext(self, ctx):
         return self.eval(ctx.expression())
 
-    # ── Arytmetyka
+    # -- Arytmetyka
     def eval_ExprAddSubContext(self, ctx):
         a = self.eval(ctx.expression(0))
         b = self.eval(ctx.expression(1))
@@ -66,7 +66,7 @@ class ExpressionEvaluator:
             raise ZeroDivisionError("Dzielenie przez zero w wyrażeniu")
         return a / b
 
-    # ── Porównania i logika
+    # -- Porównania i logika
     def eval_ExprCompareContext(self, ctx):
         a = self.eval(ctx.expression(0))
         b = self.eval(ctx.expression(1))
@@ -89,7 +89,7 @@ class ExpressionEvaluator:
     def eval_ExprNotContext(self, ctx):
         return not bool(self.eval(ctx.expression()))
 
-    # ── Dostęp do stanu
+    # -- Dostęp do stanu
     def eval_ExprStateContext(self, ctx):
         return self.eval(ctx.stateRef())
 

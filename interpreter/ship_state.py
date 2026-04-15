@@ -100,7 +100,7 @@ class LogEntry:
 class ShipState:
     """Pełny stan żaglowca."""
 
-    # ── Żagle ──
+    # -- Żagle --
     sails: dict = field(default_factory=lambda: {
         "grot": SailInfo(),
         "fok": SailInfo(),
@@ -108,7 +108,7 @@ class ShipState:
         "sztaksel": SailInfo(),
     })
 
-    # ── Olinowanie ──
+    # -- Olinowanie --
     rigging_tension: dict = field(default_factory=lambda: {
         "faly": 50.0,
         "brasy": 50.0,
@@ -116,25 +116,25 @@ class ShipState:
         "szoty": 50.0,
     })
 
-    # ── Ster i kurs ──
+    # -- Ster i kurs --
     heading: float = 0.0
     target_heading: float = 0.0
     wind_course: str = ""        # nazwa point of sail (bejdewind, etc.)
     point_of_sail: str = ""      # aktualny point of sail obliczony z heading vs wiatru
     rudder_angle: float = 0.0
 
-    # ── Kotwica i cumowanie ──
+    # -- Kotwica i cumowanie --
     anchor: AnchorState = AnchorState.RAISED
     mooring: MooringState = MooringState.FREE
 
-    # ── Prędkość / Wiosła ──
+    # -- Prędkość / Wiosła --
     speed: float = 0.0
     rowing: EngineMode = EngineMode.OFF
 
-    # ── Wiatr ──
+    # -- Wiatr --
     wind: WindState = field(default_factory=WindState)
 
-    # ── Flagi żeglarskie (nie pirackie) ──
+    # -- Flagi żeglarskie (nie pirackie) --
     flags: dict = field(default_factory=lambda: {
         "bandera": True,        # bandera narodowa - zwykle zawsze podniesiona
         "klubowa": False,       # flaga klubu żeglarskiego
@@ -145,25 +145,25 @@ class ShipState:
         "custom": [],           # flagi sygnalizacyjne / inne
     })
 
-    # ── Dziennik pokładowy ──
+    # -- Dziennik pokładowy --
     log: list = field(default_factory=list)
 
-    # ── Pozycja ──
+    # -- Pozycja --
     latitude: float = 0.0
     longitude: float = 0.0
 
-    # ─────────────────────────────────────────────────────────────
+    # -------------------------------------------------------------
     # LOG
-    # ─────────────────────────────────────────────────────────────
+    # -------------------------------------------------------------
     def add_log(self, message: str, category: str = "ogólny"):
         ts = time.strftime("%H:%M:%S")
         entry = LogEntry(timestamp=ts, message=message, category=category)
         self.log.append(entry)
         print(f"  📜 {entry}")
 
-    # ─────────────────────────────────────────────────────────────
+    # -------------------------------------------------------------
     # NORMALIZACJA NAZW
-    # ─────────────────────────────────────────────────────────────
+    # -------------------------------------------------------------
     def normalize_sail_key(self, name: str) -> str:
         mapping = {
             "grot": "grot", "fok": "fok", "bezan": "bezan",
@@ -171,9 +171,9 @@ class ShipState:
         }
         return mapping.get(name, name)
 
-    # ─────────────────────────────────────────────────────────────
+    # -------------------------------------------------------------
     # LOGIKA WIATRU
-    # ─────────────────────────────────────────────────────────────
+    # -------------------------------------------------------------
     def true_wind_angle(self) -> float:
         """Kąt między dziobem a kierunkiem Z którego wieje wiatr (0–180°)."""
         delta = (self.heading - self.wind.direction) % 360
@@ -242,9 +242,9 @@ class ShipState:
         max_speed = self.wind.speed * 0.8
         self.speed = round(max_speed * eff * area, 1)
 
-    # ─────────────────────────────────────────────────────────────
+    # -------------------------------------------------------------
     # SERIALIZACJA
-    # ─────────────────────────────────────────────────────────────
+    # -------------------------------------------------------------
     def to_dict(self) -> dict:
         return {
             "sails": {k: v.to_dict() for k, v in self.sails.items()},

@@ -35,7 +35,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-// ── Endpointy ──
+// -- Endpointy --
 
 export async function healthCheck(): Promise<HealthResponse> {
   return request<HealthResponse>("/health");

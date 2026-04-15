@@ -1,4 +1,4 @@
-# Generated from C:/Users/g_sie/Desktop/InterpreterPolecenZeglarskichANTLR/grammar/SailingParser.g4 by ANTLR 4.13.2
+# Generated from C:/Users/Kamil/Desktop/InterpreterPolecenZeglarskichANTLR/grammar/SailingParser.g4 by ANTLR 4.13.2
 from antlr4 import *
 if "." in __name__:
     from .SailingParser import SailingParser

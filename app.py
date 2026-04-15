@@ -204,7 +204,7 @@ async def get_examples():
                     "kurs na polwiatr;\n\n"
                     "jezeli wiatr.sila >= 4 oraz predkosc < 10 {\n"
                     "    dobij faly;\n"
-                    "    napin talrepy do 80 procent;\n"
+                    "    napnij talrepy do 80 procent;\n"
                     "    loguj \"trymujemy — mało prędkości na mocnym wietrze\";\n"
                     "};\n"
                 )
@@ -225,7 +225,7 @@ async def get_examples():
                     "jezeli wiatr.sila >= 7 {\n"
                     "    zwin wszystkie zagle;\n"
                     "    postaw zagle sztormowe;\n"
-                    "    napin talrepy do 90 procent;\n"
+                    "    napnij talrepy do 90 procent;\n"
                     "    dobij faly;\n"
                     "    ster prosto;\n"
                     "    podnies flaga Q;\n"

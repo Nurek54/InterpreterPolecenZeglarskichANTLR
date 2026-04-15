@@ -12,6 +12,8 @@ import StatePanel from "./components/StatePanel";
 import LogPanel from "./components/LogPanel";
 
 const SNAPSHOT_DELAY_MS = 400;
+const HEALTHCHECK_OK_INTERVAL_MS = 5000;
+const HEALTHCHECK_FAIL_INTERVAL_MS = 2000;
 
 export default function App() {
   const [shipState, setShipState] = useState<ShipState | null>(null);
@@ -23,9 +25,36 @@ export default function App() {
   const snapshotTimers = useRef<number[]>([]);
 
   useEffect(() => {
-    healthCheck()
-      .then(() => setConnected(true))
-      .catch(() => setConnected(false));
+    let cancelled = false;
+    let timerId: number | null = null;
+
+    const schedule = (delayMs: number) => {
+      if (cancelled) return;
+      timerId = window.setTimeout(runHealthCheck, delayMs);
+    };
+
+    const runHealthCheck = () => {
+      healthCheck()
+        .then(() => {
+          if (cancelled) return;
+          setConnected(true);
+          schedule(HEALTHCHECK_OK_INTERVAL_MS);
+        })
+        .catch(() => {
+          if (cancelled) return;
+          setConnected(false);
+          schedule(HEALTHCHECK_FAIL_INTERVAL_MS);
+        });
+    };
+
+    runHealthCheck();
+
+    return () => {
+      cancelled = true;
+      if (timerId !== null) {
+        window.clearTimeout(timerId);
+      }
+    };
   }, []);
 
   useEffect(() => {

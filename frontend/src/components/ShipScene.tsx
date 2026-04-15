@@ -24,9 +24,9 @@ interface CompassOverlayProps {
     pointOfSail: string;
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // KOMPAS + INFO OVERLAY (top-right)
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 function CompassOverlay({ heading, speed, anchor, pointOfSail }: CompassOverlayProps) {
     const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
@@ -213,9 +213,9 @@ function CompassOverlay({ heading, speed, anchor, pointOfSail }: CompassOverlayP
     );
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // WSKAŹNIK WIATRU (top-left)
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 function WindIndicator({ wind }: { wind: WindState }) {
     const bg = "rgba(6, 13, 20, 0.82)";
@@ -387,9 +387,9 @@ function WindIndicator({ wind }: { wind: WindState }) {
     );
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // ANIMOWANE SMUGI WIATRU (cząstki)
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 interface Particle {
     x: number;
@@ -459,9 +459,9 @@ function WindStreaks({ wind }: { wind: WindState }) {
     );
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // WODA — animowana, reagująca na wiatr
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 function Water({ windSpeed }: { windSpeed: number }) {
     const meshRef = useRef<THREE.Mesh>(null);
@@ -504,9 +504,9 @@ function Water({ windSpeed }: { windSpeed: number }) {
     );
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // OŚWIETLENIE
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 function SceneLighting() {
     return (
@@ -541,9 +541,9 @@ function SceneLighting() {
     );
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // BANDERA — powiewa zgodnie z wiatrem
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 function Ensign({
     visible,
@@ -601,9 +601,9 @@ function Ensign({
     );
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // MODEL GLB
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 function GLBModel({ url, visible }: { url: string; visible: boolean }) {
     const { scene } = useGLTF(url);
@@ -619,9 +619,9 @@ function GLBModel({ url, visible }: { url: string; visible: boolean }) {
     return <primitive ref={groupRef} object={cloned} visible={visible} scale={1} />;
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // FALLBACK — prosty statek z prymitywów
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 function FallbackShip({ hasSailsSet }: FallbackShipProps) {
     const sailColor = "#e8e0d0";
@@ -643,7 +643,7 @@ function FallbackShip({ hasSailsSet }: FallbackShipProps) {
 
     return (
         <group>
-            {/* ── KADŁUB ── */}
+            {/* -- KADŁUB -- */}
             <mesh position={[0, 0, 0]}>
                 <boxGeometry args={[2.4, 1, 8]} />
                 <meshStandardMaterial color={hullDark} roughness={0.8} />
@@ -685,7 +685,7 @@ function FallbackShip({ hasSailsSet }: FallbackShipProps) {
                 <meshStandardMaterial color="#8a6830" metalness={0.3} roughness={0.5} />
             </mesh>
 
-            {/* ── MASZTY ── */}
+            {/* -- MASZTY -- */}
             <mesh position={[0, 3.8, 0]}>
                 <cylinderGeometry args={[0.07, 0.1, 7]} />
                 <meshStandardMaterial color={mastColor} />
@@ -770,9 +770,9 @@ function FallbackShip({ hasSailsSet }: FallbackShipProps) {
     );
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // MODEL STATKU — rotacja + kołysanie
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 function ShipModel({ shipState }: ShipModelProps) {
     const groupRef = useRef<THREE.Group>(null);
@@ -836,9 +836,9 @@ function ShipModel({ shipState }: ShipModelProps) {
     );
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // ERROR BOUNDARY
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 interface ErrorBoundaryProps {
     children: React.ReactNode;
@@ -869,9 +869,9 @@ class ErrorBoundaryFallback extends React.Component<ErrorBoundaryProps, ErrorBou
     }
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // SCENA GŁÓWNA
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 export default function ShipScene({ shipState }: ShipSceneProps) {
     const heading = shipState?.heading ?? 0;

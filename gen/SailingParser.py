@@ -1,4 +1,4 @@
-# Generated from C:/Users/g_sie/Desktop/InterpreterPolecenZeglarskichANTLR/grammar/SailingParser.g4 by ANTLR 4.13.2
+# Generated from C:/Users/Kamil/Desktop/InterpreterPolecenZeglarskichANTLR/grammar/SailingParser.g4 by ANTLR 4.13.2
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -194,7 +194,7 @@ class SailingParser ( Parser ):
     literalNames = [ "<INVALID>", "'postaw'", "<INVALID>", "'refuj'", "'ustaw'", 
                      "'wybierz'", "'luzuj'", "'grot'", "'fok'", "<INVALID>", 
                      "'sztaksel'", "<INVALID>", "<INVALID>", "<INVALID>", 
-                     "<INVALID>", "'dobij'", "<INVALID>", "'szoty'", "<INVALID>", 
+                     "<INVALID>", "'dobij'", "'napnij'", "'szoty'", "<INVALID>", 
                      "'brasy'", "'talrepy'", "'pod wiatr'", "'z wiatrem'", 
                      "'ster'", "'prosto'", "'zwrot'", "'przez'", "'sztag'", 
                      "<INVALID>", "'odpadaj'", "'ostrzej'", "'ostry bejdewind'", 
