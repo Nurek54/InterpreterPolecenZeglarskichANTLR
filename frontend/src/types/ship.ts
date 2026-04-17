@@ -1,7 +1,3 @@
-// ─────────────────────────────────────────────────────────────────
-// types/ship.ts — Typy stanu statku (mapowanie 1:1 z Python backend)
-// ─────────────────────────────────────────────────────────────────
-
 export interface SailInfo {
   state: "zwinięty" | "postawiony" | "zrefowany";
   angle: number;

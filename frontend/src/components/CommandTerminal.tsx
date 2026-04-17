@@ -51,7 +51,6 @@ const OBJECTS = new Set([
   "proporczyk", "proporczyka",
   "flagę", "flage", "flaga",
   "Q", "kwarantanny",
-  // ★ NOWE - pola stanu (dla wiatr.sila, zagle.grot.stan itp.)
   "sila", "siła", "kierunek", "predkosc", "prędkość",
   "stan", "kat", "kąt", "ref", "szot",
 ]);
@@ -76,7 +75,6 @@ const MODIFIERS = new Set([
   "stan", "jednostki",
   "aż", "az",
   "pod", "wiatrem",
-  // ★ NOWE - operatory logiczne (słowne)
   "oraz", "lub", "negacja",
 ]);
 
